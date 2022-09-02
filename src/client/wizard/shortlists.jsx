@@ -708,7 +708,7 @@ class Shortlists extends Component {
                                 <span>Payment Successful!</span></div>
                                 <br/>
                                 <div>
-                                    <span>Thank you for placing an order with us. Our team contact you based on your delivery slot.</span>
+                                    <span>Thank you for placing an order with us. Our team will contact you based on your delivery slot.</span>
                                 </div>
                         </div>}
                         {curStep == 1 && !redirect && <div className="step-detail step-1">
