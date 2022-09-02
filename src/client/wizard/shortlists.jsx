@@ -354,6 +354,7 @@ class Shortlists extends Component {
             numVistors: 0,
             mobileNum: '',
             curStep: 1,
+            redirect: false,
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
             orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []
@@ -408,6 +409,10 @@ class Shortlists extends Component {
             var basketStr = JSON.stringify(basketData);
             localStorage.setItem("basket",basketStr)
         });
+
+        if (location.href.indexOf('/redirect') >= 0) {
+            this.setState({redirect: true});
+        }
     }
     fetchJson() {
         console.log('this.props.match: ', this.props.match);
@@ -610,7 +615,7 @@ class Shortlists extends Component {
             http.send(params);
         }
     render() {
-        const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep} = this.state;
+        const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
 
         console.log('orderSummary: ', orderSummary);
@@ -688,16 +693,25 @@ class Shortlists extends Component {
                             <div className="node"></div>
                             <span>Event Details</span>
                           </div>
-                          <div className={`step ${curStep>1 ? 'complete' : 'in-progress'}`}>
+                          <div className={`step ${curStep>1 || redirect ? 'complete' : 'in-progress'}`}>
                             <span>Visitor Details</span>
                             <div className="node"></div>
                           </div>
-                          <div className={`step ${curStep>2 ? 'complete' : 'in-progress'}`}>
+                          <div className={`step ${curStep>2 || redirect  ? 'complete' : 'in-progress'}`}>
                             <span>Sample Order</span>
                             <div className="node"></div>
                           </div>
                         </div>
-                        {curStep == 1 && <div className="step-detail step-1">
+                        {redirect == true && <div className="step-detail step-1">
+                                <div class="payment-success">
+                                <img src="../../../img/images/ic_tick.png" style={{width: '22px'}}/>
+                                <span>Payment Successful!</span></div>
+                                <br/>
+                                <div>
+                                    <span>Thank you for placing an order with us. Our team contact you based on your delivery slot.</span>
+                                </div>
+                        </div>}
+                        {curStep == 1 && !redirect && <div className="step-detail step-1">
                             <div>When and where is your event?</div>
                             <br/>
                             <div>
@@ -710,7 +724,7 @@ class Shortlists extends Component {
                             <div className="bottom-bar" ></div>
                             <a className="button" onClick={()=>{this.setState({curStep:2});this.saveEvent();}}>Next →</a>
                         </div> }
-                        {curStep == 2 && <div className="step-detail step-1">
+                        {curStep == 2 && !redirect && <div className="step-detail step-1">
                                 <div style={{marginTop: '-44px'}}>How many guests are you expecting at your event?</div>
                                 <div class="quantity" style={{marginTop: '22px'}}>
                                     <a className="quantity__minus"><span onClick={()=>{if(this.state.numVistors>0){this.setState({numVistors: this.state.numVistors - 10});sessionStorage.setItem('qty',this.state.numVistors - 10)}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>

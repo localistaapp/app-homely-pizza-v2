@@ -785,7 +785,7 @@ app.get("/redirect/", function(request, response) {
                   console.error('error connecting', err.stack)
                 } else {
                   console.log('connected')
-                  client.query("UPDATE \"public\".\"sample_order\" set status = $1 WHERE payment_request_id = $2",
+                  client.query("UPDATE \"public\".\"sample_order\" set order_status = $1 WHERE payment_request_id = $2",
                       [paymentStatus, paymentRequestId], (err, res) => {
                             if (err) {
                               console.log(err);
@@ -905,7 +905,7 @@ app.post('/paymentRequest', function(req, res) {
       amount: '10',
       phone: req.body.phone,
       name: req.body.phone,
-      redirect_url: 'http://www.homely.pizza/redirect/',
+      redirect_url: 'https://www.slimcrust.com/redirect/',
       send_email: false,
       send_sms: false,
       allow_repeated_payments: false}
@@ -1137,8 +1137,8 @@ app.post('/eventOrder', function(req, res) {
                                   })
                                   .catch(error => {
                                     console.log('Pushalert error: ', error);
-                                  });
-                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');*/
+                                  });*/
+                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
                             });
