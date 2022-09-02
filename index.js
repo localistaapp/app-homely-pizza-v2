@@ -899,9 +899,10 @@ app.post('/paymentRequest', function(req, res) {
     const orderId = req.body.orderId;
     const slot = req.body.slot;
     var headers = { 'X-Api-Key': 'b442e3b63d6c01b2e7fdb49e14e8a069', 'X-Auth-Token': '96650eeefedf39e2bbdb32d8496f0ca2'}
+    //amount: req.body.amount,
     var payload = {
       purpose: 'Pizza order',
-      amount: req.body.amount,
+      amount: '1',
       phone: req.body.phone,
       name: req.body.phone,
       redirect_url: 'http://www.homely.pizza/redirect/',
@@ -1085,14 +1086,14 @@ app.post('/homelyOrder', function(req, res) {
                                  res.send("error");
                               } else {
                                 console.log(response);
-                                axios
+                                /*axios
                                   .post('https://api.pushalert.co/rest/v1/send', 'title=Order%20Received&message=New%20Pizza%20Order&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
                                   .then(res => {
                                     console.log('Pushalert success: ', res);
                                   })
                                   .catch(error => {
                                     console.log('Pushalert error: ', error);
-                                  });
+                                  });*/
                                  res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
@@ -1129,7 +1130,7 @@ app.post('/eventOrder', function(req, res) {
                                  res.send("error");
                               } else {
                                 console.log(response);
-                                axios
+                                /*axios
                                   .post('https://api.pushalert.co/rest/v1/send', 'title=Event Order%20Received&message=New%20Pizza%20Event&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
                                   .then(res => {
                                     console.log('Pushalert success: ', res);
@@ -1137,7 +1138,7 @@ app.post('/eventOrder', function(req, res) {
                                   .catch(error => {
                                     console.log('Pushalert error: ', error);
                                   });
-                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');*/
                               }
 
                             });
@@ -1151,6 +1152,7 @@ app.post('/eventOrder', function(req, res) {
 
 app.post('/updateEventOrder', function(req, res) {
     const eQuantity = req.body.eventQuantity;
+    const eQuote = req.body.eventQuote;
     const orderId = req.body.eventOrderId;
     let whitelisted = false;
 
@@ -1162,8 +1164,8 @@ app.post('/updateEventOrder', function(req, res) {
         console.log('connected')
 
 
-            client.query("UPDATE \"public\".\"event_order\" set quantity = $1 WHERE order_id = $2",
-                        [eQuantity, orderId], (err, response) => {
+            client.query("UPDATE \"public\".\"event_order\" set quantity = $1, quote_price = $2 WHERE order_id = $3",
+                        [eQuantity, eQuote, orderId], (err, response) => {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
