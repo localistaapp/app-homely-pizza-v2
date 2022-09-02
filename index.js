@@ -902,7 +902,7 @@ app.post('/paymentRequest', function(req, res) {
     //amount: req.body.amount,
     var payload = {
       purpose: 'Pizza order',
-      amount: '1',
+      amount: '10',
       phone: req.body.phone,
       name: req.body.phone,
       redirect_url: 'http://www.homely.pizza/redirect/',
