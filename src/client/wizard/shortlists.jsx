@@ -366,6 +366,7 @@ class Shortlists extends Component {
     componentDidMount() {
         this.fetchJson();
         var winHeight = window.innerHeight;
+        gtag('event', 'clicked_get_quote', {'mounted': 'true'});
 
         if(isValidCoupon()) {
             document.getElementById('discountModal').style.top = '1200px';
@@ -595,6 +596,7 @@ class Shortlists extends Component {
             }
         }.bind(this);
         http.send(params);
+        gtag('event', 'entered_event_details', {'eDate': sessionStorage.getItem('eventDate')});
     }
     updateQuantity(eventQty) {
             //create order
@@ -613,6 +615,7 @@ class Shortlists extends Component {
                 }
             }.bind(this);
             http.send(params);
+            gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     render() {
         const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
