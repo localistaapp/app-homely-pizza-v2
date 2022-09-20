@@ -526,7 +526,8 @@ class Shortlists extends Component {
         var url = '/paymentRequest';
         var orderId = 0;
         orderId = localStorage.getItem('orderId') != null ? localStorage.getItem('orderId') : orderId;
-        var params = 'amount='+localStorage.getItem('dPrice')+'&phone='+localStorage.getItem('dMobile')+'&name='+localStorage.getItem('dName')+'&orderId='+orderId+'&slot='+window.currSlotSelected;
+
+        var params = 'amount='+localStorage.getItem('dPrice')+'&phone='+localStorage.getItem('dMobile')+'&name='+localStorage.getItem('dName')+'&orderId='+orderId+'&slot='+sessionStorage.getItem('deliverySlot');
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -577,6 +578,10 @@ class Shortlists extends Component {
                 return <div className="quote-txt" style={{marginTop: '22px'}}>Quote for {numVistors} large pizzas:</div>
             }
     saveEvent() {
+        if (sessionStorage.getItem('mobileNum') == null || sessionStorage.getItem('mobileNum') == "") {
+            alert("Mobile number is mandatory for an instant quote.");
+            return;
+        }
         //create order
         var http = new XMLHttpRequest();
         var url = '/eventOrder';
@@ -596,6 +601,7 @@ class Shortlists extends Component {
             }
         }.bind(this);
         http.send(params);
+        this.setState({curStep:2});
         gtag('event', 'entered_event_details', {'eDate': sessionStorage.getItem('eventDate')});
     }
     updateQuantity(eventQty) {
@@ -720,12 +726,10 @@ class Shortlists extends Component {
                             <div>
                                 <span>Date of Event:</span><input type="date" value={this.state.eventDate} onChange={(e)=>{this.setState({eventDate:e.target.value});sessionStorage.setItem('eventDate',e.target.value);}}/>
                                 <br/>
-                                <span>Venue Pincode:&nbsp;&nbsp;</span><input type="text" className="txt-field" onChange={(e)=>{this.setState({venuePinCode:e.target.value});sessionStorage.setItem('venuePinCode',e.target.value);}}/>
-                                <br/>
                                 <span>Mobile Number:&nbsp;&nbsp;</span><input type="text" className="txt-field" onChange={(e)=>{this.setState({mobileNum:e.target.value});sessionStorage.setItem('mobileNum',e.target.value);}}/>
                             </div>
                             <div className="bottom-bar" ></div>
-                            <a className="button" onClick={()=>{this.setState({curStep:2});this.saveEvent();}}>Next →</a>
+                            <a className="button" onClick={()=>{this.saveEvent();}}>Next →</a>
                         </div> }
                         {curStep == 2 && !redirect && <div className="step-detail step-1">
                                 <div style={{marginTop: '-44px'}}>How many guests are you expecting at your event?</div>
@@ -874,10 +878,14 @@ class Shortlists extends Component {
                                                       <div className="deliver-cell" style={{marginTop: '12px'}}>
                                                         <span>Slot:</span>
                                                           <select name="slot" id="slot" className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
-                                                              <option value="evening6">6pm to 7pm</option>
-                                                              <option value="night7">7pm to 8pm</option>
-                                                              <option value="night8">8pm to 9pm</option>
-                                                              <option value="night9">9pm to 10pm</option>
+                                                              <option value="Saturday 6pm to 7p">Saturday 6pm to 7pm</option>
+                                                              <option value="Saturday 7pm to 8pm">Saturday 7pm to 8pm</option>
+                                                              <option value="Saturday 8pm to 9pm">Saturday 8pm to 9pm</option>
+                                                              <option value="Saturday 9pm to 10pm">Saturday 9pm to 10pm</option>
+                                                              <option value="Sunday 6pm to 7p">Sunday 6pm to 7pm</option>
+                                                              <option value="Sunday 7pm to 8pm">Sunday 7pm to 8pm</option>
+                                                              <option value="Sunday 8pm to 9pm">Sunday 8pm to 9pm</option>
+                                                              <option value="Sunday 9pm to 10pm">Sunday 9pm to 10pm</option>
                                                             </select>
                                                       </div>
                                                       <div className="slot"></div>
