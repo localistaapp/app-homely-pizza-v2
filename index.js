@@ -902,7 +902,7 @@ app.post('/paymentRequest', function(req, res) {
     //amount: req.body.amount,
     var payload = {
       purpose: 'Pizza order',
-      amount: '10',
+      amount: req.body.amount,
       phone: req.body.phone,
       name: req.body.phone,
       redirect_url: 'https://www.slimcrust.com/redirect/',
