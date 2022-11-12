@@ -762,6 +762,18 @@ app.get("/order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });
 
+app.get("/process/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
+});
+
+app.get("/stage2/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
+});
+
+app.get("/stage3/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
+});
+
 app.get("/memory", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'memory.html'));
 });
