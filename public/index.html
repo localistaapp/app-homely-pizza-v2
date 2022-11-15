@@ -786,7 +786,7 @@ html{
 	padding: 1.8em 1.2em;
 }
 .testimonial-container p {
-	color: #8c8c90;
+	color: #363636;
     text-align: center;
     font-size: 16px;
     line-height: 24px;
@@ -922,6 +922,107 @@ button.banner:after{
         transform: rotate(360deg);
     }
 }
+.accordion {
+    padding: 24px;
+}
+.accordion .accordion-item {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.accordion .accordion-item button[aria-expanded='true'] {
+  border-bottom: 1px solid #f4273b;
+}
+
+.accordion button {
+  position: relative;
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 1em 0;
+  color: #666;
+  font-size: 1.15rem;
+  font-weight: 400;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.accordion button:hover,
+.accordion button:focus {
+  cursor: pointer;
+  color: #f4273b;
+}
+
+.accordion button:hover::after,
+.accordion button:focus::after {
+  cursor: pointer;
+  color: #03b5d2;
+  border: 1px solid #03b5d2;
+}
+
+.accordion button .accordion-title {
+  padding: 1em 1.5em 1em 0;
+  font-family: 'Quicksand' !important;
+}
+
+.accordion button .icon {
+  display: inline-block;
+  position: absolute;
+  top: 18px;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border: 1px solid;
+  border-radius: 22px;
+}
+
+.accordion button .icon::before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 9px;
+  left: 5px;
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+}
+.accordion button .icon::after {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 5px;
+  left: 9px;
+  width: 2px;
+  height: 10px;
+  background: currentColor;
+}
+
+.accordion button[aria-expanded='true'] {
+  color: #f4273b;
+}
+.accordion button[aria-expanded='true'] .icon::after {
+  width: 0;
+}
+.accordion button[aria-expanded='true'] + .accordion-content {
+  opacity: 1;
+  max-height: 9em;
+  transition: all 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 200ms linear, max-height 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content p {
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0.7em 0;
+  margin-bottom: 2em;
+}
+
 </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.5/gsap.min.js"
@@ -991,7 +1092,7 @@ if(location.href.indexOf('amrit15') != -1
             <div class="info" style="margin-top: -19px">
             <div class="para" style="margin-top: 0px'">
                 <div class="main-desc">Pizza live counters for your next party!</b> <br><br>
-                    <p style="background: #f9f4ef;border-radius: 6px;padding: 9px;">Starting
+                    <p style="background: #f9f4ef;border-radius: 6px;padding: 9px;"><b style="text-decoration:underline">Special price</b> starting
                         <b style="text-decoration:underline">₹199</b> per large pizza!</p><br><br>
 
 
@@ -1046,7 +1147,7 @@ if(location.href.indexOf('amrit15') != -1
 </div>
 
     <div class="section no-padding" style="margin-top: 40px">
-        <div class="post-heading" style="height: 500px;">
+        <div class="post-heading" style="height: 460px;">
             <div class="info">
                 <div class="desc caption">Fully portable cart</div>
                 <div class="desc" style="padding:0px !important;">
@@ -1119,6 +1220,86 @@ if(location.href.indexOf('amrit15') != -1
 <hr class="line"/>
 
     <br/>
+        <div class="accordion">
+            <div class="desc caption" style="width:100%;padding-left:0px;padding-right:0px;font-size:22px !important;text-align:center;">Frequently Asked Questions</div>
+            <div class="accordion-item" style="margin-top:36px;">
+                <button id="accordion-button-1" aria-expanded="false">
+                    <span class="accordion-title">My venue is in higher floor. Can the cart be setup there?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        Yes, Totally! Our cart if fully portable and will be setup quickly at the time of your event.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-2" aria-expanded="false">
+                    <span class="accordion-title">What's the size of your pizza? How many does it serve?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        Our pizzas are 11 inch Large. It serves 1 person and even kids have had 1 full pizza in our previous events.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-3" aria-expanded="false">
+                    <span class="accordion-title">What other items do you serve apart from pizza?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        We serve pizzas and wraps. Wraps have a stuffing of our custom sauce, veggies & optional cheese.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-4" aria-expanded="false">
+                    <span class="accordion-title">How do I place an order?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        You can check the quote clicking on the 'Get a quote' button below and leave your mobile number in the quote page. Our representative will contact you to assist in taking your order.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-5" aria-expanded="false">
+                    <span class="accordion-title">What's the price?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        As a specia offer, your first order will be charged at discounted price of 199/- per large pizza. Only for paneer toppings, we charge 25/- per pizza as additional charges.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-5" aria-expanded="false">
+                    <span class="accordion-title">Are there any other charges apart from the pizza charges?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        Apart from the pizza price, there is a transportation charge depending on your location. Our representative will share this cost once you check your quote.
+                    </p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button id="accordion-button-5" aria-expanded="false">
+                    <span class="accordion-title">Can I order a sample pizza for tasting?</span>
+                    <span class="icon" aria-hidden="true"></span>
+                </button>
+                <div class="accordion-content">
+                    <p>
+                        Yes, of course. You may place a sample order once you check your quote and we will deliver a sample pizza at your doorstep. Sample orders are charged at a nominal price per pizza.
+                    </p>
+                </div>
+            </div>
+        </div>
 
     <div class="bottom-bar" ></div>
 <a class="button" style="font-weight:bold" href="/order/">Get a Quote</a>
@@ -1273,6 +1454,22 @@ let displayTestimonialEvents = () => {
 };
 window.onload = displayTestimonialEvents;
 window.onload = nextEvents();
+
+const items = document.querySelectorAll('.accordion button');
+
+function toggleAccordion() {
+  const itemToggle = this.getAttribute('aria-expanded');
+
+  for (i = 0; i < items.length; i++) {
+    items[i].setAttribute('aria-expanded', 'false');
+  }
+
+  if (itemToggle == 'false') {
+    this.setAttribute('aria-expanded', 'true');
+  }
+}
+
+items.forEach((item) => item.addEventListener('click', toggleAccordion));
 
 setInterval(function() {
  var word = document.getElementById('rotated').innerHTML;

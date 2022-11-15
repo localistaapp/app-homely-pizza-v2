@@ -212,7 +212,7 @@ class QuoteCard extends Component {
          prefix = 'g';
          extraClasses = 'starter';
         }
-        let defaultPrice = 235;
+        let defaultPrice = 199;
         return (
         <div className="card-container">
             <div className="section-one" style={{display: 'block'}}>
@@ -229,7 +229,7 @@ class QuoteCard extends Component {
                 </div>
             </div>
             <div className="section-two">
-                <div className="pricing" style={{top: '-86px'}}><label className="price"><span className="slashed" id={`price${index}`}>{defaultPrice * parseInt(sessionStorage.getItem('qty'),10)}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" id={`priceNew${index}`}>{Math.ceil(defaultPrice * parseInt(sessionStorage.getItem('qty'),10) * 0.85)}</span></label></div>
+                <div className="pricing" style={{top: '-86px'}}><label className="price"><span className="slashed" id={`price${index}`}>{(defaultPrice * parseInt(sessionStorage.getItem('qty'),10)) + 2900 + ((defaultPrice * parseInt(sessionStorage.getItem('qty'),10)) * 0.2)}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" id={`priceNew${index}`}>{Math.ceil(defaultPrice * parseInt(sessionStorage.getItem('qty'),10))+1900}</span></label></div>
                 <div className="top">
                 </div>
             </div>
