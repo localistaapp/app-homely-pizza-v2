@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fbbff25-f33b-4a81-aaf6-38e53390f867" name="Default Changelist" comment="initial commit">
-      <change afterPath="$PROJECT_DIR$/public/process.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/stage2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/process/process.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/process/stage1.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/process/stage2.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/process/stage3.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/cust_pritesh.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/cust_pritesh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/reviews.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/.gz" beforeDir="false" afterPath="$PROJECT_DIR$/public/.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/guide.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/guide.bundle.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/guide.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/guide.bundle.min.js.br" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,15 +179,15 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/client/process" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/img/images" />
     <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/img/images" />
       <recent name="$PROJECT_DIR$/src/client/process" />
       <recent name="$PROJECT_DIR$/src/client/stage2" />
       <recent name="$PROJECT_DIR$/public" />
-      <recent name="$PROJECT_DIR$/public/img/images" />
       <recent name="$PROJECT_DIR$/public/assets/fonts" />
     </key>
   </component>

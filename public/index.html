@@ -147,7 +147,7 @@ body {
     color: #454545;
     padding: 0px;
     margin: 0 auto;
-    top: 106px;
+    top: 150px;
     position: absolute;
     font-size: 27px;
     font-weight: normal;
@@ -159,7 +159,7 @@ body {
 }
 
 .banner1 {
-    margin-top: 172px;
+    margin-top: 124px;
     height: 396px;
     background-image: url(../../../img/sc.jpg);
     background-size: cover;
@@ -459,7 +459,6 @@ html{
         height: 79px;
         margin: 0 auto;
         top: 0px;
-        position: fixed;
         z-index: 1;
         left: 0px;
         max-height: 90px;
@@ -473,7 +472,7 @@ html{
     .logo .logo-img {
         width: 142px;
         margin-left: 28px;
-        margin-top: 20px;
+        margin-top: 59px;
     }
     .headline {
       margin: 0 auto;
@@ -759,7 +758,7 @@ html{
     top: 0px;
     left: 192px;
     width: 75%;
-    margin-top: 230px;
+    margin-top: 170px;
 }
 .img-con {
 	position: absolute;
@@ -848,6 +847,25 @@ a {
 .fab {
 	color: #ff0000;
 }
+.announcement {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 38px;
+    z-index: 9999;
+    background: #f6364b;
+    color: #fff;
+    padding: 9px;
+    padding-left: 12px;
+}
+.reviews img {
+    width: 200px;
+}
+.events-img {
+    margin: 0px !important;
+    width: 100% !important;
+    border-radius: 12px !important;
+}
 @media screen and (max-width: 650px) {
 	.wrapper {
 		font-size: 14px;
@@ -892,6 +910,7 @@ if(location.href.indexOf('amrit15') != -1
 </script>
 
 <div>
+    <div class="announcement">20% OFF on your first order. Limited time offer!</div>
 <div class="results">
 <div>
 <div class="logo" id="logoWrapper">
@@ -975,9 +994,10 @@ if(location.href.indexOf('amrit15') != -1
 </div>
 </div>
 <div class="section no-padding" style="margin-top: 40px">
-<div class="post-heading">
+<div class="post-heading" style="height: 500px;">
     <div class="info">
         <div class="desc caption">What customers say?</div>
+        <div class="reviews"><a style="margin-top:0px" href="https://www.google.com/search?q=slimcrust&oq=slimcrust&aqs=chrome.0.69i59j0i10i512j69i60l2j69i61j69i60.2331j0j4&sourceid=chrome&ie=UTF-8#wptab=s:H4sIAAAAAAAAAONgVuLVT9c3NCy2sDDPTjNJf8RowS3w8sc9YSn9SWtOXmPU5OIKzsgvd80rySypFJLmYoOyBKX4uVB18uxi4vfJT07MCcjPDEoty0wtL17EKl2ck5mbXFRaXKKQlJqXnphTWlSqUASRBQCKr9orfAAAAA"><img src="./img/images/reviews.png"></a></div>
         <div id="loader"></div>
         <div id="box">
             <div class="img-con">
@@ -999,17 +1019,39 @@ if(location.href.indexOf('amrit15') != -1
 </div>
 
 
-<hr class="line"/>
-<div class="overview" style="margin-top: -150px;font-size: 20px;font-weight:bold">Nutrition Facts - Comparison</div>
-    <div class="slider-msg">Drag the below arrows left and right</div>
-<br/>
 
-<div id="beer-slider" class="beer-slider" data-beer-label="Slimcrust Pizza" data-beer-start="25">
-    <img src="./img/images/homely_pizza.jpg" alt="Original - Man holding beer"/>
-    <div class="beer-reveal" data-beer-label="Ordinary Pizza">
-        <img src="./img/images/ordinary_pizza03.jpg" alt="Processed - Man holding beer"/>
+    <div class="section no-padding" style="margin-top: 40px">
+        <div class="post-heading" style="height: 490px;">
+            <div class="info">
+                <div class="desc caption" style="font-size:20px !important">Snapshots from Recent Events</div>
+                <div id="boxEvents">
+                    <div class="img-con">
+                        <img src="https://i.postimg.cc/gJDkZrNn/profile-image-1.png" />
+                        <img src="https://i.postimg.cc/8kZzkJ7Y/profile-image-2.png" />
+                    </div>
+                    <div class="wrapper" style="-webkit-box-shadow: 0 -0.2em 3em rgb(11 30 59 / 15%);box-shadow:0 -0.2em 3em rgb(11 30 59 / 15%);margin-top:34px">
+                        <div class="testimonial-container" id="testimonial-container-events">
+                            <div id="testimonial2" class="active">
+                                <img src="" />
+                            </div>
+                        </div>
+                        <button id="prev" style="left: 0.9em;" onclick="prevEvents()">←</button>
+                        <button id="next" style="right: 0.9em;" onclick="nextEvents()">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+<img src="./img/images/e1.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e2.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e3.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e4.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e5.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e6.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+<img src="./img/images/e7.jpg" style="visibility:hidden" width="1px" style="width:1px" />
+
+<hr class="line"/>
+
     <br/>
 
     <div class="bottom-bar" ></div>
@@ -1091,23 +1133,41 @@ window.addEventListener("load", function () {
 	document.getElementById("box").style.display = "block";
 });
 const testimonials = [
+    {
+		name: "Rajesh Kumar",
+		job: "Whitefield, Bangalore",
+		image: "./img/images/rj.jpeg",
+		testimonial:
+			"<br/><br/>Very yum and delicious pizzas with soft and evenly baked crust. One of the best I've tasted in Bangalore.<br/><br/>"
+	},
+    {
+		name: "Pritesh Patel",
+		job: "Electronic city, Bangalore",
+		image: "./img/images/cust_pritesh.jpg",
+		testimonial:
+			"Good quality pizza 🍕, people liked it a lot, very professional and punctual on the timing. I recommend it to others."
+	},
 	{
 		name: "Vinayak",
 		job: "JP Nagar, Bangalore",
 		image: "./img/images/vs.jpeg",
 		testimonial:
-			"I ordered pizzas for a house party and was really happy with the service. From the packaging to the serving of hot pizzas, guests were delighted with the experience. Must try in Bangalore!"
-	},
-	{
-		name: "Rajesh Kumar",
-		job: "Whitefield, Bangalore",
-		image: "./img/images/rj.jpeg",
-		testimonial:
-			"<br/><br/>It's very yummy and delicious. It's the best pizza I ever tasted.<br/><br/>"
+			"I ordered pizzas for a house party and was really happy with the service. Chefs arrived on time and served hot pizzas right out of oven! Must try experience in Bangalore!"
 	}
+];
+const testimonialEvents = [
+    {image: "./img/images/e1.jpg"},
+	{image: "./img/images/e2.jpg"},
+	{image: "./img/images/e3.jpg"},
+	{image: "./img/images/e4.jpg"},
+	{image: "./img/images/e5.jpg"},
+	{image: "./img/images/e6.jpg"},
+	{image: "./img/images/e7.jpg"}
 ];
 let i = 0; // current slide
 let j = testimonials.length; // total slides
+let k = 0; // current slide
+let l = testimonialEvents.length; // total slides
 let testimonialContainer = document.getElementById("testimonial-container");
 function next() {
 	i = (j + i + 1) % j;
@@ -1127,6 +1187,26 @@ let displayTestimonial = () => {
         `;
 };
 window.onload = displayTestimonial;
+window.onload = next();
+
+let testimonialContainerEvents = document.getElementById("testimonial-container-events");
+function nextEvents() {
+	k = (l + k + 1) % l;
+	displayTestimonialEvents();
+}
+
+function prevEvents() {
+	k = (l + k - 1) % l;
+	displayTestimonialEvents();
+}
+let displayTestimonialEvents = () => {
+	testimonialContainerEvents.innerHTML = `
+         <img class="events-img" src=${testimonialEvents[k].image}></img>
+
+        `;
+};
+window.onload = displayTestimonialEvents;
+window.onload = nextEvents();
 
 setInterval(function() {
  var word = document.getElementById('rotated').innerHTML;
