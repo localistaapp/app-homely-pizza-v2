@@ -774,6 +774,10 @@ app.get("/stage3/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
 
+app.get("/terms/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'terms.html'));
+});
+
 app.get("/memory", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'memory.html'));
 });

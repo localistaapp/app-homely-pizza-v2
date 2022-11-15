@@ -385,7 +385,7 @@ ul.wstep li.active {
 
 .info {
     margin-top: 24px;
-    text-align: center;
+    text-align: left;
 }
 
 .line {
@@ -473,7 +473,7 @@ html{
     .logo .logo-img {
         width: 142px;
         margin-left: 28px;
-        margin-top: 59px;
+        margin-top: 24px;
     }
     .headline {
       margin: 0 auto;
@@ -848,17 +848,6 @@ a {
 .fab {
 	color: #ff0000;
 }
-.announcement {
-    position: absolute;
-    top: 0px;
-    width: 100%;
-    height: 38px;
-    z-index: 9999;
-    background: #f6364b;
-    color: #fff;
-    padding: 9px;
-    padding-left: 12px;
-}
 .reviews img {
     width: 200px;
 }
@@ -871,155 +860,6 @@ a {
 	.wrapper {
 		font-size: 14px;
 	}
-}
-button.banner{
-    position: absolute;
-    margin: auto;
-    outline: none;
-    box-shadow: 20px 20px 30px rgba(0,0,0,0.1);
-    background-color: transparent;
-    border: none;
-    overflow: hidden;
-
-}
-button.banner:before{
-    content: "20% OFF on your first order. Limited time offer!";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    height: 100%;
-    width: 100%;
-    color: #fcfcfc;
-    backdrop-filter: blur(15px);
-    cursor: pointer;
-    font-family: 'Quicksand';
-    font-weight: bold;
-    font-size: 16px;
-}
-button.banner:after{
-    content: "";
-    height: 500px;
-    width: 500px;
-    position: absolute;
-    left: -90px;
-    top: -200px;
-    z-index: -1;
-    background-image: conic-gradient(
-        #ff2e4e,
-        #d960ff,
-        #9264ff,
-        #00b3f9,
-        #06cd69,
-        #ffcd00,
-        #ff5c22,
-        #ff2e4e
-    );
-    animation: spin 7s linear infinite;
-}
-@keyframes spin{
-    100%{
-        transform: rotate(360deg);
-    }
-}
-.accordion {
-    padding: 24px;
-}
-.accordion .accordion-item {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.accordion .accordion-item button[aria-expanded='true'] {
-  border-bottom: 1px solid #f4273b;
-}
-
-.accordion button {
-  position: relative;
-  display: block;
-  text-align: left;
-  width: 100%;
-  padding: 1em 0;
-  color: #666;
-  font-size: 1.15rem;
-  font-weight: 400;
-  border: none;
-  background: none;
-  outline: none;
-}
-
-.accordion button:hover,
-.accordion button:focus {
-  cursor: pointer;
-  color: #f4273b;
-}
-
-.accordion button:hover::after,
-.accordion button:focus::after {
-  cursor: pointer;
-  color: #03b5d2;
-  border: 1px solid #03b5d2;
-}
-
-.accordion button .accordion-title {
-  padding: 1em 1.5em 1em 0;
-  font-family: 'Quicksand' !important;
-}
-
-.accordion button .icon {
-  display: inline-block;
-  position: absolute;
-  top: 18px;
-  right: 0;
-  width: 22px;
-  height: 22px;
-  border: 1px solid;
-  border-radius: 22px;
-}
-
-.accordion button .icon::before {
-  display: block;
-  position: absolute;
-  content: '';
-  top: 9px;
-  left: 5px;
-  width: 10px;
-  height: 2px;
-  background: currentColor;
-}
-.accordion button .icon::after {
-  display: block;
-  position: absolute;
-  content: '';
-  top: 5px;
-  left: 9px;
-  width: 2px;
-  height: 10px;
-  background: currentColor;
-}
-
-.accordion button[aria-expanded='true'] {
-  color: #f4273b;
-}
-.accordion button[aria-expanded='true'] .icon::after {
-  width: 0;
-}
-.accordion button[aria-expanded='true'] + .accordion-content {
-  opacity: 1;
-  max-height: 9em;
-  transition: all 200ms linear;
-  will-change: opacity, max-height;
-}
-.accordion .accordion-content {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: opacity 200ms linear, max-height 200ms linear;
-  will-change: opacity, max-height;
-}
-.accordion .accordion-content p {
-  font-size: 1rem;
-  font-weight: 300;
-  margin: 0.7em 0;
-  margin-bottom: 2em;
 }
 
 </style>
@@ -1061,7 +901,6 @@ if(location.href.indexOf('amrit15') != -1
 </script>
 
 <div>
-    <button class="announcement banner banner-colorized"></button>
 <div class="results">
 <div>
 <div class="logo" id="logoWrapper">
@@ -1072,239 +911,47 @@ if(location.href.indexOf('amrit15') != -1
 <div><i class="loading"></i></div>
 
 
-<div class="banner1"></div>
-<div class="main">
-    <div>
-
-        <div class="header">Live pizza counter, for your <span id="rotated" style="font-family:Sottel;letter-spacing:2px;">next</span> party!<br/></div>
-        <div class="scroll-arrow">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-    <div class="overview"></div>
-
-
-    <br/>
-    <hr class="line"/>
-    <div class="section">
-        <div class="post-heading">
-            <div class="info" style="margin-top: -19px">
-            <div class="para" style="margin-top: 0px'">
-                <div class="main-desc">Pizza live counters for your next party!</b> <br><br>
-                    <p style="background: #f9f4ef;border-radius: 6px;padding: 9px;"><b style="text-decoration:underline">Special price</b> starting
-                        <b style="text-decoration:underline">₹199</b> per large pizza!</p><br><br>
-
-
-                </div>
-                <br/>
-        </div>
-
-        <hr class="line"/>
-    </div>
-</div>
-</div>
-<div class="section no-padding">
-    <div class="post-heading">
-        <div class="info" style="margin-top: -20px">
-        <img class="curve small" src="./img/images/curve.png"/>
-        <hr class="line"/>
-        <div class="para" style="marginTop: 14px">
-        <div class="title">Hot pizzas under 1 minute!</div>
-            <br/><br/>
-            <img src="./img/images/poven.png" style="width:210px;margin-right: 16px;" />
-            <img src="./img/images/panim.gif" style="width:130px" />
-        <br/><br/>
-        <div class="desc">Serve hot and healthy pizzas to your guests right at your venue.
-            <br/><br/>Our chef arrives with a portable cart as per your booking & serves oven-cooked hot pizzas instantly!</div>
-    </div>
-
-</div>
-</div>
-</div>
-<div class="section no-padding" style="margin-top: 40px">
-<div class="post-heading">
-    <div class="info">
-        <div class="desc caption">Best pizza crust ever</div>
-        <section class="third-section" style="margin-top:-100px">
-            <div class="images-wrapper">
-                <img id="section_3_06" style="display:none;" class="section_3_06" src="./img/images/section_3_06.png?raw=1" />
-                <img class="section_3_05" src="./img/images/section_3_05.webp?raw=1" />
-                <img class="section_3_04" src="./img/images/section_3_04.webp?raw=1" />
-                <img class="section_3_03" src="./img/images/section_3_03.webp?raw=1" />
-                <img class="section_3_02" src="./img/images/section_3_02.webp?raw=1" />
-                <img class="section_3_01" src="./img/images/section_3_01.webp?raw=1" />
-            </div>
-        </section>
-        <br/><br/><br/><br/><br/><br/>
-
-
-        <div class="desc" style="margin-top: -350px">
-            <br/><br/>Our crust is filled with rich natural grains high in fiber that's not just healthy,
-            but also mouth-wateringly delicious!</div>
-</div>
-</div>
 </div>
 
-    <div class="section no-padding" style="margin-top: 40px">
-        <div class="post-heading" style="height: 460px;">
+
+    <div class="section no-padding" style="margin-top: 10px">
+        <div class="post-heading" style="height: 1760px;">
             <div class="info">
-                <div class="desc caption">Fully portable cart</div>
+                <div class="desc caption" style="font-size:28px !important">Terms & Conditions</div>
                 <div class="desc" style="padding:0px !important;">
                     <br/>
-                    <img src="./img/images/assembly.png" style="width:100%;height:200px;"/>
-                    <br/><br/><div style="padding-left:40px;padding-right:40px"> Our portable live counter will be assembled at your venue to start serving your guests. <br/><br/>Whether your party hall is in higher floors or on the ground floor, our cart is easily installed.  </div></div>
+                    <div style="padding-left:40px;padding-right:40px">
+                        <br/>
+                        <span class="caption">1. Discounts & Offers</span><br/><br/>
+                        Slimcrust discounts & offers are subject to change and can be revised from time to time.<br/><br/>
+                        As a customer, you agree and understand that discounts cannot be demanded unless specifically applied by the company.
+                        <br/><br/><span class="caption">2. Cancellation & Refunds</span><br/><br/>
+                        We understand that there could be unavoidable circumstances due to which you may have to cancel your event order.<br/><br/>
+                        However, since Slimcrust procures ingredients and materials on an on-demand basis depending on the order quantity, we forfeit the entire booking amount paid at the time of confirming the order.
+                        <br/><br/><span class="caption">3. Live Counter Timings</span><br/><br/>
+                        We understand that there could be unavoidable delays to start the events.<br/><br/>
+                        However, unless otherwise agreed, we would be forced to close the counter latest at 9pm due to our transportation and logistic needs.
+                        <br/><br/><span class="caption">4. Logistics & Delays</span><br/><br/>
+                        At Slimcrust, we make every effort to adhere to the timings and not cause any delays whatsoever to customers especially during events.<br/><br/>
+                        However, due to situations that may not be fully in our control, there could be delays due to traffic, weather conditions among other situational constrainsts.
+                        You fully agree and understand that such delays are not deliberate and that Slimcrust is not liable in such extreme cases.
+                        <br/><br/><span class="caption">5. Fair treatment & anti-abuse</span><br/><br/>
+                        At Slimcrust, we respect our every individual including and not restricted to chefs, helping personnel, delivery executives.<br/><br/>
+                        We expect fair treatment by our customers and have a zero abuse policy. You fully agree and understand that any untoward behaviours addressed or targeted at the Slimcrust personnel for any reasons may attract appropriate action as per local laws.
+                    </div></div>
 
             </div>
         </div>
 
 
 
-<div class="section no-padding" style="margin-top: 40px">
-<div class="post-heading" style="height: 500px;">
-    <div class="info">
-        <div class="desc caption">What customers say?</div>
-        <div class="reviews"><a style="margin-top:0px" href="https://www.google.com/search?q=slimcrust&oq=slimcrust&aqs=chrome.0.69i59j0i10i512j69i60l2j69i61j69i60.2331j0j4&sourceid=chrome&ie=UTF-8#wptab=s:H4sIAAAAAAAAAONgVuLVT9c3NCy2sDDPTjNJf8RowS3w8sc9YSn9SWtOXmPU5OIKzsgvd80rySypFJLmYoOyBKX4uVB18uxi4vfJT07MCcjPDEoty0wtL17EKl2ck5mbXFRaXKKQlJqXnphTWlSqUASRBQCKr9orfAAAAA"><img src="./img/images/reviews.png"></a></div>
-        <div id="loader"></div>
-        <div id="box">
-            <div class="img-con">
-                <img src="https://i.postimg.cc/gJDkZrNn/profile-image-1.png" />
-                <img src="https://i.postimg.cc/8kZzkJ7Y/profile-image-2.png" />
-            </div>
-            <div class="wrapper">
-                <div class="testimonial-container" id="testimonial-container">
-                    <div id="testimonial1" class="active">
-                        <img src="" />
-                    </div>
-                </div>
-                <button id="prev" onclick="prev()">←</button>
-                <button id="next" onclick="next()">→</button>
-            </div>
-        </div>
-</div>
-</div>
-</div>
 
 
 
-    <div class="section no-padding" style="margin-top: 40px">
-        <div class="post-heading" style="height: 490px;">
-            <div class="info">
-                <div class="desc caption" style="font-size:20px !important">Snapshots from Recent Events</div>
-                <div id="boxEvents">
-                    <div class="img-con">
-                        <img src="https://i.postimg.cc/gJDkZrNn/profile-image-1.png" />
-                        <img src="https://i.postimg.cc/8kZzkJ7Y/profile-image-2.png" />
-                    </div>
-                    <div class="wrapper" style="-webkit-box-shadow: 0 -0.2em 3em rgb(11 30 59 / 15%);box-shadow:0 -0.2em 3em rgb(11 30 59 / 15%);margin-top:34px">
-                        <div class="testimonial-container" id="testimonial-container-events">
-                            <div id="testimonial2" class="active">
-                                <img src="" />
-                            </div>
-                        </div>
-                        <button id="prev" style="left: 0.9em;" onclick="prevEvents()">←</button>
-                        <button id="next" style="right: 0.9em;" onclick="nextEvents()">→</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<img src="./img/images/e1.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e2.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e3.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e4.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e5.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e6.jpg" style="visibility:hidden" width="1px" style="width:1px" />
-<img src="./img/images/e7.jpg" style="visibility:hidden" width="1px" style="width:1px" />
 
-<hr class="line"/>
 
-    <br/>
-        <div class="accordion">
-            <div class="desc caption" style="width:100%;padding-left:0px;padding-right:0px;font-size:22px !important;text-align:center;">Frequently Asked Questions</div>
-            <div class="accordion-item" style="margin-top:36px;">
-                <button id="accordion-button-1" aria-expanded="false">
-                    <span class="accordion-title">My venue is in higher floor. Can the cart be setup there?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        Yes, Totally! Our cart if fully portable and will be setup quickly at the time of your event.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-2" aria-expanded="false">
-                    <span class="accordion-title">What's the size of your pizza? How many does it serve?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        Our pizzas are 11 inch Large. It serves 1 person and even kids have had 1 full pizza in our previous events.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-3" aria-expanded="false">
-                    <span class="accordion-title">What other items do you serve apart from pizza?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        We serve pizzas and wraps. Wraps have a stuffing of our custom sauce, veggies & optional cheese.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-4" aria-expanded="false">
-                    <span class="accordion-title">How do I place an order?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        You can check the quote clicking on the 'Get a quote' button below and leave your mobile number in the quote page. Our representative will contact you to assist in taking your order.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-5" aria-expanded="false">
-                    <span class="accordion-title">What's the price?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        As a special offer, your order will be charged at discounted price of 199/- per large pizza. Only for paneer toppings, we charge 25/- per pizza as additional charges.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-5" aria-expanded="false">
-                    <span class="accordion-title">Are there any other charges apart from the pizza charges?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        Apart from the pizza price, there is a transportation charge depending on your location. Our representative will share this cost once you check your quote.
-                    </p>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <button id="accordion-button-5" aria-expanded="false">
-                    <span class="accordion-title">Can I order a sample pizza for tasting?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        Yes, of course. You may place a sample order once you check your quote and we will deliver a sample pizza at your doorstep. Sample orders are charged at a nominal price per pizza.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-    <div class="bottom-bar" ></div>
-<a class="button" href="/order/" style="font-weight:bold;bottom:84px">Get a Quote</a>
-<a class="button" href="tel:+919972908138" style="font-weight:bold;color: #fd3e37;font-weight:bold;background: none;border: 2px solid #fd3e37;bottom: 25px;background: #fff;">Call us</a>
 <br/>
-<div class="desc" style="text-align: center;font-size: 14px;padding-left: 12px;padding-right: 12px;"><p>Copyright © 2022 Slimcrust   |   <a href="/terms" style="display:inline;font-size:13px;color:#666;text-decoration:underline">Terms & Conditions</a></p></div><br/>
+<div class="desc" style="text-align: center;font-size: 14px">Copyright © 2022 Slimcrust.com</div><br/>
 <br/><br/><br/>
 <br/><br/><br/><br/><br/><br/>
 </div>
