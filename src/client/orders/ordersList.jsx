@@ -94,7 +94,9 @@ class Calendar extends React.Component {
     const currentSelectedDay = this.state.selectedDay;
     return (
     <div>
-        <span className="box month-label" style={{marginRight:'60px',display:'inline-block'}} onClick={()=>{location.reload()}}>&lt; Back</span>
+        <span className="box month-label" style={{marginRight:'60px',display:'inline-block'}} onClick={()=>{this.setState({
+                                                                                                                  showEvents: false
+                                                                                                                });}}>&lt; Back</span>
       <span className="box month-label" style={{display:'inline-block'}}>
         {currentSelectedDay.format("DD MMMM YYYY")}
       </span>
@@ -1059,7 +1061,7 @@ class Stages extends Component {
 
         return (<div>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
-                    <span className="stage-heading">Upcoming Orders</span>
+                    <span className="stage-heading">Upcoming Event Orders</span>
                     <div className="calendar-rectangle">
                       <div id="calendar-content" className="calendar-content">
                         <Calendar />
