@@ -766,6 +766,10 @@ app.get("/process/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
 
+app.get("/orders/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
