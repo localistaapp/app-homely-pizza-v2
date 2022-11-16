@@ -340,6 +340,7 @@ class Stages extends Component {
                     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
                     return local.toJSON().slice(0,10);
                 });
+        let meta = JSON.parse(sessionStorage.getItem('order-meta'));
         this.state = {
             value: 0,
             results: [],
@@ -357,63 +358,25 @@ class Stages extends Component {
             redirect: false,
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
-            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []
+            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
+            orderTitle: meta['quantity'] + ' ' + meta['size'] + ' pizzas' + ' - ' + meta['quote_price'],
+            dateTime: meta['event_date'] + ' ' + meta['event_time'],
+            booking: meta['booking_amount_paid'],
+            customer: meta['customer_name'],
+            customerMobile: meta['event_contact_mobile'],
+            toppings: meta['topping_ingredients'],
+            extras: meta['extras'],
+            location: meta['venue_address'],
+            mapUrl: meta['venue_map_url'],
+            comments: meta['comments'],
         };
         sessionStorage.setItem('eventDate',new Date().toDateInputValue());
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
     componentDidMount() {
-        this.fetchJson();
         var winHeight = window.innerHeight;
-        gtag('event', 'clicked_get_quote', {'mounted': 'true'});
 
-        if(isValidCoupon()) {
-            document.getElementById('discountModal').style.top = '1200px';
-        }
-
-        window.addEventListener("scroll",function () {
-            if(window.scrollY <= 120) {
-                document.querySelector("#checkoutHeader").style.top = "0px";
-            } else {
-                document.querySelector("#checkoutHeader").style.top = (window.scrollY-2)+"px";
-            }
-        });
-
-        document.addEventListener('basket-updated', function(e) {
-            console.log('basket-updated event', e.detail);
-            var currBasketData = localStorage.getItem("basket");
-            var basketData;
-            if(currBasketData == null) {
-                 basketData = new Object();
-            } else {
-                basketData = JSON.parse(currBasketData);
-            }
-            if(e.detail != null) {
-                console.log('e.detail.itemId: ', e.detail.itemId);
-                console.log('e.detail.qty: ', e.detail.qty);
-                if (e.detail.qty <=0 && basketData[e.detail.itemId] != null) {
-                    delete basketData[e.detail.itemId];
-                    document.getElementById('checkoutCount').innerHTML = Object.keys(basketData).length;
-                    if (Object.keys(basketData).length == 0) {
-                        document.getElementById('checkoutHeader').style.display = 'none';
-                    }
-                } else {
-                    basketData[e.detail.itemId] = e.detail;
-                }
-            }
-
-            if(Object.keys(basketData).length >= 1) {
-                document.getElementById('checkoutHeader').style.display = 'inline';
-                document.getElementById('checkoutCount').innerHTML = Object.keys(basketData).length;
-            }
-            var basketStr = JSON.stringify(basketData);
-            localStorage.setItem("basket",basketStr)
-        });
-
-        if (location.href.indexOf('/redirect') >= 0) {
-            this.setState({redirect: true});
-        }
     }
     fetchJson() {
         console.log('this.props.match: ', this.props.match);
@@ -600,7 +563,7 @@ class Stages extends Component {
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     render() {
-        const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
 
         console.log('orderSummary: ', orderSummary);
@@ -662,116 +625,47 @@ class Stages extends Component {
 
 
 
-        return (<div>
+        return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
-                    <span className="stage-heading">Getting Ready.. Stage 1/3</span>
-                    <div id="checkoutHeader">
-                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-20px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
-                            <div className=""></div>
-                            <div id="checkoutCount" class="c-count">0</div>
-                        </div>
-                    </div>
+                    <Paper>
+                                              <Tabs
+                                                value={this.state.value}
+                                                onChange={this.handleTabChange}
+                                                indicatorColor="primary"
+                                                textColor="primary"
+                                                centered
+                                              >
+                            <Tab icon={<LocalPizzaIcon />} label="&nbsp;&nbsp;&nbsp;Order Detail&nbsp;&nbsp;&nbsp;" />
+                            <Tab icon={<RestaurantIcon />} label="&nbsp;&nbsp;&nbsp;Ingredients&nbsp;&nbsp;&nbsp;" />
+                                              </Tabs>
+                                              <TabPanel value={this.state.value} index={0}>
+                                                   <span className="stage-heading" style={{top: '12px'}}>{this.state.orderTitle}</span>
+                                                   <hr className="line-light"/>
+                                                   <span className="stage-desc" style={{color:'#000',fontSize:'18px'}}>{this.state.dateTime}</span>
+                                                   <span className="stage-desc" style={{marginLeft: '40px',color:'#000',fontSize:'18px'}}><b>Paid:</b> {this.state.booking}</span>
+                                                   <br/>
+                                                   <span className="stage-desc">{this.state.customer}, <a className="small-link" href={`tel:${this.state.customerMobile}`}>{this.state.customerMobile}</a></span>
+                                                   <br/>
+                                                   <span className="stage-desc">{this.state.toppings}</span>
+                                                   <br/>
+                                                   <span className="stage-desc">Extras: {this.state.extras}</span>
+                                                   <br/>
+                                                   <span className="stage-desc"><img className="marker" src="./img/images/pin.png"/>{this.state.location}</span>
+                                                   <div dangerouslySetInnerHTML={{__html:this.state.mapUrl}}></div>
+                                                   <br/>
+                                                   <span className="stage-desc">Comments: {this.state.comments}</span>
+                                                   <div className="status-title">
+                                                      <br/>
+                                                   </div>
 
-                    <div><i className="loading" id="myTasksLoader" style={{top: '28px'}}></i></div>
-                    <div className={`main fadeInBottom ${this.state.showWizard}`}>
-                        <div className="wizard-progress">
-                          <div className="step complete">
-                            <div className="node"></div>
-                            <span>Ingredients Checklist</span>
-                          </div>
-                          <div className={`step ${curStep>1 || redirect ? 'complete' : 'in-progress'}`}>
-                            <span>Process Ingredients</span>
-                            <div className="node"></div>
-                          </div>
-                          <div className={`step ${curStep>2 || redirect  ? 'complete' : 'in-progress'}`}>
-                            <span>Prep Dough</span>
-                            <div className="node"></div>
-                          </div>
-                        </div>
-                        {redirect == true && <div className="step-detail step-1">
-                                <div class="payment-success">
-                                <img src="../../../img/images/ic_tick.png" style={{width: '22px'}}/>
-                                <span>Payment Successful!</span></div>
-                                <br/>
-                                <div>
-                                    <span>Thank you for placing an order with us. Our team will contact you based on your delivery slot.</span>
-                                </div>
-                        </div>}
-                        {curStep == 1 && !redirect && <div className="step-detail step-1">
-                            <div>Make sure you check each ingredient before order day.</div>
-                            <br/>
-                            <div className="checkbox-container">
-                                <input className="check" type="checkbox" /><span>Weismill Yeast</span><span> 100g</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Refined Flour</span><span> 5kg</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Wheat Flour</span><span> 1kg</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Pizza Sauce</span><span> 800g</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Tomato sauce</span><span> 500g</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>White sauce</span><span> 5nos</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Pizza cheese</span><span> 3kg</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Keya Peri Peri</span><span> 2nos</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Oregano</span><span> 1nos</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Olives Sliced</span><span> 470g x 2</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Salt</span><span> 2.5g</span>
-                                <br/>
-                                <span><hr style={{height: '1px',width:'90%'}}/></span>
-                                <input className="check" type="checkbox" /><span>Tomato</span><span> 3kg</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Onion</span><span> 2kg</span>
-                                <br/>
-                                <input className="check" type="checkbox" /><span>Sweetcorn</span><span> 1kg</span>
-                            </div>
-                            <div className="bottom-bar" ></div>
-                            <a className="button" onClick={()=>{this.saveEvent();}}>Next →</a>
-                        </div> }
-                        {curStep == 2 && !redirect && <div className="step-detail step-1">
-                                <div>You have 1 ingredient to process.</div>
-                                <br/>
-                                <div className="checkbox-container">
-                                    <input className="check" type="checkbox" /><span>Cook Sweet Corn</span><span> 1kg</span>
-                                    <br/>
-                                </div>
-                                <div className="bottom-bar" ></div>
-                                <a className="button" onClick={()=>{this.setState({curStep:3,showList:''});this.updateQuantity(this.state.numVistors);}}>Next →</a>
-                        </div>}
-                        <br/><br/><br/><br/>
-                    </div>
-                    <div className={`main fadeInBottom ${this.state.showList}`}>
 
-                        <div>Prep the dough.</div>
-                        <div className="bottom-bar" ></div>
-                        <a className="button" onClick={()=>{this.setState({curStep:3,showList:''});window.location.href='/stage2';}}>Next →</a>
-
-                        <div id="discountModal" className="card-container checkout-modal modal-show" style={{top:'74px'}}>
-                            <div className="modal-heading">
-                                <div className="left">
-                                    Coupon Code
-                                </div>
-                                <div className="right" onClick={()=>{window.location.href='/stage2'}}>
-                                    <img src="../../../img/images/ic_close.png" />
-                                </div>
-                                <div className="checkout-content" style={{height: 'calc(100% - 350px)', marginTop:'30px'}}>
-                                    <div class="title">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                              </TabPanel>
+                                              <TabPanel value={this.state.value} index={1}>
 
 
 
-
-
-
-                    </div>
+                                              </TabPanel>
+                                            </Paper>
                 </div>)
     }
 }

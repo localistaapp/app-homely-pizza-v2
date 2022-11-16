@@ -770,6 +770,10 @@ app.get("/orders/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/order-detail/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
@@ -1125,6 +1129,30 @@ app.post('/homelyOrder', function(req, res) {
 
 
 })
+
+app.get("/event-orders/:status", function(req, res) {
+  let orderStatus = req.params.status;
+  const client = new Client(dbConfig)
+
+  client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          response.send('{}');
+        } else {
+          console.log('connected')
+          client.query("Select event_date, event_time, quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments From event_order where order_status = $1",
+                      [orderStatus], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                               res.send(response.rows);
+                            }
+
+                          });
+        }
+      })
+});
 
 app.post('/eventOrder', function(req, res) {
 

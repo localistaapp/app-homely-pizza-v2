@@ -194,11 +194,13 @@ class Calendar extends React.Component {
     } //end is in the past
   }
 
-  removeEvent(i) {
+  redirectEvent(i) {
     const monthEvents = this.state.selectedMonthEvents.slice();
     const currentSelectedDate = this.state.selectedDay;
-
-    if (confirm("Are you sure you want to remove this event?")) {
+    console.log('OrderMeta: ', this.state.selectedMonthEvents[i].meta);
+    sessionStorage.setItem('order-meta', JSON.stringify(this.state.selectedMonthEvents[i].meta));
+    location.href = '/order-detail'
+    /*if (confirm("Are you sure you ...want to remove this event?")) {
       let index = i;
 
       if (index != -1) {
@@ -210,7 +212,7 @@ class Calendar extends React.Component {
       this.setState({
         selectedMonthEvents: monthEvents
       });
-    }
+    }*/
   }
 
   initialiseEvents() {
@@ -218,7 +220,33 @@ class Calendar extends React.Component {
 
     let allEvents = [];
 
-    var event1 = {
+    axios.get(`/event-orders/COMPLETED`)
+              .then(function (response) {
+                console.log('Order data-----', response.data);
+                //this.setState({results: response.data.results});
+                for (var i=0;i<response.data.length;i++) {
+                    var orderMeta = response.data[i];
+                    var eventTitle = response.data[i].quantity + ' ' + response.data[i].size + ' pizzas';
+                    var eventDate = moment(response.data[i].event_date + ' ' + response.data[i].event_time, 'YYYY-MM-DD hh:mm');
+                    var event = {
+                          meta: orderMeta,
+                          title:eventTitle,
+                          date: eventDate,
+                          dynamic: false
+                        };
+                    allEvents.push(event);
+                }
+                for (var j = 0; j < allEvents.length; j++) {
+                  monthEvents.push(allEvents[j]);
+                }
+
+                this.setState({
+                  selectedMonthEvents: monthEvents
+                });
+
+              }.bind(this));
+
+    /* var event1 = {
       title:
         "Press the Add button and enter a name for your event. P.S you can delete me by pressing me!",
       date: moment(),
@@ -289,15 +317,9 @@ class Calendar extends React.Component {
     allEvents.push(event7);
     allEvents.push(event8);
     allEvents.push(event9);
-    allEvents.push(event10);
+    allEvents.push(event10); */
 
-    for (var i = 0; i < allEvents.length; i++) {
-      monthEvents.push(allEvents[i]);
-    }
 
-    this.setState({
-      selectedMonthEvents: monthEvents
-    });
   }
 
   render() {
@@ -318,7 +340,7 @@ class Calendar extends React.Component {
             selectedMonth={this.state.selectedMonth}
             selectedDay={this.state.selectedDay}
             selectedMonthEvents={this.state.selectedMonthEvents}
-            removeEvent={i => this.removeEvent(i)}
+            redirectEvent={i => this.redirectEvent(i)}
           />
         </section>
       );
@@ -353,14 +375,14 @@ class Events extends React.Component {
     const currentMonthView = this.props.selectedMonth;
     const currentSelectedDay = this.props.selectedDay;
     const monthEvents = this.props.selectedMonthEvents;
-    const removeEvent = this.props.removeEvent;
+    const redirectEvent = this.props.redirectEvent;
 
     const monthEventsRendered = monthEvents.map((event, i) => {
       return (
         <div
           key={event.title}
           className="event-container"
-          onClick={() => removeEvent(i)}
+          onClick={() => redirectEvent(i)}
         >
 
             <div className="event-time event-attribute">
