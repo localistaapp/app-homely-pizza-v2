@@ -389,7 +389,7 @@ class Events extends React.Component {
               {event.date.format("HH:mm")}
             </div>
 
-            <div className="event-title event-attribute">{event.title}</div>
+            <div className="event-title event-attribute small-link">{event.title}</div>
         </div>
       );
     });
