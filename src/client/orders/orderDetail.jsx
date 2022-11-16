@@ -648,16 +648,16 @@ class Stages extends Component {
                                                    <br/>
                                                    <span className="stage-desc">{this.state.toppings}</span>
                                                    <br/>
-                                                   <span className="stage-desc">Extras: {this.state.extras}</span>
+                                                   <span className="stage-desc"><span style={{color:'#000'}}>Extras:</span> {this.state.extras}</span>
+                                                   <br/>
+                                                   <span className="stage-desc"><span style={{color:'#000'}}>Comments:</span> {this.state.comments}</span>
                                                    <br/>
                                                    <span className="stage-desc"><img className="marker" src="./img/images/pin.png"/>{this.state.location}</span>
-                                                   <div dangerouslySetInnerHTML={{__html:this.state.mapUrl}}></div>
+                                                   <div className="map-container"><div dangerouslySetInnerHTML={{__html:this.state.mapUrl}}></div></div>
                                                    <br/>
-                                                   <span className="stage-desc">Comments: {this.state.comments}</span>
-                                                   <div className="status-title">
-                                                      <br/>
-                                                   </div>
-
+                                                   <div className="bottom-bar" ></div>
+                                                   <a className="button" href="/process/" style={{position:'absolute',top:'804px'}}>Process →</a>
+                                                   <br/><br/><br/><br/>
 
                                               </TabPanel>
                                               <TabPanel value={this.state.value} index={1}>
