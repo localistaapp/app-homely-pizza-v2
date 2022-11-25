@@ -222,23 +222,23 @@ class Calendar extends React.Component {
           ac.abort();
       }, 1 * 60 * 1000);
       async function readOTP() {
-          alert('readOTP4');
+          //alert('readOTP4');
           if ('OTPCredential' in window) {
-              alert('feature detected');
+              //alert('feature detected');
               //feature detected
               try {
                   if (navigator.credentials) {
-                      alert('request sent for detection');
+                      //alert('request sent for detection');
                       try {
                           navigator.credentials
                               .get({ signal: ac.signal, otp: { transport: ['sms'] } })
                               .then((otp) => {
-                                  alert('--OTP content exists--');
+                                  //alert('--OTP content exists--');
                                   alert(otp);
-                                  alert('--OTP code--');
+                                  //alert('--OTP code--');
                                   if (otp && otp.code) {
-                                      alert('--OTP code exists--');
-                                      alert(otp.code);
+                                      //alert('--OTP code exists--');
+                                      //alert(otp.code);
                                       alert(otp.code[0]);
                                       alert(otp.code[1]);
                                       alert(otp.code[2]);
@@ -249,13 +249,13 @@ class Calendar extends React.Component {
                               })
                               .catch(e => alert(e));
                       } catch (e) {
-                            alert(2);
+                            //alert(2);
                             alert(e);
                           return;
                       }
                   }
               } catch (err) {
-                  alert(3);
+                  //alert(3);
                   alert(err);
                   console.log(err);
               }
