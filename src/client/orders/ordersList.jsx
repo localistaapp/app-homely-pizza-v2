@@ -222,7 +222,7 @@ class Calendar extends React.Component {
           ac.abort();
       }, 1 * 60 * 1000);
       async function readOTP() {
-          alert('readOTP3');
+          alert('readOTP4');
           if ('OTPCredential' in window) {
               alert('feature detected');
               //feature detected
@@ -236,7 +236,11 @@ class Calendar extends React.Component {
                                   alert('--OTP content exists--');
                                   alert(otp);
                                   alert('--OTP code--');
-                                  alert(otp.code);
+                                  if (otp && otp.code) {
+                                      alert('--OTP code exists--');
+                                      alert(otp.code);
+                                      cb(otp.code);
+                                  }
                               })
                               .catch(e => alert(e));
                       } catch (e) {
