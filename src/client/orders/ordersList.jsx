@@ -217,12 +217,12 @@ class Calendar extends React.Component {
 
   autoReadOtpSMS(cb) {
       // used AbortController with setTimeout so that WebOTP API (Autoread sms) will get disabled after 1min
-      const signal = new AbortController();
+      const ac = new AbortController();
       setTimeout(() => {
-          signal.abort();
+          ac.abort();
       }, 1 * 60 * 1000);
       async function readOTP() {
-          alert('readOTP');
+          alert('readOTP1');
           if ('OTPCredential' in window) {
               alert('feature detected');
               //feature detected
@@ -231,14 +231,14 @@ class Calendar extends React.Component {
                       alert('request sent for detection');
                       try {
                           navigator.credentials
-                              .get({ abort: signal, otp: { transport: ['sms'] } })
-                              .then(content => {
+                              .get({ abort: ac.signal, otp: { transport: ['sms'] } })
+                              .then((otp:any) => {
                                   alert('--OTP content exists--');
-                                  alert(content);
-                                  alert('--OTP content--', content.code);
-                                  console.log('--OTP content--', content);
-                                  if (content && content.code) {
-                                      cb(content.code);
+                                  alert(otp);
+                                  alert('--OTP content--', otp.code);
+                                  console.log('--OTP content--', otp);
+                                  if (otp && content.otp) {
+                                      cb(otp.code);
                                   }
                               })
                               .catch(e => console.log(e));
