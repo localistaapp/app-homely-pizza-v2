@@ -265,8 +265,8 @@ class Calendar extends React.Component {
     };
 
   initialiseEvents() {
-    alert('Checking OTP');
-    this.autoReadOtpSMS(()=>{alert('callback')});
+    //alert('Checking OTP');
+    //this.autoReadOtpSMS(()=>{alert('callback')});
     const monthEvents = this.state.selectedMonthEvents;
 
     let allEvents = [];

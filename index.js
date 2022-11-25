@@ -1140,8 +1140,8 @@ app.get("/event-orders/:status", function(req, res) {
           response.send('{}');
         } else {
           console.log('connected')
-          client.query("Select event_date, event_time, quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments From event_order where order_status = $1",
-                      [orderStatus], (err, response) => {
+          client.query("Select event_date, event_time, quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments From event_order where order_status IN ('COMPLETED','UPCOMING')",
+                      [], (err, response) => {
                             if (err) {
                               console.log(err)
                                res.send("error");
