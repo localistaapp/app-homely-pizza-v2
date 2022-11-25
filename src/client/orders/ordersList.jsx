@@ -234,6 +234,7 @@ class Calendar extends React.Component {
                               .get({ abort: signal, otp: { transport: ['sms'] } })
                               .then(content => {
                                   alert('--OTP content exists--');
+                                  alert(content);
                                   alert('--OTP content--', content.code);
                                   console.log('--OTP content--', content);
                                   if (content && content.code) {
