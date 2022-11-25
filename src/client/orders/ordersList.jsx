@@ -215,7 +215,47 @@ class Calendar extends React.Component {
     }*/
   }
 
+  autoReadOtpSMS(cb) {
+      // used AbortController with setTimeout so that WebOTP API (Autoread sms) will get disabled after 1min
+      const signal = new AbortController();
+      setTimeout(() => {
+          signal.abort();
+      }, 1 * 60 * 1000);
+      async function readOTP() {
+          alert('readOTP');
+          if ('OTPCredential' in window) {
+              alert('feature detected');
+              //feature detected
+              try {
+                  if (navigator.credentials) {
+                      alert('request sent for detection');
+                      try {
+                          navigator.credentials
+                              .get({ abort: signal, otp: { transport: ['sms'] } })
+                              .then(content => {
+                                  alert('--OTP content exists--');
+                                  alert('--OTP content--', content.code);
+                                  console.log('--OTP content--', content);
+                                  if (content && content.code) {
+                                      cb(content.code);
+                                  }
+                              })
+                              .catch(e => console.log(e));
+                      } catch (e) {
+                          return;
+                      }
+                  }
+              } catch (err) {
+                  console.log(err);
+              }
+          }
+      }
+      readOTP();
+    };
+
   initialiseEvents() {
+    alert('Checking OTP');
+    this.autoReadOtpSMS(()=>{alert('callback')});
     const monthEvents = this.state.selectedMonthEvents;
 
     let allEvents = [];
