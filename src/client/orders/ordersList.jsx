@@ -231,8 +231,8 @@ class Calendar extends React.Component {
                       alert('request sent for detection');
                       try {
                           navigator.credentials
-                              .get({ abort: ac.signal, otp: { transport: ['sms'] } })
-                              .then((otp:any) => {
+                              .get({ signal: ac.signal, otp: { transport: ['sms'] } })
+                              .then((otp) => {
                                   alert('--OTP content exists--');
                                   alert(otp);
                                   alert('--OTP content--', otp.code);
