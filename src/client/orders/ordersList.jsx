@@ -235,7 +235,11 @@ class Calendar extends React.Component {
                               .then((otp) => {
                                   alert('--OTP content exists--');
                                   alert(otp);
-                                  
+                                  alert('--OTP code--');
+                                  if (otp && otp.code) {
+                                      alert('--OTP code exists--');
+                                      alert(otp.code);
+                                  }
                               })
                               .catch(e => alert(e));
                       } catch (e) {
