@@ -774,6 +774,18 @@ app.get("/order-detail/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
+app.get("/dashboard-quote/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
+app.get("/dashboard-quote-res/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });

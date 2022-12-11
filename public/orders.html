@@ -2211,12 +2211,34 @@ input[type="date"]:focus {
 input[type="date"]:hover::-webkit-calendar-picker-indicator { opacity:0.05; }
 input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15; }
 .txt-field {
-    height: 53px;
-    width: 144px;
+    height: 36px;
+    width: 56px;
     font-size: 16px;
     margin-top: 14px;
     padding: 12px;
     color: #626262;
+}
+.qtitle{
+    width: 212px;
+    position: absolute;
+    top: 39px;
+    left: 80px;
+}
+.quote-main{
+    display: table;
+}
+.quote-left{
+    width: 37%;
+    padding-top: 60px !important;
+}
+.quote-right{
+    padding-left: 8px;
+}
+.quote-left,.quote-right{
+    padding-top: 34px;
+    display: table-cell;
+    padding-left: 28px;
+    vertical-align:top;
 }
 .sample-msg {
     width: 80%;
@@ -2308,8 +2330,26 @@ span.stage-desc {
     text-align: left;
     margin-left: 40px;
     font-size: 16px;
-    line-height: 40px;
+    line-height: 36px;
     color: #666;
+}
+span.stage-desc.size-l {
+    font-size: 20px;
+}
+span.stage-desc.size-xl {
+    font-size: 24px;
+    margin-left:0px;
+    font-weight: bold;
+    color: #000;
+}
+span.stage-desc.quote {
+    margin-left: 0px;
+    display: block;
+}
+.q-bold{
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
 }
 .hidden {
     display: none;
