@@ -334,26 +334,21 @@ class SummaryCard extends Component {
 }
 
 
-class Dashboard extends Component {
+class QuoteRes extends Component {
 
+//quotePizzaQty, quotePizzaSize, quoteGarlicQty, quoteWrapsQty, quoteDistance
     constructor() {
         super();
         this.state = {
-            value: 0,
-            results: [],
-            starters: [],
-            activeStep: 1,
-            showCoupon: false,
-            couponApplied: false,
-            showSlot: false,
-            slotSelected: '',
-            showList: 'hidden',
-            showWizard: '',
-            numVistors: 0,
-            mobileNum: '',
-            curStep: 1,
-            redirect: false,
-        };
+                    value: 0,
+                    quoteTitle: sessionStorage.getItem('quotePizzaQty') + ' ' + sessionStorage.getItem('quotePizzaSize') == '11' ? 'Large Pizzas' : 'Mini Pizzas',
+                    lineItem1: sessionStorage.getItem('quotePizzaQty') + ' Pizzas (' + sessionStorage.getItem('quotePizzaSize') +' inch) - '+ (sessionStorage.getItem('quotePizzaSize')=='11' ? parseInt(sessionStorage.getItem('quotePizzaQty'),10)*199 : parseInt(sessionStorage.getItem('quotePizzaQty'),10)*159),
+                    lineItem2: sessionStorage.getItem('quoteGarlicQty')!=null && sessionStorage.getItem('quoteGarlicQty')!='0' ? (sessionStorage.getItem('quoteGarlicQty') + ' Garlic Breads - '+parseInt(sessionStorage.getItem('quoteGarlicQty'),10)*149) : '',
+                    lineItem3: sessionStorage.getItem('quoteWrapsQty')!=null && sessionStorage.getItem('quoteWrapsQty')!='0' ? (sessionStorage.getItem('quoteWrapsQty') + ' Veg Wraps - '+parseInt(sessionStorage.getItem('quoteWrapsQty'),10)*159) : '',
+                    foodCharges: (sessionStorage.getItem('quotePizzaSize')=='11' ? parseInt(sessionStorage.getItem('quotePizzaQty'),10)*199 : parseInt(sessionStorage.getItem('quotePizzaQty'),10)*159) + parseInt(sessionStorage.getItem('quoteGarlicQty'),10)*149 + parseInt(sessionStorage.getItem('quoteWrapsQty'),10)*159,
+                    conveyanceCharges: sessionStorage.getItem('quoteDistance')!=null && sessionStorage.getItem('quoteDistance')=='10' ? 1400 : 1800,
+                    total: (sessionStorage.getItem('quotePizzaSize')=='11' ? parseInt(sessionStorage.getItem('quotePizzaQty'),10)*199 : parseInt(sessionStorage.getItem('quotePizzaQty'),10)*159) + parseInt(sessionStorage.getItem('quoteGarlicQty'),10)*149 + parseInt(sessionStorage.getItem('quoteWrapsQty'),10)*159 + (sessionStorage.getItem('quoteDistance')!=null && sessionStorage.getItem('quoteDistance')=='10' ? 1400 : 1800)
+                };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
@@ -367,35 +362,33 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {value,quoteTitle, lineItem1, lineItem2, lineItem3, foodCharges, conveyanceCharges, total} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/images/logoslim.jpg" style={{width: '42px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img class="qtitle" src="../img/images/qtitle.png" style={{width: '212px'}}/>
                     <Paper>
-
-                                              <TabPanel className="quote-main" value={this.state.value} index={0}>
-                                                   <div className="quote-left"><img src="../img/images/qpizza.jpg" style={{width: '120px'}}/></div>
-                                                   <div className="quote-right">
-                                                       <span className="stage-desc size-xl">30 Large Pizzas</span>
-                                                       <hr className="line-light" style={{marginTop: '7px',width:'186px',marginLeft:'0px'}}/>
-                                                       <span className="stage-desc quote">30 Pizzas (11 inch) - 5970</span>
-                                                       <span className="stage-desc quote">10 Garlic Breads - 1490</span>
-                                                       <span className="stage-desc quote">10 Veg Wraps - 1590</span>
-                                                       <br/>
-                                                       <span className="stage-desc quote"><b class="q-bold">Food Charges:</b> 5970/-</span>
-                                                       <span className="stage-desc quote"><b class="q-bold">Conveyance:</b> 1600/-</span>
-                                                       <hr className="line-light" style={{marginTop: '7px',width:'186px',marginLeft:'0px'}}/>
-                                                       <span className="stage-desc size-xl">Total: 7750/-</span><span className="stage-desc" style={{marginLeft:'0px'}}>(All inclusive)</span>
-                                                       <br/><br/><br/><br/><br/>
-                                                   </div>
-                                              </TabPanel>
-                                              <TabPanel value={this.state.value} index={1}>
-                                              </TabPanel>
-                                            </Paper>
-                    <div className="q-footer"><img src="../img/images/qfssai.jpg" style={{width: '192px'}}/></div>
+                      <TabPanel className="quote-main" value={this.state.value} index={0}>
+                           <div className="quote-left"><img src="../img/images/qpizza.jpg" style={{width: '120px'}}/></div>
+                           <div className="quote-right">
+                               <span className="stage-desc size-xl">{quoteTitle}</span>
+                               <hr className="line-light" style={{marginTop: '7px',width:'186px',marginLeft:'0px'}}/>
+                               <span className="stage-desc quote">{lineItem1}</span>
+                               <span className="stage-desc quote">{lineItem2}</span>
+                               <span className="stage-desc quote">{lineItem3}</span>
+                               <br/>
+                               <span className="stage-desc quote"><b class="q-bold">Food Charges:</b> {foodCharges}/-</span>
+                               <span className="stage-desc quote"><b class="q-bold">Conveyance:</b> {conveyanceCharges}/-</span>
+                               <hr className="line-light" style={{marginTop: '7px',width:'186px',marginLeft:'0px'}}/>
+                               <span className="stage-desc size-xl">Total: {total}/-</span><span className="stage-desc" style={{marginLeft:'0px'}}>(All inclusive)</span>
+                               <br/><br/><br/><br/><br/>
+                           </div>
+                      </TabPanel>
+                      <TabPanel value={this.state.value} index={1}>
+                      </TabPanel>
+                    </Paper>
                 </div>)
     }
 }
 
-export default withRouter(Dashboard);
+export default withRouter(QuoteRes);

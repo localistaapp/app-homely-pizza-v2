@@ -365,6 +365,14 @@ class Dashboard extends Component {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
     }
+    getQuote() {
+        sessionStorage.setItem('quotePizzaQty',document.getElementById('quotePizzaQty').value);
+        sessionStorage.setItem('quotePizzaSize',document.getElementById('quotePizzaSize').value);
+        sessionStorage.setItem('quoteGarlicQty',document.getElementById('quoteGarlicQty').value == '' ? '0' : document.getElementById('quoteGarlicQty').value);
+        sessionStorage.setItem('quoteWrapsQty',document.getElementById('quoteWrapsQty').value == '' ? '0' : document.getElementById('quoteWrapsQty').value);
+        sessionStorage.setItem('quoteDistance',document.getElementById('quoteDistance').value == '' ? '0' : document.getElementById('quoteDistance').value);
+        window.location.href='/dashboard-quote-res';
+    }
 
     render() {
         const {orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -377,17 +385,17 @@ class Dashboard extends Component {
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RequestQuoteIcon />&nbsp;&nbsp;Generate Quote</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <br/>
-                                                   <span className="stage-desc size-l" >Pizzas: <input type="number" className="txt-field" />&nbsp;&nbsp;&nbsp;&nbsp;Size: <input type="number" className="txt-field" />&nbsp;inch</span>
+                                                   <span className="stage-desc size-l" >Pizzas: <input id="quotePizzaQty" type="number" className="txt-field" />&nbsp;&nbsp;&nbsp;&nbsp;Size: <input id="quotePizzaSize" type="number" className="txt-field" />&nbsp;inch</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc size-l" >Wraps: <input type="number" className="txt-field" /></span>
+                                                   <span className="stage-desc size-l" >Wraps: <input id="quoteWrapsQty" type="number" className="txt-field" /></span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc size-l">Garlic bread: <input type="number" className="txt-field" /></span>
+                                                   <span className="stage-desc size-l">Garlic bread: <input id="quoteGarlicQty" type="number" className="txt-field" /></span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc size-l">Distance: <input type="number" className="txt-field" />&nbsp;km</span>
+                                                   <span className="stage-desc size-l">Distance: <input id="quoteDistance" type="number" className="txt-field" />&nbsp;km</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <br/>
                                                    <div className="bottom-bar" ></div>
-                                                   <a className="button" onClick={()=>{window.location.href='/dashboard-quote-res'}}>Get Quote →</a>
+                                                   <a className="button" onClick={()=>{this.getQuote();}}>Get Quote →</a>
                                                    <br/><br/><br/><br/>
 
                                               </TabPanel>

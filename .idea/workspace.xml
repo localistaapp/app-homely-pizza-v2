@@ -6,7 +6,7 @@
       <change beforePath="$PROJECT_DIR$/public/.gz" beforeDir="false" afterPath="$PROJECT_DIR$/public/.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js.br" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/orders/quote.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/orders/quote.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/orders/quoteRes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/orders/quoteRes.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
