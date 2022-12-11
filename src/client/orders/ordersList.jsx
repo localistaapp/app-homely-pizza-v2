@@ -245,6 +245,7 @@ class Calendar extends React.Component {
                                       alert(otp.code[3]);
                                       alert(otp.code[4]);
                                       alert(otp.code[5]);
+
                                   }
                               })
                               .catch(e => alert(e));
