@@ -1134,7 +1134,7 @@ class Stages extends Component {
 
 
         return (<div>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <span className="stage-heading">Upcoming Event Orders</span>
                     <div className="calendar-rectangle">
                       <div id="calendar-content" className="calendar-content">
