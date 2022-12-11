@@ -341,7 +341,7 @@ class QuoteRes extends Component {
         super();
         this.state = {
                     value: 0,
-                    quoteTitle: sessionStorage.getItem('quotePizzaQty') + ' ' + sessionStorage.getItem('quotePizzaSize') == '11' ? 'Large Pizzas' : 'Mini Pizzas',
+                    quoteTitle: sessionStorage.getItem('quotePizzaQty') + ' ' + (sessionStorage.getItem('quotePizzaSize') == '11' ? 'Large Pizzas' : 'Mini Pizzas'),
                     lineItem1: sessionStorage.getItem('quotePizzaQty') + ' Pizzas (' + sessionStorage.getItem('quotePizzaSize') +' inch) - '+ (sessionStorage.getItem('quotePizzaSize')=='11' ? parseInt(sessionStorage.getItem('quotePizzaQty'),10)*199 : parseInt(sessionStorage.getItem('quotePizzaQty'),10)*159),
                     lineItem2: sessionStorage.getItem('quoteGarlicQty')!=null && sessionStorage.getItem('quoteGarlicQty')!='0' ? (sessionStorage.getItem('quoteGarlicQty') + ' Garlic Breads - '+parseInt(sessionStorage.getItem('quoteGarlicQty'),10)*149) : '',
                     lineItem3: sessionStorage.getItem('quoteWrapsQty')!=null && sessionStorage.getItem('quoteWrapsQty')!='0' ? (sessionStorage.getItem('quoteWrapsQty') + ' Veg Wraps - '+parseInt(sessionStorage.getItem('quoteWrapsQty'),10)*159) : '',
