@@ -391,11 +391,9 @@ class Dashboard extends Component {
                                                    </div>
                                               </TabPanel>
                                               <TabPanel value={this.state.value} index={1}>
-
-
-
                                               </TabPanel>
                                             </Paper>
+                    <div className="q-footer"><img src="../img/images/qfssai.jpg" style={{width: '192px'}}/></div>
                 </div>)
     }
 }
