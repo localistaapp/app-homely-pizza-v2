@@ -385,7 +385,7 @@ class Dashboard extends Component {
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RequestQuoteIcon />&nbsp;&nbsp;Generate Quote</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <br/>
-                                                   <span className="stage-desc size-l" >Pizzas: <input id="quotePizzaQty" type="number" className="txt-field" />&nbsp;&nbsp;&nbsp;&nbsp;Size: <input id="quotePizzaSize" type="number" value="11" className="txt-field" />&nbsp;inch</span>
+                                                   <span className="stage-desc size-l" >Pizzas: <input id="quotePizzaQty" type="number" className="txt-field" />&nbsp;&nbsp;&nbsp;&nbsp;Size: <input id="quotePizzaSize" type="number" className="txt-field" />&nbsp;inch</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc size-l" >Wraps: <input id="quoteWrapsQty" type="number" className="txt-field" /></span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
