@@ -10,8 +10,8 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import LocalPizzaIcon from '@material-ui/icons/LocalPizza';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
+import CalendarViewDay from '@material-ui/icons/CalendarToday';
+import ListView from '@material-ui/icons/List';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
@@ -278,7 +278,7 @@ class Calendar extends React.Component {
                 //this.setState({results: response.data.results});
                 for (var i=0;i<response.data.length;i++) {
                     var orderMeta = response.data[i];
-                    var eventTitle = response.data[i].quantity + ' ' + response.data[i].size + ' pizzas';
+                    var eventTitle = response.data[i].pizza_quantity + ' ' + response.data[i].size + ' pizzas';
                     var eventDate = moment(response.data[i].event_date + ' ' + response.data[i].event_time, 'YYYY-MM-DD hh:mm');
                     var event = {
                           meta: orderMeta,
@@ -430,18 +430,18 @@ class Events extends React.Component {
     const redirectEvent = this.props.redirectEvent;
 
     const monthEventsRendered = monthEvents.map((event, i) => {
+    console.log('---event0---', event);
       return (
         <div
           key={event.title}
           className="event-container"
-          onClick={() => redirectEvent(i)}
         >
 
             <div className="event-time event-attribute">
               {event.date.format("HH:mm")}
             </div>
 
-            <div className="event-title event-attribute small-link">{event.title}</div>
+            <span className="event-title event-attribute small-link" onClick={() => redirectEvent(i)}>{event.title}</span><span className="stage-desc desc-btn" style={{marginLeft:'10px'}}>Complete</span>
         </div>
       );
     });
@@ -489,10 +489,15 @@ class Week extends React.Component {
 
     for (var i = 0; i < 7; i++) {
       var dayHasEvents = false;
+      var isConfirmedOrder = false;
 
       for (var j = 0; j < monthEvents.length; j++) {
         if (monthEvents[j].date.isSame(date, "day")) {
+        console.log('monthEvents[j].meta.order_status', monthEvents[j].meta.order_status);
           dayHasEvents = true;
+          if (monthEvents[j].meta.order_status == 'CONFIRMED') {
+            isConfirmedOrder = true;
+          }
         }
       }
 
@@ -502,7 +507,8 @@ class Week extends React.Component {
         isCurrentMonth: date.month() === currentMonthView.month(),
         isToday: date.isSame(new Date(), "day"),
         date: date,
-        hasEvents: dayHasEvents
+        hasEvents: dayHasEvents,
+        isConfirmedOrder: isConfirmedOrder
       };
 
       days.push(<Day day={day} selected={selected} select={select} />);
@@ -522,7 +528,7 @@ class Day extends React.Component {
     let day = this.props.day;
     let selected = this.props.selected;
     let select = this.props.select;
-
+    let classNameColor = this.props.day.isConfirmedOrder ? 'day-number yellow' : 'day-number'
     return (
       <div
         className={
@@ -534,7 +540,7 @@ class Day extends React.Component {
         }
         onClick={() => select(day)}
       >
-        <div className="day-number">{day.number}</div>
+        <div className={classNameColor}>{day.number}</div>
       </div>
     );
   }
@@ -1135,12 +1141,14 @@ class Stages extends Component {
 
         return (<div>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
-                    <span className="stage-heading">Upcoming Event Orders</span>
-                    <div className="calendar-rectangle">
-                      <div id="calendar-content" className="calendar-content">
-                        <Calendar />
-                      </div>
-                    </div>
+                    <span className="stage-heading" style={{top: '100px',background: '#f6f6f6'}}>Upcoming Event Orders</span>
+
+                        <div className="calendar-rectangle"  style={{marginTop: '10px'}}>
+                          <div id="calendar-content" className="calendar-content">
+                            <Calendar />
+                          </div>
+                        </div>
+
 
                 </div>)
     }

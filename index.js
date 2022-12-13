@@ -28,7 +28,8 @@ let dbConfig = {
          port: 5432,
          user: 'slimcrust',
          password: '3oXJwFL9ytuMtD7ofv5uhr7LceQVBTsv',
-         ssl: { rejectUnauthorized: false }
+         ssl: { rejectUnauthorized: false },
+         keepAlive:true
      }
 const orderid = require('order-id')('randomgenid');
 var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai89eidZYXjM0OK3KeXfkPU@redis-16431.c10.us-east-1-2.ec2.cloud.redislabs.com:16431';
@@ -1156,7 +1157,7 @@ app.get("/event-orders/:status", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("Select event_date, event_time, quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments From event_order where order_status IN ('COMPLETED','UPCOMING')",
+          client.query("Select event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
@@ -1256,7 +1257,9 @@ app.post('/createConfirmedOrder', function(req, res) {
                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
-                            });
+                            }).finally(() => {
+                                      client.end();
+                                  });;
 
 
       }

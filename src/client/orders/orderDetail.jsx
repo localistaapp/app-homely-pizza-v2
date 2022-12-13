@@ -359,7 +359,7 @@ class Stages extends Component {
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
             orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
-            orderTitle: meta['quantity'] + ' ' + meta['size'] + ' pizzas' + ' - ' + meta['quote_price'],
+            orderTitle: meta['pizza_quantity'] + ' ' + meta['size'] + ' pizzas' + ' - ' + meta['quote_price'],
             dateTime: meta['event_date'] + ' ' + meta['event_time'],
             booking: meta['booking_amount_paid'],
             customer: meta['customer_name'],
