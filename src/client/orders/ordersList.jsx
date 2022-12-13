@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
@@ -279,10 +281,12 @@ class Calendar extends React.Component {
                 for (var i=0;i<response.data.length;i++) {
                     var orderMeta = response.data[i];
                     var eventTitle = response.data[i].pizza_quantity + ' ' + response.data[i].size + ' pizzas';
+                    var orderId = response.data[i].order_id;
                     var eventDate = moment(response.data[i].event_date + ' ' + response.data[i].event_time, 'YYYY-MM-DD hh:mm');
                     var event = {
                           meta: orderMeta,
                           title:eventTitle,
+                          orderId: orderId,
                           date: eventDate,
                           dynamic: false
                         };
@@ -423,6 +427,26 @@ class Calendar extends React.Component {
 }
 
 class Events extends React.Component {
+  completeOrder(orderId) {
+        var http = new XMLHttpRequest();
+        var url = '/completeConfirmedOrder';
+        var params = 'orderId='+orderId;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res != null){
+                    res = JSON.parse(res);
+                    console.log('--event order id--', res);
+                    window.location.href='/orders?status=success';
+                }
+            }
+        }.bind(this);
+        http.send(params);
+  }
   render() {
     const currentMonthView = this.props.selectedMonth;
     const currentSelectedDay = this.props.selectedDay;
@@ -441,7 +465,8 @@ class Events extends React.Component {
               {event.date.format("HH:mm")}
             </div>
 
-            <span className="event-title event-attribute small-link" onClick={() => redirectEvent(i)}>{event.title}</span><span className="stage-desc desc-btn" style={{marginLeft:'10px'}}>Complete</span>
+            <span className="event-title event-attribute small-link" onClick={() => redirectEvent(i)}>{event.title}</span>
+            <span className="desc-btn" style={{marginLeft:'14px'}}><EditIcon onClick={()=>{alert(1)}} />&nbsp;&nbsp;<CheckIcon onClick={()=>{this.completeOrder(event.orderId)}} /></span>
         </div>
       );
     });
@@ -490,13 +515,16 @@ class Week extends React.Component {
     for (var i = 0; i < 7; i++) {
       var dayHasEvents = false;
       var isConfirmedOrder = false;
-
+      var isSampleOrder = false;
       for (var j = 0; j < monthEvents.length; j++) {
         if (monthEvents[j].date.isSame(date, "day")) {
-        console.log('monthEvents[j].meta.order_status', monthEvents[j].meta.order_status);
+        console.log('monthEvents[j].meta', monthEvents[j].meta);
           dayHasEvents = true;
           if (monthEvents[j].meta.order_status == 'CONFIRMED') {
             isConfirmedOrder = true;
+          }
+          if (monthEvents[j].meta.order_type == 'SAMPLE') {
+            isSampleOrder = true;
           }
         }
       }
@@ -508,7 +536,8 @@ class Week extends React.Component {
         isToday: date.isSame(new Date(), "day"),
         date: date,
         hasEvents: dayHasEvents,
-        isConfirmedOrder: isConfirmedOrder
+        isConfirmedOrder: isConfirmedOrder,
+        isSampleOrder: isSampleOrder
       };
 
       days.push(<Day day={day} selected={selected} select={select} />);
@@ -528,7 +557,9 @@ class Day extends React.Component {
     let day = this.props.day;
     let selected = this.props.selected;
     let select = this.props.select;
-    let classNameColor = this.props.day.isConfirmedOrder ? 'day-number yellow' : 'day-number'
+    let classNameColor = this.props.day.isConfirmedOrder ? 'day-number yellow' : 'day-number';
+    console.log(this.props.day.isSampleOrder);
+    classNameColor = this.props.day.isSampleOrder ? 'day-number blue' : classNameColor;
     return (
       <div
         className={
@@ -882,7 +913,8 @@ class Stages extends Component {
             redirect: false,
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
-            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []
+            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
+            status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default'
         };
         sessionStorage.setItem('eventDate',new Date().toDateInputValue());
         window.currSlotSelected = '';
@@ -1077,7 +1109,7 @@ class Stages extends Component {
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     render() {
-        const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {status, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
 
         console.log('orderSummary: ', orderSummary);
@@ -1141,6 +1173,7 @@ class Stages extends Component {
 
         return (<div>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    {status == 'success' && <span className="stage-heading status-success">Order updated successfully</span>}
                     <span className="stage-heading" style={{top: '100px',background: '#f6f6f6'}}>Upcoming Event Orders</span>
 
                         <div className="calendar-rectangle"  style={{marginTop: '10px'}}>

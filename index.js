@@ -791,6 +791,10 @@ app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-sample-order/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
@@ -1157,7 +1161,7 @@ app.get("/event-orders/:status", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("Select event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
+          client.query("Select event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id, order_type From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
@@ -1238,6 +1242,7 @@ app.post('/createConfirmedOrder', function(req, res) {
     const garlicBreadQty = req.body.orderGarlicBreadQty;
     const city = req.body.orderCity;
     const zone =  req.body.orderZone;
+    const orderType = req.body.orderType;
 
     const client = new Client(dbConfig)
     client.connect(err => {
@@ -1247,8 +1252,8 @@ app.post('/createConfirmedOrder', function(req, res) {
         console.log('connected')
 
 
-            client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)",
-                        [orderId, eDate, eTime, pizzaQty, quotePrice, venueAddress, customerMobile, 'CONFIRMED', venueMapURL, bookingAmountPaid, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, zone], (err, response) => {
+            client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone, order_type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)",
+                        [orderId, eDate, eTime, pizzaQty, quotePrice, venueAddress, customerMobile, 'CONFIRMED', venueMapURL, bookingAmountPaid, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, zone, orderType], (err, response) => {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
@@ -1257,15 +1262,37 @@ app.post('/createConfirmedOrder', function(req, res) {
                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
-                            }).finally(() => {
-                                      client.end();
-                                  });;
+                            });
+      }
+    })
+})
 
+app.post('/completeConfirmedOrder', function(req, res) {
+
+    let whitelisted = false;
+
+    const orderId = req.body.orderId;
+
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        console.log('connected')
+            client.query("UPDATE \"public\".\"confirmed_order\" set order_status='COMPLETED' where order_id=$1",
+                        [orderId], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                console.log(response);
+                                res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                              }
+
+                            });
 
       }
     })
-
-
 })
 
 app.post('/updateEventOrder', function(req, res) {

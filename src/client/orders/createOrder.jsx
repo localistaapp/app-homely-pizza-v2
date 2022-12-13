@@ -393,7 +393,7 @@ class Dashboard extends Component {
         params += '&orderAddress='+orderAddress+'&orderMapURL='+orderMapURL+'&orderCity='+orderCity;
         params += '&orderZone='+orderZone+'&orderPizzaQty='+orderPizzaQty+'&orderPizzaSize='+orderPizzaSize;
         params += '&orderGarlicBreadQty='+orderGarlicBreadQty+'&orderWrapsQty='+orderWrapsQty+'&orderToppingIng='+orderToppingIng;
-        params += '&orderSpecialIng='+orderSpecialIng+'&orderExtras='+orderExtras+'&orderComments='+orderComments;
+        params += '&orderSpecialIng='+orderSpecialIng+'&orderExtras='+orderExtras+'&orderComments='+orderComments+'&orderType=EVENT';
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 

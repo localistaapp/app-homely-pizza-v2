@@ -8,6 +8,7 @@ import Dashboard from './dashboard.jsx';
 import Quote from './quote.jsx';
 import QuoteRes from './quoteRes.jsx';
 import CreateOrder from './createOrder.jsx';
+import CreateSampleOrder from'./createSampleOrder.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
 
@@ -18,6 +19,7 @@ var DashboardWithRouter = withRouter(Dashboard);
 var QuoteWithRouter = withRouter(Quote);
 var QuoteResWithRouter = withRouter(QuoteRes);
 var CreateOrderWithRouter = withRouter(CreateOrder);
+var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
 
 render(<Router>
     <div>
@@ -52,9 +54,14 @@ render(<Router>
                         <Route  path="/dashboard-quote-res" component={QuoteResWithRouter} />
                     </div>)} />
         <Route path="/dashboard-create-order" exact render={() => (
-                            <div className="results">
-                                    <Route exact path="/" component={CreateOrderWithRouter} />
-                                <Route  path="/dashboard-create-order" component={CreateOrderWithRouter} />
-                            </div>)} />
+                    <div className="results">
+                            <Route exact path="/" component={CreateOrderWithRouter} />
+                        <Route  path="/dashboard-create-order" component={CreateOrderWithRouter} />
+                    </div>)} />
+        <Route path="/dashboard-create-sample-order" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={CreateSampleOrderWithRouter} />
+                        <Route  path="/dashboard-create-sample-order" component={CreateSampleOrderWithRouter} />
+                    </div>)} />
     </div>
 </Router>, document.getElementById('containerWiz'));
