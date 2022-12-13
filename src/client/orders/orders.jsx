@@ -7,6 +7,7 @@ import Inventory from './inventory.jsx';
 import Dashboard from './dashboard.jsx';
 import Quote from './quote.jsx';
 import QuoteRes from './quoteRes.jsx';
+import CreateOrder from './createOrder.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
 
@@ -16,6 +17,7 @@ var InventoryWithRouter = withRouter(Inventory);
 var DashboardWithRouter = withRouter(Dashboard);
 var QuoteWithRouter = withRouter(Quote);
 var QuoteResWithRouter = withRouter(QuoteRes);
+var CreateOrderWithRouter = withRouter(CreateOrder);
 
 render(<Router>
     <div>
@@ -49,5 +51,10 @@ render(<Router>
                             <Route exact path="/" component={QuoteResWithRouter} />
                         <Route  path="/dashboard-quote-res" component={QuoteResWithRouter} />
                     </div>)} />
+        <Route path="/dashboard-create-order" exact render={() => (
+                            <div className="results">
+                                    <Route exact path="/" component={CreateOrderWithRouter} />
+                                <Route  path="/dashboard-create-order" component={CreateOrderWithRouter} />
+                            </div>)} />
     </div>
 </Router>, document.getElementById('containerWiz'));

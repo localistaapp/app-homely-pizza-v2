@@ -786,6 +786,10 @@ app.get("/dashboard-quote-res/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-order/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
@@ -1149,7 +1153,7 @@ app.get("/event-orders/:status", function(req, res) {
   client.connect(err => {
         if (err) {
           console.error('error connecting', err.stack)
-          response.send('{}');
+          res.send('{}');
         } else {
           console.log('connected')
           client.query("Select event_date, event_time, quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments From event_order where order_status IN ('COMPLETED','UPCOMING')",
@@ -1185,6 +1189,65 @@ app.post('/eventOrder', function(req, res) {
 
             client.query("INSERT INTO \"public\".\"event_order\"(order_id, event_date, venue_pincode, event_contact_mobile, order_status) VALUES($1, $2, $3, $4, $5)",
                         [orderId, eDate, ePincode, eMobile, status], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                console.log(response);
+                                axios
+                                  .post('https://api.pushalert.co/rest/v1/send', 'title=Event Order%20Received&message=New%20Pizza%20Event&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
+                                  .then(res => {
+                                    console.log('Pushalert success: ', res);
+                                  })
+                                  .catch(error => {
+                                    console.log('Pushalert error: ', error);
+                                  });
+                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                              }
+
+                            });
+
+
+      }
+    })
+
+
+})
+
+app.post('/createConfirmedOrder', function(req, res) {
+
+    const orderId = orderid.generate();
+    let whitelisted = false;
+
+    const eDate = req.body.orderDate;
+    const eTime = req.body.orderTime;
+    const pizzaQty = req.body.orderPizzaQty;
+    const quotePrice = req.body.orderPrice;
+    const venueAddress = req.body.orderAddress;
+    const customerMobile = req.body.orderContact;
+    const venueMapURL = req.body.orderMapURL;
+    const bookingAmountPaid = req.body.orderAmtPaid;
+    const customerName = req.body.orderName;
+    const toppingIngredients = req.body.orderToppingIng;
+    const etxras = req.body.orderExtras;
+    const specialIngredients = req.body.orderSpecialIng;
+    const pizzaSize = req.body.orderPizzaSize;
+    const comments = req.body.orderComments;
+    const wrapsQty = req.body.orderWrapsQty;
+    const garlicBreadQty = req.body.orderGarlicBreadQty;
+    const city = req.body.orderCity;
+    const zone =  req.body.orderZone;
+
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        console.log('connected')
+
+
+            client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)",
+                        [orderId, eDate, eTime, pizzaQty, quotePrice, venueAddress, customerMobile, 'CONFIRMED', venueMapURL, bookingAmountPaid, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, zone], (err, response) => {
                               if (err) {
                                 console.log(err)
                                  res.send("error");

@@ -2212,11 +2212,17 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator { opacity:0.05; }
 input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15; }
 .txt-field {
     height: 36px;
-    width: 56px;
+    width: 156px;
     font-size: 16px;
     margin-top: 14px;
     padding: 12px;
     color: #626262;
+}
+.txt-field.right{
+    float: right;
+    right: 40px;
+    position: absolute;
+    margin-top: 0px;
 }
 .qtitle{
     width: 212px;
@@ -2332,6 +2338,12 @@ input.check {
     margin-top: 22px;
     margin-right: 7px;
 }
+.status-success {
+    z-index: 9;
+    background: #4cb94a;
+    margin-top: -6px;
+    color: #fff;
+}
 span.stage-desc {
     font-family: 'Quicksand';
     text-align: left;
@@ -2339,6 +2351,12 @@ span.stage-desc {
     font-size: 16px;
     line-height: 36px;
     color: #666;
+}
+span.stage-desc.desc-btn{
+    color: #fff;
+    background: #fc0327;
+    padding: 6px !important;
+    border-radius: 6px;
 }
 span.stage-desc.size-l {
     font-size: 20px;

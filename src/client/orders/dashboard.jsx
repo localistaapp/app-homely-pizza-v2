@@ -379,7 +379,7 @@ class Dashboard extends Component {
                                                    <br/><br/>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-quote';}}><RequestQuoteIcon /> Get Quote</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span>
+                                                   <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span><span class="stage-desc desc-btn" onClick={()=>{window.location.href='/dashboard-create-order';}}>+ Create</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc"><InventoryIcon /> Inventory</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
