@@ -15,6 +15,7 @@ import RestaurantIcon from '@material-ui/icons/Business';
 import RequestQuoteIcon from '@material-ui/icons/NotesSharp';
 import OrdersIcon from '@material-ui/icons/ViewListSharp';
 import InventoryIcon from '@material-ui/icons/ShoppingBasket';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
@@ -353,13 +354,43 @@ class Dashboard extends Component {
             mobileNum: '',
             curStep: 1,
             redirect: false,
+            statTotalSales: '',
+            statTotalPizzas: '',
+            statMonthlySales: ''
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
+        this.initializeStats();
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
 
+    }
+    fmt(s){
+        var formatted = "";
+        if(s.length > 1){
+            formatted = s.substring(0,1);
+            s = s.substring(1);
+        }
+
+        while(s.length > 3){
+            formatted += "," + s.substring(0,2);
+            s = s.substring(2);
+        }
+        return formatted + "," + s + ".00";
+    }
+    initializeStats() {
+        let enquiriesArr = [];
+        axios.get(`/stats/`)
+          .then(function (response) {
+            console.log('Order data-----', response.data);
+            this.setState({
+              statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[0].sales),
+              statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[1].sales),
+              statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[2].sales)
+            });
+
+          }.bind(this));
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
@@ -367,7 +398,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {statTotalSales, statTotalPizzas, statMonthlySales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
@@ -376,10 +407,17 @@ class Dashboard extends Component {
                                               <TabPanel value={this.state.value} index={0}>
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RestaurantIcon />&nbsp;&nbsp;Business Dashboard</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
-                                                   <br/><br/>
+                                                   <div className="sales-dashlet">
+                                                       <img className="dashboard-icon" src="../img/images/increase.png"/><span className="stage-desc dash">{statTotalSales}</span>
+                                                       <img className="dashboard-icon" src="../img/images/monthly.png" style={{marginLeft: '80px'}}/><span className="stage-desc dash">{statMonthlySales}</span>
+                                                       <img className="dashboard-icon" src="../img/images/pizzaic1.png" style={{marginLeft: '72px', width: '24px'}}/><span className="stage-desc dash">{statTotalPizzas}</span>
+                                                   </div>
+                                                   <br/>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-quote';}}><RequestQuoteIcon /> Get Quote</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span><span class="stage-desc desc-btn" onClick={()=>{window.location.href='/dashboard-create-order';}}>+ Create</span><span class="stage-desc desc-btn blue" style={{marginLeft: '8px'}} onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>+ Sample</span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc"><InventoryIcon /> Inventory</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>

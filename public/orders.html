@@ -782,13 +782,44 @@ tr:not(:last-child) {
     border-bottom: 1px solid #eee !important;
 }
 
-tr:first-child {
-    text-decoration: blink;
-	-webkit-animation-name: blinker;
-	-webkit-animation-duration: 1s;
-	-webkit-animation-iteration-count:infinite;
-	-webkit-animation-timing-function:ease-in-out;
-	-webkit-animation-direction: alternate;
+.dashboard-icon {
+    width: 30px;
+    margin-left: 32px;
+    margin-right: 4px;
+}
+
+.sales-dashlet {
+    margin-top: 20px;
+    background: #f8f8f8;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background: linear-gradient(#ffffff, #f8f8f8);
+}
+
+table.etab {
+    font-family: 'Quicksand';
+    border-collapse: collapse;
+}
+
+.etab th {
+    text-align: center;
+    width: 100%;
+    border: 1px solid #dddddd !important;
+}
+
+.etab tr td {
+    border: 1px solid #dddddd !important;
+    padding-left: 9px !important;
+    padding-right: 4px !important;
+}
+
+.etab td:last-child {
+    padding-top: 17px !important;
+}
+
+.tel {
+    color: #fe031e;
+    text-decoration: underline;
 }
 
 .blink-text {
@@ -2352,6 +2383,11 @@ span.stage-desc {
     font-size: 16px;
     line-height: 36px;
     color: #666;
+}
+span.stage-desc.dash {
+    margin-left: 4px;
+    margin-top: 2px;
+    position: absolute;
 }
 span.stage-desc.desc-btn{
     color: #fff;

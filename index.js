@@ -787,6 +787,10 @@ app.get("/dashboard-quote-res/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-enquiries/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1175,6 +1179,54 @@ app.get("/event-orders/:status", function(req, res) {
       })
 });
 
+app.get("/enquiry-orders/:status", function(req, res) {
+  let orderStatus = req.params.status;
+  const client = new Client(dbConfig)
+
+  client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+          console.log('connected')
+          client.query("Select distinct event_date, quantity, event_contact_mobile, order_id From event_order where order_status IN ('PENDING')",
+                      [], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                               res.send(response.rows);
+                            }
+
+                          });
+        }
+      })
+});
+
+app.get("/stats/", function(req, res) {
+  let orderStatus = req.params.status;
+  const client = new Client(dbConfig)
+
+  client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+          console.log('connected')
+          client.query("SELECT SUM (DISTINCT quote_amt) as sales FROM confirmed_order UNION SELECT SUM (DISTINCT quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') UNION SELECT SUM (DISTINCT pizza_quantity) as sales FROM confirmed_order",
+                      [], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                               res.send(response.rows);
+                            }
+
+                          });
+        }
+      })
+});
+
 app.post('/eventOrder', function(req, res) {
 
     const eDate = req.body.eDate;
@@ -1280,6 +1332,34 @@ app.post('/completeConfirmedOrder', function(req, res) {
       } else {
         console.log('connected')
             client.query("UPDATE \"public\".\"confirmed_order\" set order_status='COMPLETED' where order_id=$1",
+                        [orderId], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                console.log(response);
+                                res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                              }
+
+                            });
+
+      }
+    })
+})
+
+app.post('/updateEnquiry/:orderId/:status', function(req, res) {
+
+    let whitelisted = false;
+    let orderStatus = req.params.status;
+    const orderId = req.params.orderId;
+
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        console.log('connected')
+            client.query("UPDATE \"public\".\"event_order\" set order_status='"+orderStatus+"' where order_id=$1",
                         [orderId], (err, response) => {
                               if (err) {
                                 console.log(err)
