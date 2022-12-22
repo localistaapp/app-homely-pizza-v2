@@ -385,9 +385,9 @@ class Dashboard extends Component {
           .then(function (response) {
             console.log('Order data-----', response.data);
             this.setState({
-              statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[0].sales),
-              statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[1].sales),
-              statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[2].sales)
+              statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
+              statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
+              statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
             });
 
           }.bind(this));
