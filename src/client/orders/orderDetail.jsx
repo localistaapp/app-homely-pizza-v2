@@ -359,7 +359,7 @@ class Stages extends Component {
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
             orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
-            orderTitle: meta['pizza_quantity'] + ' ' + meta['size'] + ' pizzas' + ' - ' + meta['quote_price'],
+            orderTitle: meta['pizza_quantity'] + ' ' + meta['size'] + '" pizzas, ' +  (meta['wraps_quantity'] ? meta['wraps_quantity'] +' wraps' : '') + (meta['garlic_bread__quantity'] ? meta['garlic_bread__quantity'] +' garlic' : '') + ' - ' + meta['quote_price'],
             dateTime: meta['event_date'] + ' ' + meta['event_time'],
             booking: meta['booking_amount_paid'],
             customer: meta['customer_name'],
@@ -369,6 +369,7 @@ class Stages extends Component {
             location: meta['venue_address'],
             mapUrl: meta['venue_map_url'],
             comments: meta['comments'],
+            ingredients: this.getIngredients(meta['pizza_quantity'], meta['wraps_quantity'], meta['garlic_bread__quantity'], meta['topping_ingredients'])
         };
         sessionStorage.setItem('eventDate',new Date().toDateInputValue());
         window.currSlotSelected = '';
@@ -377,6 +378,53 @@ class Stages extends Component {
     componentDidMount() {
         var winHeight = window.innerHeight;
 
+    }
+    getIngredients(pizzaQty, wrapsQty, garlicQty, toppings) {
+        if (wrapsQty && wrapsQty != '') {
+            wrapsQty = parseInt(wrapsQty, 10);
+        } else {
+            wrapsQty = 0;
+        }
+        if (garlicQty && garlicQty != '') {
+            garlicQty = parseInt(garlicQty, 10);
+        } else {
+            garlicQty = 0;
+        }
+        var ingredients = new Array();
+        var dryFlourQty = 250;
+        var totalFlourQty = pizzaQty * 120 + garlicQty * 110;
+
+        var maidaQty = (totalFlourQty * 0.8) + (wrapsQty * 35) + dryFlourQty;
+        ingredients.push({name: 'Refined flour', qty: maidaQty, unit:'g', nos: '1'});
+        var attaQty = (totalFlourQty * 0.2) + (wrapsQty * 35);
+        ingredients.push({name: 'Wheat flour', qty: attaQty, unit:'g', nos: '1'});
+        ingredients.push({name: 'Pizza sauce', qty: 325, unit:'g', nos: Math.ceil((4 * pizzaQty)/30 + (1 * wrapsQty)/20)});
+        ingredients.push({name: 'Tomato sauce', qty: 500, unit:'g', nos: Math.round((1 * pizzaQty)/30)});
+        ingredients.push({name: 'White sauce', qty: 325, unit:'g', nos: Math.ceil((1 * pizzaQty)/50 + (1 * wrapsQty)/30)});
+        ingredients.push({name: 'Pizza cheese', qty: 1, unit:'kg', nos: Math.ceil((1.5 * (pizzaQty + garlicQty))/30)});
+        ingredients.push({name: 'Peri Peri', qty: 1, unit:'pc', nos: Math.ceil((1 * (pizzaQty + garlicQty))/45)});
+        ingredients.push({name: 'Oregano', qty: 1, unit:'pc', nos: Math.ceil((1 * (pizzaQty + garlicQty))/45)});
+        ingredients.push({name: 'Olives', qty: 425, unit:'g', nos: Math.ceil((1 * pizzaQty)/40)});
+        if (garlicQty > 0) {
+            ingredients.push({name: 'Ginger garlic paste', qty: Math.round((100 * garlicQty)/30), unit:'g', nos: '1'});
+        }
+        var toppingVeggies = toppings.split(', ');
+        for(var i=0;i<toppingVeggies.length;i++) {
+            if (toppingVeggies[i].toLowerCase() == 'capcicum' || toppingVeggies[i].toLowerCase() == 'capsicum') {
+                ingredients.push({name: 'Capcicum', qty: Math.round((1000 * pizzaQty)/30 + (1000 * wrapsQty)/80), unit:'g', nos: ''});
+            } else if (toppingVeggies[i].toLowerCase() == 'onion') {
+                ingredients.push({name: 'Onion', qty: Math.round((1000 * pizzaQty)/30 + (1000 * wrapsQty)/80), unit:'g', nos: ''});
+            } else if (toppingVeggies[i].toLowerCase() == 'tomato') {
+                ingredients.push({name: 'Tomato', qty: Math.round((1000 * pizzaQty)/30), unit:'g', nos: ''});
+            } else if (toppingVeggies[i].toLowerCase() == 'sweet corn') {
+                ingredients.push({name: 'Frozen sweet corn', qty: Math.round((500 * pizzaQty)/20), unit:'g', nos: ''});
+            } else if (toppingVeggies[i].toLowerCase() == 'paneer') {
+                ingredients.push({name: 'Paneer', qty: Math.round((500 * pizzaQty)/30 + (500 * wrapsQty)/50), unit:'g', nos: ''});
+            } else if (toppingVeggies[i].toLowerCase() == 'baby corn') {
+                ingredients.push({name: 'Baby corn', qty: Math.round((1000 * pizzaQty)/30), unit:'g', nos: ''});
+            }
+        }
+        return ingredients
     }
     fetchJson() {
         console.log('this.props.match: ', this.props.match);
@@ -563,8 +611,19 @@ class Stages extends Component {
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     render() {
-        const {orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {ingredients, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
+
+        const ingredientsRendered = ingredients.map((ing, i) => {
+                      return (
+                      <tr key={`ing-${i}`}>
+                         <td>{ing.name}</td>
+                         <td>{ing.qty}</td>
+                         <td>{ing.unit}</td>
+                         <td>{ing.nos}</td>
+                       </tr>
+                      );
+                });
 
         console.log('orderSummary: ', orderSummary);
         let loaderElems = [];
@@ -662,7 +721,16 @@ class Stages extends Component {
                                               </TabPanel>
                                               <TabPanel value={this.state.value} index={1}>
 
+                                              <table className="etab">
+                                                    <tr>
+                                                    <th>Product</th>
+                                                    <th>Qty</th>
+                                                    <th>Unit</th>
+                                                    <th>Nos</th>
+                                                    </tr>
+                                                {ingredientsRendered}
 
+                                                </table>
 
                                               </TabPanel>
                                             </Paper>

@@ -1165,7 +1165,7 @@ app.get("/event-orders/:status", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("Select event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id, order_type From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
+          client.query("Select event_date, event_time, pizza_quantity, wraps_quantity, garlic_bread_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id, order_type From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
