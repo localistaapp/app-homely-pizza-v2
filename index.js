@@ -1213,7 +1213,7 @@ app.get("/stats/", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("SELECT SUM (DISTINCT quote_amt) as sales FROM confirmed_order UNION SELECT SUM (DISTINCT quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') UNION SELECT SUM (DISTINCT pizza_quantity) as sales FROM confirmed_order",
+          client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order",
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
