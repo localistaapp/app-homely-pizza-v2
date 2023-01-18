@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="2fbbff25-f33b-4a81-aaf6-38e53390f867" name="Default Changelist" comment="initial commit">
+      <change afterPath="$PROJECT_DIR$/public/img/images/intro.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/play-btn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/play-btn1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/play-button.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/.gz" beforeDir="false" afterPath="$PROJECT_DIR$/public/.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js.br" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/process.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/process.bundle.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/process.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/process.bundle.min.js.br" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,15 +83,15 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/package.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/public/guide.bundle.min.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/public/shortlists.html" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/client/wizard/book.jsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/client/wizard/createFitProfile.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/client/wizard/guide.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/client/wizard/shortlists.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/data-source/mockDataQnA.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/public/shortlists.html" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/webpack.config.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/package.json" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/client/wizard/createFitProfile.jsx" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/public/guide.bundle.min.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/client/wizard/book.jsx" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -172,13 +184,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/img/images" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "/Users/sampath/Documents/code/me/app-homely-pizza-v2/public/img/images"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/img/images" />
