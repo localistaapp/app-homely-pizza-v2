@@ -1052,14 +1052,6 @@ button.banner:after{
 	-ms-user-select: none;
 	user-select: none;
 	overflow: hidden;
-	opacity: 0.7;
-	border-top: 1px solid #e0e0e0;
-}
-.play-btn{
-    width: 64px;
-    position: absolute;
-    top: 305px;
-    left: calc(50% - 32px);
 }
 
 </style>
@@ -1130,8 +1122,6 @@ if(location.href.indexOf('amrit15') != -1
     <video id="my-video" class="video-js responsive-video" controls preload="auto" poster="./img/sc.jpg" data-setup='' onclick="this.play();">
         <source class="video" src="./img/images/intro.mp4" type='video/mp4'>
     </video>
-    <img class="play-btn" src="./img/images/play-btn1.png" style="width: 64px" onclick="playVid();this.style.display='none';document.getElementById('my-video').style.opacity='1';" />
-
     <div class="main">
     <div>
 
@@ -1538,16 +1528,6 @@ setInterval(function() {
  else if(word=='house') document.getElementById('rotated').innerHTML = 'office';
  else document.getElementById('rotated').innerHTML = 'next';
 },2000);
-
-var vid = document.getElementById("my-video");
-
-function playVid() {
-  vid.play();
-}
-
-function pauseVid() {
-  vid.pause();
-}
 
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J00T03NH7J"></script>
