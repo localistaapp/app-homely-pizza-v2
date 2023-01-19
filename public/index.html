@@ -384,7 +384,30 @@ ul.wstep li.active {
     border-radius: 6px;
     z-index: 0;
     position: relative;
-    box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 17%) 0px 18px 36px -18px inset;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 10%) 0px 18px 36px -18px inset;
+}
+
+.one {
+    width: 100vw;
+    height: 320px;
+    position: relative;
+    background-color: #ffffff;
+    display: inline-block;
+    top: -16px;
+    box-shadow: rgb(100 100 111 / 20%) 0px 0px 99px 5px;
+    padding: 20px;
+    text-align: left;
+}
+
+.one:after {
+    content: "";
+    border-width: 0px 12px 14px;
+    border-style: solid;
+    border-color: #ffffff transparent;
+    position: absolute;
+    top: -13px;
+    left: 79px;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 10px -12px inset;
 }
 
 .fb-post {
@@ -1166,6 +1189,30 @@ button.banner:after{
     color: #000;
     box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 7%) 0px 18px 36px -18px inset;
 }
+.head {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+.detail {
+    font-size: 15px;
+    color: #9b9b9b;
+    line-height: 1.5;
+}
+.minor-head {
+    font-size: 22px;
+    margin-top: 32px;
+    max-width: 100vw;
+    overflow: scroll;
+}
+.topping {
+    width: 64px;
+}
+.minor-head > div {
+    display: table-cell;
+    font-size: 14px;
+    color: #9b9b9b;
+    padding-right: 40px;
+}
 </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.5/gsap.min.js"
@@ -1232,7 +1279,7 @@ if(location.href.indexOf('amrit15') != -1
 <div><i class="loading"></i></div>
 
     <video id="my-video" class="video-js responsive-video" controls preload="auto" poster="./img/sc.jpg" data-setup='' onclick="this.play();">
-        <source class="video" src="./img/images/intro.mp4" type='video/mp4'>
+        <source class="video" src="./img/images/introc.mp4" type='video/mp4'>
     </video>
     <div class="main">
     <div>
@@ -1274,7 +1321,7 @@ if(location.href.indexOf('amrit15') != -1
         <img class="curve small" src="./img/images/curve.png"/>
         <hr class="line thin"/>
         <div class="para" style="margin-top: 0px">
-        <div class="title">What we serve</div>
+        <div class="title" style="background: #fff;">What we serve</div>
             <div class="menu-container">
                 <div class="title plate">
                     <img src="./img/images/panim.gif" style="width: 107px;top: 15px;position: absolute;left: 16px;" />
@@ -1294,6 +1341,44 @@ if(location.href.indexOf('amrit15') != -1
                 </div>
                 <br/><br/><br/><br/>
 
+            </div>
+            <div class="tab-container">
+                <div class="one">
+                    <div class="head">11" Large Pizza</div>
+                    <div class="detail">Our signature 11" Large pizza can be cut into 4 large or 6 small slices</div>
+                    <div class="minor-head">Topping options</div>
+                    <div class="minor-head" style="margin-top:16px">
+                        <div>
+                            <img class="topping" src="./img/images/topolives.png" />
+                            <div>Olives</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/topcapsicum.png" />
+                            <div>Capsicum / Green Pepper</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/toponion.png" />
+                            <div>Onion</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/topsweetcorn.png" />
+                            <div>Sweet corn</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/toptomato.png" />
+                            <div>Tomatoes</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/toppaneer.png" />
+                            <div>Paneer</div>
+                        </div>
+                        <div>
+                            <img class="topping" src="./img/images/topmushroom.png" />
+                            <div>Mushroom</div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             <br/><br/>
             <img src="./img/images/poven.png" style="width:210px;margin-right: 16px;" />
