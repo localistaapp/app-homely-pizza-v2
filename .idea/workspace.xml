@@ -5,6 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2fbbff25-f33b-4a81-aaf6-38e53390f867" name="Default Changelist" comment="initial commit">
+      <change afterPath="$PROJECT_DIR$/public/img/images/e01.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e02.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e03.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e04.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e05.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e06.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e07.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e08.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/images/e09.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
     </list>

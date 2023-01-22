@@ -3,6 +3,7 @@
 
 <head>
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="theme-color" content="#fff">
     <style type="text/css">.pac-container{background-color:#fff;position:absolute!important;z-index:1000;border-radius:2px;border-top:1px solid #d9d9d9;font-family:Arial,sans-serif;box-shadow:0 2px 6px rgba(0,0,0,0.3);-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.pac-logo:after{content:"";padding:1px 1px 1px 0;height:16px;text-align:right;display:block;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png);background-position:right;background-repeat:no-repeat;background-size:120px 14px}.hdpi.pac-logo:after{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3_hdpi.png)}.pac-item{cursor:default;padding:0 4px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;line-height:30px;text-align:left;border-top:1px solid #e6e6e6;font-size:11px;color:#999}.pac-item:hover{background-color:#fafafa}.pac-item-selected,.pac-item-selected:hover{background-color:#ebf2fe}.pac-matched{font-weight:700}.pac-item-query{font-size:13px;padding-right:3px;color:#000}.pac-icon{width:15px;height:20px;margin-right:7px;margin-top:6px;display:inline-block;vertical-align:top;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons.png);background-size:34px}.hdpi .pac-icon{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png)}.pac-icon-search{background-position:-1px -1px}.pac-item-selected .pac-icon-search{background-position:-18px -1px}.pac-icon-marker{background-position:-1px -161px}.pac-item-selected .pac-icon-marker{background-position:-18px -161px}.pac-placeholder{color:gray}
@@ -389,7 +390,7 @@ ul.wstep li.active {
 
 .one,.two {
     width: 100vw;
-    height: 420px;
+    height: 320px;
     position: relative;
     background-color: #ffffff;
     display: inline-block;
@@ -418,14 +419,19 @@ ul.wstep li.active {
     border-color: #ffffff transparent;
     position: absolute;
     top: -13px;
-    left: 47%;
+    left: 61%;
     box-shadow: rgb(50 50 93 / 0%) 0px 30px 10px -12px inset;
 }
-.pricing {
+.close-btn {
     position: relative;
-    top: -4px;
+    top: -52px;
     float: right;
-    right: 62px;
+    right: -14px;
+    max-width: 64px;
+}
+.close-btn img {
+    width: 18px;
+    opacity: 0.2;
 }
 label.price {
     color: #000;
@@ -1263,7 +1269,7 @@ button.banner:after{
     overflow-x: scroll;
 }
 .menu-container-ls {
-    width:92vw;
+    width:83vw;
     height:200px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     padding: 20px;
@@ -1307,6 +1313,62 @@ button.banner:after{
     font-size: 14px;
     color: #9b9b9b;
     padding-right: 40px;
+}
+.gcontainer {
+  padding: 4rem 0rem;
+  margin: 0 auto;
+  max-width: 75rem;
+  width: 90%;
+}
+
+.main .gcontainer .glider-contain .glider .card-image {
+  margin-right: 0.5rem;
+  background: #ffffff;
+  border: none;
+  outline: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 2px;
+  height: 210px !important;
+}
+.main .gcontainer .glider-contain .glider .card-image img {
+  display: block;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.main .gcontainer .glider-contain .glider-prev,
+.main .gcontainer .glider-contain .glider-next {
+  font-size: 1.5rem;
+  background: #454545;
+  color: #ffffff;
+  margin-top: 1rem;
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  border-radius: 50%;
+}
+.main .gcontainer .glider-contain .glider-prev .fas,
+.main .gcontainer .glider-contain .glider-next .fas {
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .main .glider-contain .glider-prev,
+.main .glider-contain .glider-next {
+    display: none;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .main .glider-contain .dots {
+    display: none;
+  }
+}
+.glider-slide {
+    height: 210px;
 }
 </style>
 
@@ -1417,20 +1479,20 @@ if(location.href.indexOf('amrit15') != -1
         <hr class="line thin"/>
         <div class="para" style="margin-top: 0px">
         <div class="title" style="background: #fff;">What we serve</div>
-            <div class="menu-container">
+            <div class="menu-container" id="mcon">
                 <div class="title plate" onclick="showMenuTab1('menuTab1');">
                     <img src="./img/images/panim.gif" style="width: 107px;top: 15px;position: absolute;left: 16px;" />
                     <div class="menu-title">11" Large Pizza</div>
                 </div>
-                <div class="title plate" style="margin-left: 178px !important;margin-top: -127px !important;">
+                <div class="title plate" style="margin-left: 178px !important;margin-top: -127px !important;" onclick="document.getElementById('mcon').scrollLeft = 0;showMenuTab1('menuTab2');">
                     <img src="./img/images/wraps.png" style="width: 179px;top: 13px;position: absolute;left: -25px;" />
                     <div class="menu-title">Veg wraps</div>
                 </div>
                 <div class="title plate" style="margin-left: 327px !important;margin-top: -127px !important;">
-                    <img src="./img/images/garlic.png" style="width: 98px;top: 13px;position: absolute;left: 11px;" />
+                    <img src="./img/images/garlic.png" style="width: 98px;top: 13px;position: absolute;left: 11px;" onclick="document.getElementById('mcon').scrollLeft = 160;showMenuTab1('menuTab3');" />
                     <div class="menu-title">Garlic bread</div>
                 </div>
-                <div class="title plate" style="margin-left: 476px !important;margin-top: -127px !important;margin-right:27px">
+                <div class="title plate" style="margin-left: 476px !important;margin-top: -127px !important;margin-right:27px" onclick="document.getElementById('mcon').scrollLeft = 360;showMenuTab1('menuTab4');">
                     <img src="./img/images/mojito.png" style="width: 66px;top: -12px;position: absolute;left: 22px;" />
                     <div class="menu-title">Virgin mojito</div>
                 </div>
@@ -1440,7 +1502,9 @@ if(location.href.indexOf('amrit15') != -1
             <div id="menuTab1" class="tab-container" style="display:none" onclick="hideMe('menuTab1')">
                 <div class="one">
                     <div class="head">11" Large Pizza</div>
-                    <div class="pricing"><label class="price"><span class="slashed" id="price0">249</span><span class="rupee" style="margin-left: 6px;">₹</span><span class="orig" id="priceNew0">199</span></label></div>
+                    <div class="close-btn" onclick="hideMe('menuTab1')">
+                        <img src="./img/images/ic_close.png" />
+                    </div>
 
                     <div class="detail">Our signature 11" Large pizza can be cut into 4 large or 6 small slices</div>
                     <div class="minor-head">Topping options</div>
@@ -1474,6 +1538,54 @@ if(location.href.indexOf('amrit15') != -1
                             <div>Mushroom</div>
                         </div>
                         <br/>
+                    </div>
+                </div>
+            </div>
+            <div id="menuTab2" class="tab-container" style="display:none" onclick="hideMe('menuTab2')">
+                <div class="two">
+                    <div class="head">Veg Wraps</div>
+                    <div class="close-btn" onclick="hideMe('menuTab2')">
+                        <img src="./img/images/ic_close.png" />
+                    </div>
+
+                    <div class="detail">Veg wraps provide you a bite of crunchy veggies mixed with cheese and seasoning complementing for a great meal</div>
+
+                    <div class="minor-head" style="margin-top:16px">
+                        <div style="margin-top:20px">
+                            <img src="./img/images/wraps.png" style="width:275px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="menuTab3" class="tab-container" style="display:none" onclick="hideMe('menuTab3')">
+                <div class="two">
+                    <div class="head">Garlic Bread</div>
+                    <div class="close-btn" onclick="hideMe('menuTab2')">
+                        <img src="./img/images/ic_close.png" />
+                    </div>
+
+                    <div class="detail">This mild, yet memorable delicacy offers delectable taste of garlic and a soft baked bread</div>
+
+                    <div class="minor-head" style="margin-top:16px">
+                        <div style="margin-top:20px">
+                            <img src="./img/images/garlic.png" style="width: 135px;margin: 0 auto;left: 0;right: 0;position: absolute;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="menuTab4" class="tab-container" style="display:none" onclick="hideMe('menuTab4')">
+                <div class="two">
+                    <div class="head">Virgin mojito</div>
+                    <div class="close-btn" onclick="hideMe('menuTab2')">
+                        <img src="./img/images/ic_close.png" />
+                    </div>
+
+                    <div class="detail">Sip into this flavourful drink and add unforgettable charm to your party!</div>
+
+                    <div class="minor-head" style="margin-top:16px">
+                        <div style="margin-top:20px">
+                            <img src="./img/images/mojito.png" style="width: 76px;margin: 0 auto;left: 0;right: 0;position: absolute;margin-top: 14px;left: -19px;" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1523,8 +1635,8 @@ if(location.href.indexOf('amrit15') != -1
                         <div class="menu-container-ls">
                             <img src="./img/images/ihot.png" />
                             <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Served hot & fast</span>
-                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:19px;">
-                                We serve hot pizzas at the counter & serve to your guests around a minute.
+                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                                We serve hot & fresh pizzas super fast at your live counter. Each pizza is served to your guests in around a minute.
                             </div>
                             <br/><br/><br/><br/>
 
@@ -1533,8 +1645,8 @@ if(location.href.indexOf('amrit15') != -1
                         <div class="menu-container-ls">
                             <img src="./img/images/ikiosk.png" />
                             <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Portable & quick setup</span>
-                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:19px;">
-                                Our portable setup ensures we can easily setup the counter even in a samll 4ft x 3ft space!
+                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                                Our portable setup ensures we can easily setup a live counter even in a small 4ft x 3ft space. Indoor or outdoor!
                             </div>
                             <br/><br/><br/><br/>
 
@@ -1543,8 +1655,8 @@ if(location.href.indexOf('amrit15') != -1
                         <div class="menu-container-ls">
                             <img src="./img/images/ishield.png" />
                             <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Fire Safe</span>
-                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:19px;">
-                                With our fully fire-safe equipment, your can be rest assured of smoke & fire-free environment.
+                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                                With our fully fire-safe equipment, your can be rest assured of smoke-free & fire-free environment at your live counter.
                             </div>
                             <br/><br/><br/><br/>
 
@@ -1552,9 +1664,9 @@ if(location.href.indexOf('amrit15') != -1
                         <br/>
                         <div class="menu-container-ls">
                             <img src="./img/images/ibank.png" />
-                            <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Affordable</span>
-                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:19px;">
-                                Our packages are reasonably priced to cater to the wider community.
+                            <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Trusted & affordable</span>
+                            <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                                Our packages are reasonably priced to cater to the wider community. Our service is trusted & rated the best for fast and timely service.
                             </div>
                             <br/><br/><br/><br/>
 
@@ -1568,24 +1680,55 @@ if(location.href.indexOf('amrit15') != -1
         </div>
 
     <div class="section no-padding" style="margin-top: 0px">
-        <div class="post-heading" style="height: 490px;">
+        <div class="post-heading" style="height: 264px;">
             <div class="info" style="position: relative">
                 <hr class="line thin"/>
                 <div class="title" style="background: #fff;width: 200px;">Photo Gallery</div>
                 <div id="boxEvents">
-                    <div class="img-con">
-                        <img src="https://i.postimg.cc/gJDkZrNn/profile-image-1.png" />
-                        <img src="https://i.postimg.cc/8kZzkJ7Y/profile-image-2.png" />
-                    </div>
-                    <div class="wrapper" style="-webkit-box-shadow: 0 -0.2em 3em rgb(11 30 59 / 15%);box-shadow:0 -0.2em 3em rgb(11 30 59 / 15%);margin-top:34px">
-                        <div class="testimonial-container" id="testimonial-container-events">
-                            <div id="testimonial2" class="active">
-                                <img src="" />
+                    <main class="main">
+                        <div class="gcontainer">
+                            <div class="glider-contain">
+                                <div class="glider">
+                                    <div class="card-image" style="height:210px;">
+                                        <img src="./img/images/e01.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image" style="height:210px;">
+                                        <img src="./img/images/e6.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image" style="height:210px;">
+                                        <img src="./img/images/e7.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e02.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e03.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e04.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e05.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e06.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e07.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e08.jpg" alt="Slider Image">
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="./img/images/e09.jpg" alt="Slider Image">
+                                    </div>
+                                </div>
+                                <span role="button" aria-label="Previous" class="glider-prev"><i class="fas fa-chevron-left"></i></span>
+                                <span role="button" aria-label="Next" class="glider-next"><i class="fas fa-chevron-right"></i></span>
+                                <span role="tablist" class="dots"></span>
                             </div>
                         </div>
-                        <button id="prev" style="left: 0.9em;" onclick="prevEvents()">←</button>
-                        <button id="next" style="right: 0.9em;" onclick="nextEvents()">→</button>
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
@@ -1622,18 +1765,18 @@ if(location.href.indexOf('amrit15') != -1
                 </button>
                 <div class="accordion-content">
                     <p>
-                        Our pizzas are 11 inch Large. It serves 1 person and even kids have had 1 full pizza in our previous events.
+                        Our pizzas are 11 inch Large. It serves 1 person and even 2 kids if you're considering it for a meal.
                     </p>
                 </div>
             </div>
             <div class="accordion-item">
                 <button id="accordion-button-3" aria-expanded="false">
-                    <span class="accordion-title">What other items do you serve apart from pizza?</span>
+                    <span class="accordion-title">What else do you serve apart from pizza at the live counter?</span>
                     <span class="icon" aria-hidden="true"></span>
                 </button>
                 <div class="accordion-content">
                     <p>
-                        We serve pizzas and wraps. Wraps have a stuffing of our custom sauce, veggies & optional cheese.
+                        We serve pizzas, veg wraps, garlic bread and few non-alcoholic drinks at the live counter.
                     </p>
                 </div>
             </div>
@@ -1644,7 +1787,7 @@ if(location.href.indexOf('amrit15') != -1
                 </button>
                 <div class="accordion-content">
                     <p>
-                        You can check the quote clicking on the 'Get a quote' button below and leave your mobile number in the quote page. Our representative will contact you to assist in taking your order.
+                        You can browse the packages clicking on the 'Browse packages' button below to place an enquiry/order.
                     </p>
                 </div>
             </div>
@@ -1670,17 +1813,7 @@ if(location.href.indexOf('amrit15') != -1
                     </p>
                 </div>
             </div>
-            <div class="accordion-item">
-                <button id="accordion-button-5" aria-expanded="false">
-                    <span class="accordion-title">Can I order a sample pizza for tasting?</span>
-                    <span class="icon" aria-hidden="true"></span>
-                </button>
-                <div class="accordion-content">
-                    <p>
-                        Yes, of course. You may place a sample order once you check your quote and we will deliver a sample pizza at your doorstep. Sample orders are charged at a nominal price per pizza.
-                    </p>
-                </div>
-            </div>
+
         </div>
 
     <div class="bottom-bar" ></div>
@@ -1696,7 +1829,7 @@ if(location.href.indexOf('amrit15') != -1
 </div>
     <div class="largevp">Please use your smartphone in portrait mode to order from Slimcrust. Currently, we're only supported on smartphone platforms. </div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
     <script>
 
 $.fn.BeerSlider = function ( options ) {
@@ -1750,23 +1883,6 @@ let testimonialContainer = document.getElementById("testimonial-container");
 
 
 let testimonialContainerEvents = document.getElementById("testimonial-container-events");
-function nextEvents() {
-	k = (l + k + 1) % l;
-	displayTestimonialEvents();
-}
-
-function prevEvents() {
-	k = (l + k - 1) % l;
-	displayTestimonialEvents();
-}
-let displayTestimonialEvents = () => {
-	testimonialContainerEvents.innerHTML = `
-         <img class="events-img" src=${testimonialEvents[k].image}></img>
-
-        `;
-};
-window.onload = displayTestimonialEvents;
-window.onload = nextEvents();
 
 const items = document.querySelectorAll('.accordion button');
 
@@ -1793,11 +1909,50 @@ setInterval(function() {
 },2000);
 
 function showMenuTab1(menuElemId) {
+    document.getElementById('menuTab1').style.display = 'none';
+    document.getElementById('menuTab2').style.display = 'none';
+    document.getElementById('menuTab3').style.display = 'none';
+    document.getElementById('menuTab4').style.display = 'none';
     document.getElementById(menuElemId).style.display = 'block';
 }
 function hideMe(menuElemId) {
     document.getElementById(menuElemId).style.display = 'none';
 }
+// Glider Configuration
+new Glider(document.querySelector(".glider"), {
+  slidesToShow: 1.5,
+  slidesToScroll: 1,
+  draggable: true,
+  dots: ".dots",
+  responsive: [
+    {
+      // If Screen Size More than 768px
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1.5,
+        slidesToScroll: 1,
+        duration: 0.5,
+        arrows: {
+          prev: ".glider-prev",
+          next: ".glider-next"
+        }
+      }
+    },
+    {
+      // If Screen Size More than 1024px
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2.5,
+        slidesToScroll: 1,
+        duration: 0.5,
+        arrows: {
+          prev: ".glider-prev",
+          next: ".glider-next"
+        }
+      }
+    }
+  ]
+});
 
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J00T03NH7J"></script>
