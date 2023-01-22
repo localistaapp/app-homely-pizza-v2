@@ -414,6 +414,28 @@ class Shortlists extends Component {
         if (location.href.indexOf('/redirect') >= 0) {
             this.setState({redirect: true});
         }
+        const label = document.querySelector('.dropdown__filter-selected')
+        const options = Array.from(document.querySelectorAll('.dropdown__select-option'))
+
+        options.forEach((option) => {
+        	option.addEventListener('click', () => {
+        		label.textContent = option.textContent
+        	})
+        })
+
+        // Close dropdown onclick outside
+        document.addEventListener('click', (e) => {
+        	const toggle = document.querySelector('.dropdown__switch')
+        	const element = e.target
+
+        	if (element == toggle) return;
+
+        	const isDropdownChild = element.closest('.dropdown__filter')
+
+        	if (!isDropdownChild) {
+        		toggle.checked = false
+        	}
+        });
     }
     fetchJson() {
         console.log('this.props.match: ', this.props.match);
@@ -697,20 +719,7 @@ class Shortlists extends Component {
 
                     <div><i className="loading" id="myTasksLoader" style={{top: '28px'}}></i></div>
                     <div className={`main fadeInBottom ${this.state.showWizard}`}>
-                        <div className="wizard-progress">
-                          <div className="step complete">
-                            <div className="node"></div>
-                            <span>Event Details</span>
-                          </div>
-                          <div className={`step ${curStep>1 || redirect ? 'complete' : 'in-progress'}`}>
-                            <span>Visitor Details</span>
-                            <div className="node"></div>
-                          </div>
-                          <div className={`step ${curStep>2 || redirect  ? 'complete' : 'in-progress'}`}>
-                            <span>Sample Order</span>
-                            <div className="node"></div>
-                          </div>
-                        </div>
+                        <div class="header">Select a package, for <br/>your party!<br/></div>
                         {redirect == true && <div className="step-detail step-1">
                                 <div class="payment-success">
                                 <img src="../../../img/images/ic_tick.png" style={{width: '22px'}}/>
@@ -721,13 +730,86 @@ class Shortlists extends Component {
                                 </div>
                         </div>}
                         {curStep == 1 && !redirect && <div className="step-detail step-1">
-                            <div>When and where is your event?</div>
+                                    <div className="dropdown">
+                                        <input type="checkbox" className="dropdown__switch" id="filter-switch" hidden />
+                                        <label for="filter-switch" className="dropdown__options-filter">
+                                            <ul className="dropdown__filter" role="listbox" tabindex="-1">
+                                                <li className="dropdown__filter-selected" aria-selected="true">
+                                                    Pick the number of guests:
+                                                </li>
+                                                <li>
+                                                    <ul className="dropdown__select">
+                                                        <li className="dropdown__select-option" role="option">
+                                                            20 Guests
+                                                        </li>
+                                                        <li className="dropdown__select-option" role="option">
+                                                            25 Guests
+                                                        </li>
+                                                        <li className="dropdown__select-option" role="option">
+                                                            30-35 Guests
+                                                        </li>
+                                                        <li className="dropdown__select-option" role="option">
+                                                            40-45 Guests
+                                                        </li>
+                                                        <li className="dropdown__select-option" role="option">
+                                                            50-60 Guests
+                                                        </li>
+                                                        <li className="dropdown__select-option" role="option">
+                                                            70-100 Guests
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </label>
+                                        <div className="packages">
+                                            <div className="menu-container-ls">
+                                                <img src="../img/images/p3.png" />
+                                                <span className="phead">Large pizza for {this.state.numGuests} guests</span>
+                                                <div className="pdetail">
+                                                    A total of {this.state.numGuests} pizzas will be served at the live counter.
+                                                </div>
+                                                <br/>
+                                                <span className="phead" style={{marginTop: '160px',left: '22px'}}>Inclusions</span>
+                                                <br/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'102px'}}/>
+                                                <br/><br/>
+                                                <div className="pdetail incl1">Live counter setup for 3-4 hrs</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                                <div className="pdetail incl2" >Any 4 toppings of your choice</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                                <div className="pdetail incl3" >Fresh base, live pizzas</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                                <div className="pdetail incl4" >Chef & helper for serving</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                                <div className="pdetail incl5" >Pizza making kids workshop</div>
+
+                                            </div>
+                                            <div className="menu-container-ls">
+                                                <img src="../img/images/p3.png" />
+                                                <span className="phead">Large pizza for {this.state.numGuests} guests</span>
+                                                <div className="pdetail">
+                                                    A total of {this.state.numGuests} pizzas will be served at the live counter.
+                                                </div>
+                                                <br/>
+                                                <span className="phead" style={{marginTop: '160px',left: '22px'}}>Inclusions</span>
+                                                <br/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'102px'}}/>
+                                                <br/><br/>
+                                                <div className="pdetail incl1">Live counter setup for 3-4 hrs</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                                <div className="pdetail incl2" >Any 4 toppings of your choice</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                                <div className="pdetail incl3" >Fresh base, live pizzas</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                                <div className="pdetail incl4" >Chef & helper for serving</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                                <div className="pdetail incl5" >Pizza making kids workshop</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                             <br/>
-                            <div>
-                                <span>Date of Event:</span><input type="date" value={this.state.eventDate} onChange={(e)=>{this.setState({eventDate:e.target.value});sessionStorage.setItem('eventDate',e.target.value);}}/>
-                                <br/>
-                                <span>Mobile Number:&nbsp;&nbsp;</span><input type="text" className="txt-field" onChange={(e)=>{this.setState({mobileNum:e.target.value});sessionStorage.setItem('mobileNum',e.target.value);}}/>
-                            </div>
+
                             <div className="bottom-bar" ></div>
                             <a className="button" onClick={()=>{this.saveEvent();}}>Next →</a>
                         </div> }
