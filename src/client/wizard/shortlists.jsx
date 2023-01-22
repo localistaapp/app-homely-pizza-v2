@@ -425,6 +425,7 @@ class Shortlists extends Component {
 
         // Close dropdown onclick outside
         document.addEventListener('click', (e) => {
+        debugger;
         	const toggle = document.querySelector('.dropdown__switch')
         	const element = e.target
 
@@ -709,7 +710,7 @@ class Shortlists extends Component {
 
 
         return (<div>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <img onClick={()=>{location.href='/';}} id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
                     <div id="checkoutHeader">
                         <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-20px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
                             <div className=""></div>
