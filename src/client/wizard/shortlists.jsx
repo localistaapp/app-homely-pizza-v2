@@ -357,7 +357,8 @@ class Shortlists extends Component {
             redirect: false,
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
-            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []
+            orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
+            numGuests: 20,
         };
         sessionStorage.setItem('eventDate',new Date().toDateInputValue());
         window.currSlotSelected = '';
@@ -424,8 +425,9 @@ class Shortlists extends Component {
         })
 
         // Close dropdown onclick outside
-        document.addEventListener('click', (e) => {
-        debugger;
+        /* document.addEventListener('click', (e) => {
+            console.log('--Num guests--', e.target.getAttribute('data-num-guests'));
+
         	const toggle = document.querySelector('.dropdown__switch')
         	const element = e.target
 
@@ -436,7 +438,7 @@ class Shortlists extends Component {
         	if (!isDropdownChild) {
         		toggle.checked = false
         	}
-        });
+        }); */
     }
     fetchJson() {
         console.log('this.props.match: ', this.props.match);
@@ -646,8 +648,20 @@ class Shortlists extends Component {
             http.send(params);
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
+    setNumGuests(numGuests) {
+        document.getElementById('packages').style.opacity = '1';
+        document.getElementById('packages').style.pointerEvents = 'all';
+        this.setState({numGuests: numGuests});
+    }
+    showMore(packElem){
+        document.getElementById(packElem).style.height = '660px';
+        document.getElementById(packElem+'BottomDiv').style.display = 'none';
+        document.getElementById(packElem+'ShowBtn').style.display = 'none';
+        document.getElementById(packElem+'Learn').style.display = 'block';
+        document.getElementById(packElem+'Chat').style.display = 'block';
+    }
     render() {
-        const {showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {numGuests, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
 
         console.log('orderSummary: ', orderSummary);
@@ -740,39 +754,40 @@ class Shortlists extends Component {
                                                 </li>
                                                 <li>
                                                     <ul className="dropdown__select">
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="20" role="option" onClick={()=>{this.setNumGuests('20');}}>
                                                             20 Guests
                                                         </li>
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="25" role="option" onClick={()=>{this.setNumGuests('25');}}>
                                                             25 Guests
                                                         </li>
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="30" role="option" onClick={()=>{this.setNumGuests('30');}}>
                                                             30-35 Guests
                                                         </li>
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="40" role="option" onClick={()=>{this.setNumGuests('40');}}>
                                                             40-45 Guests
                                                         </li>
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="55" role="option" onClick={()=>{this.setNumGuests('55');}}>
                                                             50-60 Guests
                                                         </li>
-                                                        <li className="dropdown__select-option" role="option">
+                                                        <li className="dropdown__select-option" data-num-guests="80" role="option" onClick={()=>{this.setNumGuests('80');}}>
                                                             70-100 Guests
                                                         </li>
                                                     </ul>
                                                 </li>
                                             </ul>
                                         </label>
-                                        <div className="packages">
-                                            <div className="menu-container-ls">
-                                                <img src="../img/images/p3.png" />
-                                                <span className="phead">Large pizza for {this.state.numGuests} guests</span>
+                                        <div id="packages" className="packages">
+                                            <div id="pack1" className="menu-container-ls" style={{height: '320px'}}>
+                                                <img src="../img/images/pack1.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <span className="phead">{this.state.numGuests} Large pizzas</span>
+                                                <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 239}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 199}</span></label></div>
                                                 <div className="pdetail">
-                                                    A total of {this.state.numGuests} pizzas will be served at the live counter.
+                                                    A total of {this.state.numGuests} Large pizzas (11 inch) will be served at the live counter.
                                                 </div>
                                                 <br/>
                                                 <span className="phead" style={{marginTop: '160px',left: '22px'}}>Inclusions</span>
                                                 <br/>
-                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'102px'}}/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'166px'}}/>
                                                 <br/><br/>
                                                 <div className="pdetail incl1">Live counter setup for 3-4 hrs</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
@@ -783,36 +798,119 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl4" >Chef & helper for serving</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
                                                 <div className="pdetail incl5" >Pizza making kids workshop</div>
-
+                                                <div className="bottom-bar-div" id="pack1BottomDiv"></div>
+                                                <a id="pack1ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack1')}}>Show More</a>
+                                                <a id="pack1Learn" class="button cta" href="/package/1">Learn More</a>
+                                                <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
-                                            <div className="menu-container-ls">
-                                                <img src="../img/images/p3.png" />
-                                                <span className="phead">Large pizza for {this.state.numGuests} guests</span>
+                                            <div id="pack2" className="menu-container-ls" style={{height: '320px'}}>
+                                                <img src="../img/images/pack2.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}}  />
+                                                <span className="phead">{this.state.numGuests} Pizza Mini Combo Meal</span>
+                                                <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 299}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 249}</span></label></div>
                                                 <div className="pdetail">
-                                                    A total of {this.state.numGuests} pizzas will be served at the live counter.
+                                                    A starter mini veg wrap (4 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
                                                 </div>
+                                                <br/><br/><br/>
+                                                <span className="phead" style={{marginTop: '220px',left: '22px'}}>Inclusions</span>
                                                 <br/>
-                                                <span className="phead" style={{marginTop: '160px',left: '22px'}}>Inclusions</span>
-                                                <br/>
-                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'102px'}}/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'170px'}}/>
                                                 <br/><br/>
-                                                <div className="pdetail incl1">Live counter setup for 3-4 hrs</div>
+                                                <div className="pdetail incl1" style={{marginTop: '187px'}}>Live counter setup for 3-4 hrs</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
-                                                <div className="pdetail incl2" >Any 4 toppings of your choice</div>
+                                                <div className="pdetail incl2" style={{marginTop: '227px'}}>Any 4 toppings of your choice</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
-                                                <div className="pdetail incl3" >Fresh base, live pizzas</div>
+                                                <div className="pdetail incl3" style={{marginTop: '267px'}}>Fresh base, live pizzas</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
-                                                <div className="pdetail incl4" >Chef & helper for serving</div>
+                                                <div className="pdetail incl4" style={{marginTop: '307px'}}>Chef & helper for serving</div>
                                                 <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
-                                                <div className="pdetail incl5" >Pizza making kids workshop</div>
-
+                                                <div className="pdetail incl5" style={{marginTop: '347px'}}>Pizza making kids workshop</div>
+                                                <div className="bottom-bar-div" id="pack2BottomDiv"></div>
+                                                <a id="pack2ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack2')}}>Show More</a>
+                                                <a id="pack2Learn" class="button cta" href="/package/2">Learn More</a>
+                                                <a id="pack2Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%202%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                            </div>
+                                            <div id="pack3" className="menu-container-ls" style={{height: '320px'}}>
+                                                <img src="../img/images/pack03.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <span className="phead">{this.state.numGuests} Pizza Large Combo Meal</span>
+                                                <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 359}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 299}</span></label></div>
+                                                <div className="pdetail">
+                                                    A starter full veg wrap  (8 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
+                                                </div>
+                                                <br/><br/><br/>
+                                                <span className="phead" style={{marginTop: '214px',left: '22px'}}>Inclusions</span>
+                                                <br/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'165px'}}/>
+                                                <br/><br/>
+                                                <div className="pdetail incl1" style={{marginTop: '181px'}}>Live counter setup for 3-4 hrs</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                                <div className="pdetail incl2" style={{marginTop: '221px'}}>Any 4 toppings of your choice</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                                <div className="pdetail incl3" style={{marginTop: '261px'}}>Fresh base, live pizzas</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                                <div className="pdetail incl4" style={{marginTop: '301px'}}>Chef & helper for serving</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                                <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
+                                                <div className="bottom-bar-div" id="pack3BottomDiv"></div>
+                                                <a id="pack3ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack3')}}>Show More</a>
+                                                <a id="pack3Learn" class="button cta" href="/package/3">Learn More</a>
+                                                <a id="pack3Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%203%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                            </div>
+                                            <div id="pack4" className="menu-container-ls" style={{height: '320px'}}>
+                                                <img src="../img/images/pack04.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <span className="phead">{this.state.numGuests} Pizza Mega Combo Meal</span>
+                                                <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 429}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 359}</span></label></div>
+                                                <div className="pdetail">
+                                                    A starter 2 slice garlic bread, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
+                                                </div>
+                                                <br/><br/><br/>
+                                                <span className="phead" style={{marginTop: '214px',left: '22px'}}>Inclusions</span>
+                                                <br/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'165px'}}/>
+                                                <br/><br/>
+                                                <div className="pdetail incl1" style={{marginTop: '181px'}}>Live counter setup for 3-4 hrs</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                                <div className="pdetail incl2" style={{marginTop: '221px'}}>Any 4 toppings of your choice</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                                <div className="pdetail incl3" style={{marginTop: '261px'}}>Fresh base, live pizzas</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                                <div className="pdetail incl4" style={{marginTop: '301px'}}>Chef & helper for serving</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                                <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
+                                                <div className="bottom-bar-div" id="pack4BottomDiv"></div>
+                                                <a id="pack4ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack4')}}>Show More</a>
+                                                <a id="pack4Learn" class="button cta" href="/package/4">Learn More</a>
+                                                <a id="pack4Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%204%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                            </div>
+                                            <div id="pack5" className="menu-container-ls" style={{height: '320px'}}>
+                                                <img src="../img/images/pack05.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <span className="phead">{this.state.numGuests} Italian Meal Combo</span>
+                                                <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 479}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 399}</span></label></div>
+                                                <div className="pdetail">
+                                                    A starter garlic bread, 1 veg wrap (8 inch long) & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)
+                                                </div>
+                                                <br/><br/><br/>
+                                                <span className="phead" style={{marginTop: '214px',left: '22px'}}>Inclusions</span>
+                                                <br/>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'165px'}}/>
+                                                <br/><br/>
+                                                <div className="pdetail incl1" style={{marginTop: '181px'}}>Live counter setup for 3-4 hrs</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                                <div className="pdetail incl2" style={{marginTop: '221px'}}>Any 4 toppings of your choice</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                                <div className="pdetail incl3" style={{marginTop: '261px'}}>Fresh base, live pizzas</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                                <div className="pdetail incl4" style={{marginTop: '301px'}}>Chef & helper for serving</div>
+                                                <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                                <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
+                                                <div className="bottom-bar-div" id="pack5BottomDiv"></div>
+                                                <a id="pack5ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack5')}}>Show More</a>
+                                                <a id="pack5Learn" class="button cta" href="/package/5">Learn More</a>
+                                                <a id="pack5Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%205%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                         </div>
                                     </div>
                             <br/>
 
-                            <div className="bottom-bar" ></div>
-                            <a className="button" onClick={()=>{this.saveEvent();}}>Next →</a>
                         </div> }
                         {curStep == 2 && !redirect && <div className="step-detail step-1">
                                 <div style={{marginTop: '-44px'}}>How many guests are you expecting at your event?</div>
