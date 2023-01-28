@@ -957,7 +957,7 @@ class Shortlists extends Component {
                         {curStep == 2 && <div className="step-detail step-1" style={{marginTop: '78px'}}>
                                 <hr className="line thin" style={{top: '-2px'}}/>
                                 <div className="step-detail-title" style={{marginTop: '-44px',textAlign: 'left'}}>Book your package</div>
-                                <div id="packages" className="packages" style={{opacity: '1', pointerEvents: 'all', marginTop: '34px',height:'700px'}}>
+                                <div id="packages" className="packages" style={{opacity: '1', pointerEvents: 'all', marginTop: '34px',height:'880px'}}>
                                     <div id="pack1" className="menu-container-ls" style={{height: '320px',boxShadow: 'none',overflow: 'unset'}}>
                                     <img src={`../img/images/pack${this.state.selectedPackage}.png`} style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
                                     <span className="phead">{this.state.numGuests}{pkgs[this.state.selectedPackage].selectedPkgTitle}</span>
@@ -985,11 +985,11 @@ class Shortlists extends Component {
                                     </div>
                                 </div>
                                 <div className="bottom-bar" ></div>
-                                <div className="button" style={{bottom: '-7px',background:'rgb(255, 255, 255)',color:'rgb(255 255 255)',border: '1px solid',height: '320px',width: '100%'}}></div>
+                                <div className="button" style={{backgroundColor:'#fff',background:'transparent',backdropFilter:'blur(12px)',boxShadow: '0px 0px 13px 6px rgb(131 131 131 / 21%)',bottom: '-7px',borderRadius:'10px',color:'rgb(255 255 255)',border: '1px solid',height: '350px',width: '100%'}}></div>
                                 <div className="booking-form">
                                     <div>
                                         <span className="form-label">Date of event:</span>
-                                        <input style={{border: '1px solid #94b5dc',bottom:'2px',marginLeft: '25px'}} className="form-input" type="date" value={this.state.deliveryDate} onChange={(e)=>{this.setState({deliveryDate:e.target.value});sessionStorage.setItem('deliveryDate',e.target.value);}}/>
+                                        <input style={{border: '1px solid #cc3c3b',bottom:'2px',marginLeft: '25px',padding:'0',paddingLeft:'8px',width:'180px'}} className="form-input" type="date" value={this.state.deliveryDate} onChange={(e)=>{this.setState({deliveryDate:e.target.value});sessionStorage.setItem('deliveryDate',e.target.value);}}/>
                                     </div>
                                     <div>
                                         <span className="form-label">Serving time:</span>
@@ -1006,6 +1006,7 @@ class Shortlists extends Component {
                                         <span className="form-label">Mobile number:</span>
                                         <input id="dMobile" type="text" className="form-input-mob" placeholder=""/>
                                     </div>
+                                    <div><span class="small-msg">*No payment required now. Agent will contact for next steps.</span></div>
                                 </div>
                                 <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{this.selectPackage(1);}}>Book Now</a>
                                 <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
