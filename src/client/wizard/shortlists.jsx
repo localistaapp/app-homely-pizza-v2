@@ -359,10 +359,16 @@ class Shortlists extends Component {
             deliveryDate: new Date().toDateInputValue(),
             orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
             numGuests: 20,
+            selectedPackage: 1,
+            selectPkgActualPrice: '',
+            selectPkgPrice: '',
+            selectedPkgDescription: '',
+            selectedPkgTitle: '',
         };
         sessionStorage.setItem('eventDate',new Date().toDateInputValue());
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
+        this.selectPackage = this.selectPackage.bind(this);
     }
     componentDidMount() {
         this.fetchJson();
@@ -660,6 +666,10 @@ class Shortlists extends Component {
         document.getElementById(packElem+'Learn').style.display = 'block';
         document.getElementById(packElem+'Chat').style.display = 'block';
     }
+    selectPackage(packageNum) {
+        this.setState({curStep: 2, selectedPackage: packageNum});
+        window.scrollTo(0, 0);
+    }
     render() {
         const {numGuests, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         this.slotsAvailable = true;
@@ -721,7 +731,38 @@ class Shortlists extends Component {
                   }
                 };
 
-
+        let pkgs = {
+                     1: {
+                       "selectPkgActualPrice": "199",
+                       "selectPkgPrice": "239",
+                       "selectedPkgDescription": "A total of [qty] Large pizzas (11 inch) will be served at the live counter.",
+                       "selectedPkgTitle": " Large pizzas"
+                     },
+                     2: {
+                       "selectPkgActualPrice": "249",
+                       "selectPkgPrice": "299",
+                       "selectedPkgDescription": "A starter mini veg wrap (4 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgTitle": " Pizza Mini Combo Meal"
+                     },
+                     3: {
+                       "selectPkgActualPrice": "299",
+                       "selectPkgPrice": "359",
+                       "selectedPkgDescription": "A starter full veg wrap (8 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgTitle": " Pizza Large Combo Meal"
+                     },
+                     4: {
+                       "selectPkgActualPrice": "359",
+                       "selectPkgPrice": "429",
+                       "selectedPkgDescription": "A starter 2 slice garlic bread, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgTitle": " Pizza Mega Combo Meal"
+                     },
+                     5: {
+                       "selectPkgActualPrice": "399",
+                       "selectPkgPrice": "479",
+                       "selectedPkgDescription": "A starter garlic bread, 1 veg wrap (8 inch long) & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgTitle": " Pizza Mega Combo Meal"
+                     }
+                   };
 
         return (<div>
                     <img onClick={()=>{location.href='/';}} id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
@@ -734,7 +775,7 @@ class Shortlists extends Component {
 
                     <div><i className="loading" id="myTasksLoader" style={{top: '28px'}}></i></div>
                     <div className={`main fadeInBottom ${this.state.showWizard}`}>
-                        <div class="header">Select a package, for <br/>your party!<br/></div>
+
                         {redirect == true && <div className="step-detail step-1">
                                 <div class="payment-success">
                                 <img src="../../../img/images/ic_tick.png" style={{width: '22px'}}/>
@@ -745,6 +786,7 @@ class Shortlists extends Component {
                                 </div>
                         </div>}
                         {curStep == 1 && !redirect && <div className="step-detail step-1">
+                            <div class="header">Select a package, for <br/>your party!<br/></div>
                                     <div className="dropdown">
                                         <input type="checkbox" className="dropdown__switch" id="filter-switch" hidden />
                                         <label for="filter-switch" className="dropdown__options-filter">
@@ -800,7 +842,7 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl5" >Pizza making kids workshop</div>
                                                 <div className="bottom-bar-div" id="pack1BottomDiv"></div>
                                                 <a id="pack1ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack1')}}>Show More</a>
-                                                <a id="pack1Learn" class="button cta" href="/package/1">Learn More</a>
+                                                <a id="pack1Learn" class="button cta" onClick={()=>{this.selectPackage(1);}}>Select package</a>
                                                 <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack2" className="menu-container-ls" style={{height: '320px'}}>
@@ -826,11 +868,11 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl5" style={{marginTop: '347px'}}>Pizza making kids workshop</div>
                                                 <div className="bottom-bar-div" id="pack2BottomDiv"></div>
                                                 <a id="pack2ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack2')}}>Show More</a>
-                                                <a id="pack2Learn" class="button cta" href="/package/2">Learn More</a>
+                                                <a id="pack2Learn" class="button cta" onClick={()=>{this.selectPackage(2);}}>Select package</a>
                                                 <a id="pack2Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%202%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack3" className="menu-container-ls" style={{height: '320px'}}>
-                                                <img src="../img/images/pack03.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <img src="../img/images/pack3.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
                                                 <span className="phead">{this.state.numGuests} Pizza Large Combo Meal</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 359}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 299}</span></label></div>
                                                 <div className="pdetail">
@@ -852,11 +894,11 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
                                                 <div className="bottom-bar-div" id="pack3BottomDiv"></div>
                                                 <a id="pack3ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack3')}}>Show More</a>
-                                                <a id="pack3Learn" class="button cta" href="/package/3">Learn More</a>
+                                                <a id="pack3Learn" class="button cta" onClick={()=>{this.selectPackage(3);}}>Select package</a>
                                                 <a id="pack3Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%203%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack4" className="menu-container-ls" style={{height: '320px'}}>
-                                                <img src="../img/images/pack04.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <img src="../img/images/pack4.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
                                                 <span className="phead">{this.state.numGuests} Pizza Mega Combo Meal</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 429}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 359}</span></label></div>
                                                 <div className="pdetail">
@@ -878,11 +920,11 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
                                                 <div className="bottom-bar-div" id="pack4BottomDiv"></div>
                                                 <a id="pack4ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack4')}}>Show More</a>
-                                                <a id="pack4Learn" class="button cta" href="/package/4">Learn More</a>
+                                                <a id="pack4Learn" class="button cta" onClick={()=>{this.selectPackage(4);}}>Select package</a>
                                                 <a id="pack4Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%204%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack5" className="menu-container-ls" style={{height: '320px'}}>
-                                                <img src="../img/images/pack05.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                                <img src="../img/images/pack5.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
                                                 <span className="phead">{this.state.numGuests} Italian Meal Combo</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 479}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 399}</span></label></div>
                                                 <div className="pdetail">
@@ -904,7 +946,7 @@ class Shortlists extends Component {
                                                 <div className="pdetail incl5" style={{marginTop: '341px'}}>Pizza making kids workshop</div>
                                                 <div className="bottom-bar-div" id="pack5BottomDiv"></div>
                                                 <a id="pack5ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack5')}}>Show More</a>
-                                                <a id="pack5Learn" class="button cta" href="/package/5">Learn More</a>
+                                                <a id="pack5Learn" class="button cta" onClick={()=>{this.selectPackage(5);}}>Select package</a>
                                                 <a id="pack5Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%205%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                         </div>
@@ -912,19 +954,62 @@ class Shortlists extends Component {
                             <br/>
 
                         </div> }
-                        {curStep == 2 && !redirect && <div className="step-detail step-1">
-                                <div style={{marginTop: '-44px'}}>How many guests are you expecting at your event?</div>
-                                <div class="quantity" style={{marginTop: '22px'}}>
-                                    <a className="quantity__minus"><span onClick={()=>{if(this.state.numVistors>0){this.setState({numVistors: this.state.numVistors - 10});sessionStorage.setItem('qty',this.state.numVistors - 10)}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
-                                    <input name="quantity" type="text" className="quantity__input" value={this.state.numVistors} />
-                                    <a className="quantity__plus"><span onClick={()=>{this.setState({numVistors: this.state.numVistors + 10});sessionStorage.setItem('qty',this.state.numVistors + 10)}}>+</span></a>
-                                  </div>
-                                {this.state.numVistors > 0 && this.getQuoteString(this.state.numVistors)}
-                                <div className="pkg">
-                                {this.state.numVistors > 0 && <QuoteCard index={4} data={proposedPackage1} type="pizzas" />}
+                        {curStep == 2 && <div className="step-detail step-1" style={{marginTop: '78px'}}>
+                                <hr className="line thin" style={{top: '-2px'}}/>
+                                <div className="step-detail-title" style={{marginTop: '-44px',textAlign: 'left'}}>Book your package</div>
+                                <div id="packages" className="packages" style={{opacity: '1', pointerEvents: 'all', marginTop: '34px',height:'700px'}}>
+                                    <div id="pack1" className="menu-container-ls" style={{height: '320px',boxShadow: 'none',overflow: 'unset'}}>
+                                    <img src={`../img/images/pack${this.state.selectedPackage}.png`} style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
+                                    <span className="phead">{this.state.numGuests}{pkgs[this.state.selectedPackage].selectedPkgTitle}</span>
+                                    <div className="pricing" style={{right:'128px'}}><label className="price"><span className="slashed">{this.state.numGuests * pkgs[this.state.selectedPackage].selectPkgPrice}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * pkgs[this.state.selectedPackage].selectPkgActualPrice}</span></label></div>
+                                    <div className="pdetail">
+                                    {pkgs[this.state.selectedPackage].selectedPkgDescription.replace('[qty]',this.state.numGuests)}
+                                    </div>
+                                    <br/>
+                                    <span className="phead" style={{marginTop: '210px',left: '22px'}}>Inclusions</span>
+                                    <br/>
+                                    <img class="icheck" src="../img/images/icheck.png" style={{marginTop:'216px'}}/>
+                                    <br/><br/>
+                                    <div className="pdetail incl1" style={{marginTop: '172px'}}>Live counter setup for 3-4 hrs</div>
+                                    <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'-25px'}}/>
+                                    <div className="pdetail incl2" style={{marginTop: '212px'}} >Any 4 toppings of your choice</div>
+                                    <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'14px'}}/>
+                                    <div className="pdetail incl3" style={{marginTop: '253px'}} >Fresh base, live pizzas</div>
+                                    <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'54px'}}/>
+                                    <div className="pdetail incl4" style={{marginTop: '293px'}} >Chef & helper for serving</div>
+                                    <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
+                                    <div className="pdetail incl5" style={{marginTop: '333px',marginBottom:'100px'}} >Pizza making kids workshop</div>
+                                    <br/><br/><br/><br/>
+                                    <a id="pack1Learn" class="button cta" onClick={()=>{this.selectPackage(1);}}>Book Now</a>
+                                    <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" />Chat before order</a>
+                                    </div>
                                 </div>
                                 <div className="bottom-bar" ></div>
-                                <a className="button" onClick={()=>{this.setState({curStep:3,showList:''});this.updateQuantity(this.state.numVistors);}}>Next →</a>
+                                <div className="button" style={{bottom: '-7px',background:'rgb(255, 255, 255)',color:'rgb(255 255 255)',border: '1px solid',height: '320px',width: '100%'}}></div>
+                                <div className="booking-form">
+                                    <div>
+                                        <span className="form-label">Date of event:</span>
+                                        <input style={{border: '1px solid #94b5dc',bottom:'2px',marginLeft: '25px'}} className="form-input" type="date" value={this.state.deliveryDate} onChange={(e)=>{this.setState({deliveryDate:e.target.value});sessionStorage.setItem('deliveryDate',e.target.value);}}/>
+                                    </div>
+                                    <div>
+                                        <span className="form-label">Serving time:</span>
+                                        <select name="slot" id="slot" className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
+                                          <option value="Saturday 6pm to 7p">12pm to 4pm</option>
+                                          <option value="Saturday 7pm to 8pm">1pm to 4pm</option>
+                                          <option value="Saturday 8pm to 9pm">2pm to 4pm</option>
+                                          <option value="Saturday 9pm to 10pm">4pm to 6pm</option>
+                                          <option value="Sunday 6pm to 7p">5pm to 7pm</option>
+                                          <option value="Sunday 7pm to 8pm">6pm to 9pm</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <span className="form-label">Mobile number:</span>
+                                        <input id="dMobile" type="text" className="form-input-mob" placeholder=""/>
+                                    </div>
+                                </div>
+                                <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{this.selectPackage(1);}}>Book Now</a>
+                                <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
+
                         </div>}
                         <br/><br/><br/><br/>
                     </div>

@@ -620,7 +620,7 @@
     color: #454545;
     padding: 0px;
     margin: 0 auto;
-    top: 100px;
+    top: -98px;
     position: absolute;
     font-size: 23px;
     font-weight: normal;
@@ -1720,6 +1720,57 @@ div#containerWiz {
 -moz-text-size-adjust:none;
 text-size-adjust:none;
 
+.step-detail-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 38px;
+    color: #000;
+    margin-top: 2px;
+    padding-left: 0px;
+    padding-right: 10px;
+    padding-left: 36px;
+    padding-right: 36px;
+    background: #f6f6f6;
+    padding: 5px;
+    width: 220px;
+    margin: 0 auto;
+    border-radius: 6px;
+    z-index: 0;
+    position: relative;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 10%) 0px 18px 36px -18px inset;
+}
+
+.booking-form {
+    bottom: 151px;
+    position: fixed;
+    z-index: 1;
+    text-align: left;
+    line-height: 2.7;
+    font-size: 18px;
+}
+.form-input {
+    height: 30px;
+    bottom: 50px;
+    font-family: Quicksand;
+}
+.line {
+    border-top: dashed 1px #c2c2c2;
+    margin-top: -2px;
+    margin-bottom: 12px;
+    display: none;
+}
+
+.line.thin {
+    display: block;
+    top: 23px;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+    border-top: 1px solid #f2f2f2 !important;
+    box-shadow: 8px 8px 15px #d2d2d2, -8px -8px 15px #fcfcfc;
+}
+
 </style>
     <!-- Basic -->
     <title>Slimcrust - Guilt-free pizzas in less than 1 minute</title>
@@ -2249,9 +2300,21 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
     text-align: left;
 }
 .slot-dropdown {
-    height: 52px;
-    width: 119px;
-    margin-left: 27px;
+    height: 33px;
+    margin-left: 33px;
+    padding: 0 24px 0px 24px;
+    border: 1px solid #94b5db;
+    border-radius: 4px;
+    font-family: Quicksand;
+}
+.form-input-mob {
+    width: 154px;
+    margin-left: 13px;
+    padding: 10px;
+    border: 1px solid #94b5db;
+    border-radius: 4px;
+    height: 33px;
+    font-family: Quicksand;
 }
 .delivery-icon {
     width: 36px;
