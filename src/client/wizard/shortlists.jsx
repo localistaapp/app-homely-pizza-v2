@@ -369,11 +369,15 @@ class Shortlists extends Component {
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.selectPackage = this.selectPackage.bind(this);
+        this.bookPackage = this.bookPackage.bind(this);
     }
     componentDidMount() {
+
         this.fetchJson();
         var winHeight = window.innerHeight;
         gtag('event', 'clicked_get_quote', {'mounted': 'true'});
+
+
 
         if(isValidCoupon()) {
             document.getElementById('discountModal').style.top = '1200px';
@@ -669,6 +673,49 @@ class Shortlists extends Component {
     selectPackage(packageNum) {
         this.setState({curStep: 2, selectedPackage: packageNum});
         window.scrollTo(0, 0);
+
+         setTimeout(function(){new Glider(document.querySelector(".glider"), {
+                  slidesToShow: 1.5,
+                  slidesToScroll: 1,
+                  draggable: true,
+                  dots: ".dots",
+                  responsive: [
+                    {
+                      // If Screen Size More than 768px
+                      breakpoint: 768,
+                      settings: {
+                        slidesToShow: 1.5,
+                        slidesToScroll: 1,
+                        duration: 0.5,
+                        arrows: {
+                          prev: ".glider-prev",
+                          next: ".glider-next"
+                        }
+                      }
+                    },
+                    {
+                      // If Screen Size More than 1024px
+                      breakpoint: 1024,
+                      settings: {
+                        slidesToShow: 2.5,
+                        slidesToScroll: 1,
+                        duration: 0.5,
+                        arrows: {
+                          prev: ".glider-prev",
+                          next: ".glider-next"
+                        }
+                      }
+                    }
+                  ]
+                });},1000);
+    }
+    bookPackage() {
+        var pkg = this.state.selectedPackage;
+        var numGuests = this.state.numGuests;
+        var deliveryDate = this.state.deliveryDate;
+        var e = document.getElementById("slot");
+        var slot = e.options[e.selectedIndex].text;
+        var mob = document.getElementById('evtMobile').value;
     }
     render() {
         const {numGuests, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -796,9 +843,6 @@ class Shortlists extends Component {
                                                 </li>
                                                 <li>
                                                     <ul className="dropdown__select">
-                                                        <li className="dropdown__select-option" data-num-guests="20" role="option" onClick={()=>{this.setNumGuests('20');}}>
-                                                            20 Guests
-                                                        </li>
                                                         <li className="dropdown__select-option" data-num-guests="25" role="option" onClick={()=>{this.setNumGuests('25');}}>
                                                             25 Guests
                                                         </li>
@@ -957,7 +1001,7 @@ class Shortlists extends Component {
                         {curStep == 2 && <div className="step-detail step-1" style={{marginTop: '78px'}}>
                                 <hr className="line thin" style={{top: '-2px'}}/>
                                 <div className="step-detail-title" style={{marginTop: '-44px',textAlign: 'left'}}>Book your package</div>
-                                <div id="packages" className="packages" style={{opacity: '1', pointerEvents: 'all', marginTop: '34px',height:'880px'}}>
+                                <div id="packages" className="packages" style={{opacity: '1', pointerEvents: 'all', marginTop: '34px',height:'500px'}}>
                                     <div id="pack1" className="menu-container-ls" style={{height: '320px',boxShadow: 'none',overflow: 'unset'}}>
                                     <img src={`../img/images/pack${this.state.selectedPackage}.png`} style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
                                     <span className="phead">{this.state.numGuests}{pkgs[this.state.selectedPackage].selectedPkgTitle}</span>
@@ -984,6 +1028,63 @@ class Shortlists extends Component {
                                     <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" />Chat before order</a>
                                     </div>
                                 </div>
+
+                                <div className="section no-padding">
+                                        <div className="post-heading" style={{height: '264px'}}>
+                                            <div className="info" style={{position: 'relative'}}>
+                                                <hr className="line thin"/>
+                                                <div className="title" style={{background: '#fff',width: '200px'}}>Event Gallery</div>
+                                                <div id="boxEvents">
+                                                    <main className="main" style={{marginTop: '-36px'}}>
+                                                        <div className="gcontainer">
+                                                            <div className="glider-contain">
+                                                                <div className="glider">
+                                                                    <div className="card-image" style={{height:'210px'}}>
+                                                                        <img src="../img/images/e01.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image" style={{height:'210px'}}>
+                                                                        <img src="../img/images/e6.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image" style={{height:'210px'}}>
+                                                                        <img src="../img/images/e7.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e02.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e03.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e04.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e05.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e06.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e07.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e08.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                    <div className="card-image">
+                                                                        <img src="../img/images/e09.jpg" alt="Slider Image"/>
+                                                                    </div>
+                                                                </div>
+                                                                <span role="button" aria-label="Previous" className="glider-prev"><i className="fas fa-chevron-left"></i></span>
+                                                                <span role="button" aria-label="Next" className="glider-next"><i className="fas fa-chevron-right"></i></span>
+                                                                <span role="tablist" className="dots"></span>
+                                                            </div>
+                                                        </div>
+                                                    </main>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
                                 <div className="bottom-bar" ></div>
                                 <div className="button" style={{backgroundColor:'#fff',background:'transparent',backdropFilter:'blur(12px)',boxShadow: '0px 0px 13px 6px rgb(131 131 131 / 21%)',bottom: '-7px',borderRadius:'10px',color:'rgb(255 255 255)',border: '1px solid',height: '350px',width: '100%'}}></div>
                                 <div className="booking-form">
@@ -1004,11 +1105,11 @@ class Shortlists extends Component {
                                     </div>
                                     <div>
                                         <span className="form-label">Mobile number:</span>
-                                        <input id="dMobile" type="text" className="form-input-mob" placeholder=""/>
+                                        <input id="evtMobile" type="text" className="form-input-mob" placeholder=""/>
                                     </div>
                                     <div><span class="small-msg">*No payment required now. Agent will contact for next steps.</span></div>
                                 </div>
-                                <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{this.selectPackage(1);}}>Book Now</a>
+                                <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{this.bookPackage();}}>Book Now</a>
                                 <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
 
                         </div>}

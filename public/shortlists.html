@@ -2,6 +2,7 @@
 <html lang="en">
 <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="theme-color" content="#fff">
     <style type="text/css">.pac-container{background-color:#fff;position:absolute!important;z-index:1000;border-radius:2px;border-top:1px solid #d9d9d9;font-family:Arial,sans-serif;box-shadow:0 2px 6px rgba(0,0,0,0.3);-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.pac-logo:after{content:"";padding:1px 1px 1px 0;height:16px;text-align:right;display:block;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png);background-position:right;background-repeat:no-repeat;background-size:120px 14px}.hdpi.pac-logo:after{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3_hdpi.png)}.pac-item{cursor:default;padding:0 4px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;line-height:30px;text-align:left;border-top:1px solid #e6e6e6;font-size:11px;color:#999}.pac-item:hover{background-color:#fafafa}.pac-item-selected,.pac-item-selected:hover{background-color:#ebf2fe}.pac-matched{font-weight:700}.pac-item-query{font-size:13px;padding-right:3px;color:#000}.pac-icon{width:15px;height:20px;margin-right:7px;margin-top:6px;display:inline-block;vertical-align:top;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons.png);background-size:34px}.hdpi .pac-icon{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png)}.pac-icon-search{background-position:-1px -1px}.pac-item-selected .pac-icon-search{background-position:-18px -1px}.pac-icon-marker{background-position:-1px -161px}.pac-item-selected .pac-icon-marker{background-position:-18px -161px}.pac-placeholder{color:gray}
@@ -1362,6 +1363,8 @@ body .pizza .slice:after {
     font-weight: bold;
     padding-left: 36px;
     padding-right: 36px;
+    font-family: 'Quicksand';
+    font-size: 20px;
 }
 
 .info {
@@ -1775,6 +1778,179 @@ text-size-adjust:none;
     z-index: 0;
     border-top: 1px solid #f2f2f2 !important;
     box-shadow: 8px 8px 15px #d2d2d2, -8px -8px 15px #fcfcfc;
+}
+
+.gcontainer {
+  padding: 4rem 0rem;
+  margin: 0 auto;
+  max-width: 75rem;
+  width: 90%;
+}
+
+.main .gcontainer .glider-contain .glider .card-image {
+  margin-right: 0.5rem;
+  background: #ffffff;
+  border: none;
+  outline: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 2px;
+  height: 210px !important;
+}
+.main .gcontainer .glider-contain .glider .card-image img {
+  display: block;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.main .gcontainer .glider-contain .glider-prev,
+.main .gcontainer .glider-contain .glider-next {
+  font-size: 1.5rem;
+  background: #454545;
+  color: #ffffff;
+  margin-top: 1rem;
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  border-radius: 50%;
+}
+.main .gcontainer .glider-contain .glider-prev .fas,
+.main .gcontainer .glider-contain .glider-next .fas {
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .main .glider-contain .glider-prev,
+.main .glider-contain .glider-next {
+    display: none;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .main .glider-contain .dots {
+    display: none;
+  }
+}
+.glider-slide {
+    height: 210px;
+}
+.glider-dot.active {
+    background: #f38b8b;
+}
+.section {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.numeral {
+    font-size: 30px;
+    font-family: sans-serif;
+    opacity: 0.1;
+}
+
+.para {
+    font-size: 18px;
+    margin-top: 20px;
+    display: inline-table;
+}
+
+.sub-heading {
+    color: #ec493d;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.post-heading .title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 38px;
+    color: #000;
+    margin-top: 2px;
+    padding-left: 0px;
+    padding-right: 10px;
+    padding-left: 36px;
+    padding-right: 36px;
+    background: #f6f6f6;
+    padding: 5px;
+    width: 220px;
+    margin: 0 auto;
+    border-radius: 6px;
+    z-index: 0;
+    position: relative;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 10%) 0px 18px 36px -18px inset;
+}
+
+.one,.two {
+    width: 100vw;
+    height: 320px;
+    position: relative;
+    background-color: #ffffff;
+    display: inline-block;
+    top: -16px;
+    box-shadow: rgb(100 100 111 / 20%) 0px 0px 99px 5px;
+    padding: 30px;
+    text-align: left;
+}
+.cust {
+    width: 100vw;
+    height: 420px;
+    position: relative;
+    background-color: #ffffff;
+    display: inline-block;
+    top: -16px;
+    box-shadow: rgb(100 100 111 / 20%) 0px 0px 99px 5px;
+    text-align: left;
+    padding-bottom: 20px;
+}
+.cust:after {
+    content: "";
+    border-width: 0px 12px 14px;
+    border-style: solid;
+    border-color: #ffffff transparent;
+    position: absolute;
+    top: -13px;
+    left: 47%;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 10px -12px inset;
+}
+.one {
+    height: 320px;
+}
+.one:after {
+    content: "";
+    border-width: 0px 12px 14px;
+    border-style: solid;
+    border-color: #ffffff transparent;
+    position: absolute;
+    top: -13px;
+    left: 79px;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 10px -12px inset;
+}
+.two:after {
+    content: "";
+    border-width: 0px 12px 14px;
+    border-style: solid;
+    border-color: #ffffff transparent;
+    position: absolute;
+    top: -13px;
+    left: 61%;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 10px -12px inset;
+}
+.close-btn {
+    position: relative;
+    top: -52px;
+    float: right;
+    right: -14px;
+    max-width: 64px;
+}
+.close-btn img {
+    width: 18px;
+    opacity: 0.2;
 }
 
 </style>
@@ -2230,6 +2406,9 @@ input[type="date"]:focus {
   border-color:#3acfff;
   box-shadow:0 0 0 0.25rem rgba(0, 120, 250, 0.1);
 }
+input {
+    background: #fff !important;
+}
 
 ::-webkit-datetime-edit {}
 ::-webkit-datetime-edit-fields-wrapper {}
@@ -2559,4 +2738,5 @@ function isValidCoupon() {
 
   gtag('config', 'G-J00T03NH7J');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
 <script src="../guide.bundle.min.js"></script>
