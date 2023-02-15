@@ -354,7 +354,7 @@ class Shortlists extends Component {
             numVistors: 0,
             mobileNum: '',
             curStep: 1,
-            redirect: false,
+            redirect: window.location.href.indexOf('success')>=0,
             eventDate: new Date().toDateInputValue(),
             deliveryDate: new Date().toDateInputValue(),
             orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : [],
@@ -716,6 +716,34 @@ class Shortlists extends Component {
         var e = document.getElementById("slot");
         var slot = e.options[e.selectedIndex].text;
         var mob = document.getElementById('evtMobile').value;
+
+        var eMobile = document.getElementById('evtMobile').value;
+        var eDate = this.state.deliveryDate;
+        var eSlot = e.options[e.selectedIndex].text;
+        var eGuests = this.state.numGuests;
+        var ePackage = this.state.selectedPackage;
+
+        //create order
+        var http = new XMLHttpRequest();
+        var url = '/createBooking';
+        var params = 'eMobile='+eMobile+'&eDate='+eDate+'&eSlot='+eSlot;
+        params += '&eGuests='+eGuests+'&ePackage='+ePackage;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed booking creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res != null){
+                    res = JSON.parse(res);
+                    console.log('--event order id--', res);
+                    sessionStorage.setItem('confirmedOrderId', res.orderId);
+                    window.location.href='/booking-success';
+                }
+            }
+        }.bind(this);
+        http.send(params);
     }
     render() {
         const {numGuests, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -825,11 +853,10 @@ class Shortlists extends Component {
 
                         {redirect == true && <div className="step-detail step-1">
                                 <div class="payment-success">
-                                <img src="../../../img/images/ic_tick.png" style={{width: '22px'}}/>
-                                <span>Payment Successful!</span></div>
+                                <span style={{marginLeft: '-8px'}}>🎉 Booking Successful!</span></div>
                                 <br/>
                                 <div>
-                                    <span>Thank you for placing an order with us. Our team will contact you based on your delivery slot.</span>
+                                    <span>Thanks for booking Slimcrust. Our team will contact you shortly to complete the next steps.</span>
                                 </div>
                         </div>}
                         {curStep == 1 && !redirect && <div className="step-detail step-1">
@@ -1113,6 +1140,21 @@ class Shortlists extends Component {
                                 <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
 
                         </div>}
+
+
+
+
+                        {curStep == 1 && redirect && <div className="step-detail step-1" style={{marginTop: '78px'}}>
+
+                                                        <div className="bottom-bar" ></div>
+                                                        <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{window.location.href='/'}}>Back to Home</a>
+                                                        <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat with support</a>
+
+                                                </div>}
+
+
+
+
                         <br/><br/><br/><br/>
                     </div>
                     <div className={`main fadeInBottom ${this.state.showList}`}>

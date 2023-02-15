@@ -763,6 +763,10 @@ app.get("/order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });
 
+app.get("/booking-success/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
+});
+
 app.get("/process/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
@@ -1310,6 +1314,40 @@ app.post('/createConfirmedOrder', function(req, res) {
 
             client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone, order_type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)",
                         [orderId, eDate, eTime, pizzaQty, quotePrice, venueAddress, customerMobile, 'CONFIRMED', venueMapURL, bookingAmountPaid, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, zone, orderType], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                console.log(response);
+                                res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                              }
+
+                            });
+      }
+    })
+})
+
+app.post('/createBooking', function(req, res) {
+
+    const orderId = orderid.generate();
+    let whitelisted = false;
+
+    const eMobile = req.body.eMobile;
+    const eDate = req.body.eDate;
+    const eSlot = req.body.eSlot;
+    const eGuests = req.body.eGuests;
+    const ePackage = req.body.ePackage;
+
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        console.log('connected')
+
+
+            client.query("INSERT INTO \"public\".\"booking\"(mobile, date, slot, num_guests, package) VALUES($1, $2, $3, $4, $5)",
+                        [eMobile, eDate, eSlot, eGuests, ePackage], (err, response) => {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
