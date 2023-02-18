@@ -1344,7 +1344,15 @@ app.post('/createBooking', function(req, res) {
         console.error('error connecting', err.stack)
       } else {
         console.log('connected')
-
+        axios
+          .post('https://api.pushalert.co/rest/v1/send', 'title=Booking%20Received&message=New%20Pizza%20Booking&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
+          .then(res => {
+            console.log('Pushalert success: ', res);
+          })
+          .catch(error => {
+            console.log('Pushalert error: ', error);
+          });
+         res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
 
             client.query("INSERT INTO \"public\".\"booking\"(mobile, date, slot, num_guests, package) VALUES($1, $2, $3, $4, $5)",
                         [eMobile, eDate, eSlot, eGuests, ePackage], (err, response) => {
