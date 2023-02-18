@@ -1361,7 +1361,7 @@ app.post('/createBooking', function(req, res) {
                                                                   .catch(error => {
                                                                     console.log('Pushalert error: ', error);
                                                                   });
-                                res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                //res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
                             });
