@@ -914,7 +914,7 @@ class Shortlists extends Component {
                                                 <div className="bottom-bar-div" id="pack1BottomDiv"></div>
                                                 <a id="pack1ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack1')}}>Show More</a>
                                                 <a id="pack1Learn" class="button cta" onClick={()=>{this.selectPackage(1);}}>Select package</a>
-                                                <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                                <a id="pack1Chat" onClick={()=>{gtag_report_conversion()}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack2" className="menu-container-ls" style={{height: '320px'}}>
                                                 <img src="../img/images/pack2.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}}  />
@@ -940,7 +940,7 @@ class Shortlists extends Component {
                                                 <div className="bottom-bar-div" id="pack2BottomDiv"></div>
                                                 <a id="pack2ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack2')}}>Show More</a>
                                                 <a id="pack2Learn" class="button cta" onClick={()=>{this.selectPackage(2);}}>Select package</a>
-                                                <a id="pack2Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%202%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                                <a id="pack2Chat" onClick={()=>{gtag_report_conversion()}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%202%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack3" className="menu-container-ls" style={{height: '320px'}}>
                                                 <img src="../img/images/pack3.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
@@ -966,7 +966,7 @@ class Shortlists extends Component {
                                                 <div className="bottom-bar-div" id="pack3BottomDiv"></div>
                                                 <a id="pack3ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack3')}}>Show More</a>
                                                 <a id="pack3Learn" class="button cta" onClick={()=>{this.selectPackage(3);}}>Select package</a>
-                                                <a id="pack3Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%203%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                                <a id="pack3Chat" onClick={()=>{gtag_report_conversion()}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%203%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack4" className="menu-container-ls" style={{height: '320px'}}>
                                                 <img src="../img/images/pack4.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
@@ -992,7 +992,7 @@ class Shortlists extends Component {
                                                 <div className="bottom-bar-div" id="pack4BottomDiv"></div>
                                                 <a id="pack4ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack4')}}>Show More</a>
                                                 <a id="pack4Learn" class="button cta" onClick={()=>{this.selectPackage(4);}}>Select package</a>
-                                                <a id="pack4Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%204%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                                <a id="pack4Chat" onClick={()=>{gtag_report_conversion()}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%204%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                             <div id="pack5" className="menu-container-ls" style={{height: '320px'}}>
                                                 <img src="../img/images/pack5.png" style={{width: '106px', position: 'absolute', zIndex: '1', left: '12px', top: '11px'}} />
@@ -1018,7 +1018,7 @@ class Shortlists extends Component {
                                                 <div className="bottom-bar-div" id="pack5BottomDiv"></div>
                                                 <a id="pack5ShowBtn" className="button show-more" onClick={()=>{this.showMore('pack5')}}>Show More</a>
                                                 <a id="pack5Learn" class="button cta" onClick={()=>{this.selectPackage(5);}}>Select package</a>
-                                                <a id="pack5Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%205%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
+                                                <a id="pack5Chat" onClick={()=>{gtag_report_conversion()}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%205%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon"/>Chat before order</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1051,8 +1051,8 @@ class Shortlists extends Component {
                                     <img class="icheck" src="../img/images/icheck.png" style={{position:'absolute',marginTop:'94px'}}/>
                                     <div className="pdetail incl5" style={{marginTop: '333px',marginBottom:'100px'}} >Pizza making kids workshop</div>
                                     <br/><br/><br/><br/>
-                                    <a id="pack1Learn" class="button cta" onClick={()=>{this.selectPackage(1);}}>Book Now</a>
-                                    <a id="pack1Chat" href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" />Chat before order</a>
+                                    <a id="pack1Learn" class="button cta" onClick={()=>{gtag_report_conversion();this.selectPackage(1);}}>Book Now</a>
+                                    <a id="pack1Chat" onClick={()=>{gtag_report_conversion();}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button show-more" style={{display: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" />Chat before order</a>
                                     </div>
                                 </div>
 
@@ -1136,8 +1136,8 @@ class Shortlists extends Component {
                                     </div>
                                     <div><span class="small-msg">*No payment required now. Agent will contact for next steps.</span></div>
                                 </div>
-                                <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{this.bookPackage();}}>Book Now</a>
-                                <a href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
+                                <a class="button" style={{textTransform: 'none',bottom:'75px'}} onClick={()=>{gtag_report_conversion();this.bookPackage();}}>Book Now</a>
+                                <a onClick={()=>{gtag_report_conversion();}} href={`https://wa.me/7619514999?text=I'm%20interested%20in%20pizza%20package%20num%201%20for%20${this.state.numGuests}%20guests`} className="button" style={{display:'block',bottom:'10px',background:'#fff',color:'#ff332d',border:'1px solid',textTransform: 'none'}}><img src="../img/images/whatsapp.png" className="btn-icon" style={{top:'17px'}}/>Chat before order</a>
 
                         </div>}
 

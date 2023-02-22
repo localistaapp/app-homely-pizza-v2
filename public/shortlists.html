@@ -2710,6 +2710,20 @@ fbq('track', 'PageView');
                    src="https://www.facebook.com/tr?id=322116655625727&ev=PageView&noscript=1"
     /></noscript>
 
+    <script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-616546442/fOrOCLDlj4cYEIqB_6UC',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
 </head>
 <body>
 <div id="containerWiz" class="container">
@@ -2728,7 +2742,6 @@ function isValidCoupon() {
 
     localStorage.removeItem("basket");
 </script>
-
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J00T03NH7J"></script>
 <script>
