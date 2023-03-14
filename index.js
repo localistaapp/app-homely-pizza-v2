@@ -1312,7 +1312,7 @@ app.post('/createConfirmedOrder', function(req, res) {
         console.log('connected')
 
 
-            client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone, order_type, quote_price) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)",
+            client.query("INSERT INTO \"public\".\"confirmed_order\"(order_id, event_date, event_time, pizza_quantity, quote_price, venue_address, event_contact_mobile, order_status, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, wraps_quantity, garlic_bread_quantity, city, zone, order_type, quote_amt) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)",
                         [orderId, eDate, eTime, pizzaQty, quotePrice, venueAddress, customerMobile, 'CONFIRMED', venueMapURL, bookingAmountPaid, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, zone, orderType, quotePrice], (err, response) => {
                               if (err) {
                                 console.log(err)
