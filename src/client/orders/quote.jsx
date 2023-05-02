@@ -359,9 +359,11 @@ class Dashboard extends Component {
     }
 
     autoReadSmsOtp(callback) {
+        alert('in autoReadSmsOtp');
         const autoReadSmsOtpError = 'auto_read_sms_otp_error';
         //feature not supported
         if (!window.AbortController || !navigator.credentials) {
+            alert('feature not supported1');
             return;
         }
         // eslint-disable-next-line compat/compat -- Handled via feature detection at the start of this function
@@ -369,6 +371,7 @@ class Dashboard extends Component {
         async function readOtp() {
             //feature detection to check if auto detection of OTP SMS functionality is supported by the browser
             if (!('OTPCredential' in window) || !('credentials' in navigator)) {
+                alert('feature not supported2');
                 return;
             }
             // eslint-disable-next-line compat/compat -- Handled via feature detection at the start of this function
@@ -380,6 +383,7 @@ class Dashboard extends Component {
                     }
                 })
                 .catch(e => {
+                    alert('error caught');
                     reportEvent(autoReadSmsOtpError, { error: e.message });
                 });
         }
@@ -387,7 +391,7 @@ class Dashboard extends Component {
     };
     componentDidMount() {
         var winHeight = window.innerHeight;
-        autoReadSmsOtp((otpArr) => {
+        this.autoReadSmsOtp((otpArr) => {
             alert(otpArr);
         })
     }
