@@ -383,7 +383,7 @@ class Dashboard extends Component {
                     }
                 })
                 .catch(e => {
-                    alert('error caught');
+                    alert('error caught: ' +e.message);
                     reportEvent(autoReadSmsOtpError, { error: e.message });
                 });
         }
@@ -392,8 +392,12 @@ class Dashboard extends Component {
     componentDidMount() {
         var winHeight = window.innerHeight;
         this.autoReadSmsOtp((otpArr) => {
+            alert('typeof otpArr: '+typeof otpArr);
             alert(otpArr);
-        })
+            otpArr.forEach((item, index) => {
+                    alert('item: '+item);
+            });
+        });
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
