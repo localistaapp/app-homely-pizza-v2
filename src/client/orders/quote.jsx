@@ -394,7 +394,7 @@ class Dashboard extends Component {
         this.autoReadSmsOtp((otpArr) => {
             alert('typeof otpArr: '+typeof otpArr);
             alert(otpArr);
-            otpArr.forEach((item, index) => {
+            Array.from(otpArr).forEach((item, index) => {
                     alert('item: '+item);
             });
         });
