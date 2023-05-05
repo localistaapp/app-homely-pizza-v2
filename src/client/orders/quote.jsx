@@ -18,6 +18,7 @@ import InventoryIcon from '@material-ui/icons/ShoppingBasket';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
+import { Device } from "./Device";
 
 const useStyles = makeStyles({
   root: {
@@ -358,7 +359,7 @@ class Dashboard extends Component {
         this.handleTabChange = this.handleTabChange.bind(this);
     }
 
-    autoReadSmsOtp(callback) {
+    /*autoReadSmsOtp(callback) {
         alert('in autoReadSmsOtp');
         const autoReadSmsOtpError = 'auto_read_sms_otp_error';
         //feature not supported
@@ -388,10 +389,11 @@ class Dashboard extends Component {
                 });
         }
         readOtp();
-    };
+    };*/
     componentDidMount() {
         var winHeight = window.innerHeight;
-        this.autoReadSmsOtp((otpArr) => {
+        alert('calling Device.autoReadSmsOtp');
+        Device.autoReadSmsOtp((otpArr) => {
             alert('typeof otpArr: '+typeof otpArr);
             alert(otpArr);
             Array.from(otpArr).forEach((item, index) => {
