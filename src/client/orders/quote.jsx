@@ -393,7 +393,7 @@ class Dashboard extends Component {
     componentDidMount() {
         var winHeight = window.innerHeight;
         alert('calling Device.autoReadSmsOtp');
-        Device.autoReadSmsOtp((otpArr) => {
+        new Device().autoReadSmsOtp((otpArr) => {
             alert('typeof otpArr: '+typeof otpArr);
             alert(otpArr);
             Array.from(otpArr).forEach((item, index) => {
