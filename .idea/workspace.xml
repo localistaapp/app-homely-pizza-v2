@@ -6,6 +6,67 @@
   <component name="ChangeListManager">
     <list default="true" id="2fbbff25-f33b-4a81-aaf6-38e53390f867" name="Default Changelist" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/index.js.flow" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/index.js.flow" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/dom-helpers/node_modules/csstype/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-camel-case/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-camel-case/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-camel-case/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-camel-case/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/dist/jss-plugin-default-unit.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/dist/jss-plugin-default-unit.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-default-unit/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-global/dist/jss-plugin-global.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-global/dist/jss-plugin-global.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-global/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-global/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-global/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-global/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-nested/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-nested/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-nested/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-nested/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-props-sort/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-props-sort/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-props-sort/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-props-sort/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/dist/jss-plugin-rule-value-function.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/dist/jss-plugin-rule-value-function.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-rule-value-function/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/dist/jss-plugin-vendor-prefixer.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/dist/jss-plugin-vendor-prefixer.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss-plugin-vendor-prefixer/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.cjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.cjs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/dist/jss.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/dist/jss.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/index.js.flow" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/index.js.flow" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/node_modules/csstype/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/jss/src/plugins/conditionalRule.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jss/src/plugins/conditionalRule.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/build-info.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.development.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.development.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.production.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.production.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.development.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.development.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.production.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.production.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/react/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.profiling.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/.gz" beforeDir="false" afterPath="$PROJECT_DIR$/public/.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/guide.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/guide.bundle.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/guide.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/guide.bundle.min.js.br" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/orders.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/orders.bundle.min.js.br" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/process.bundle.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/process.bundle.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/process.bundle.min.js.br" beforeDir="false" afterPath="$PROJECT_DIR$/public/process.bundle.min.js.br" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/orders/dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/orders/dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/orders/quote.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/orders/quote.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

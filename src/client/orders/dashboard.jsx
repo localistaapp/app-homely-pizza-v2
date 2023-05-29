@@ -16,6 +16,7 @@ import RequestQuoteIcon from '@material-ui/icons/NotesSharp';
 import OrdersIcon from '@material-ui/icons/ViewListSharp';
 import InventoryIcon from '@material-ui/icons/ShoppingBasket';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import GoogleOneTapLogin from 'react-google-one-tap-login';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
@@ -402,6 +403,7 @@ class Dashboard extends Component {
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => console.log(response)} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com' }} />
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>

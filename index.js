@@ -1197,7 +1197,14 @@ app.get("/enquiry-orders/:status", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("Select distinct event_date, quantity, event_contact_mobile, order_id From event_order where order_status IN ('PENDING')",
+          let franchiseId = req.params.franchiseId;
+          let franchiseWhereClause = '';
+          if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
+            franchiseWhereClause = 'where franchise_id = '+franchiseId;
+          } else {
+            franchiseWhereClause = '';
+          }
+          client.query("Select distinct date as event_date, num_guests as quantity, mobile as event_contact_mobile, id as order_id From booking where status IN ('PENDING') "+franchiseWhereClause,
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
@@ -1213,7 +1220,18 @@ app.get("/enquiry-orders/:status", function(req, res) {
 
 app.get("/stats/", function(req, res) {
   let orderStatus = req.params.status;
+  let franchiseId = req.params.franchiseId;
+  let franchiseWhereClause1 = '';
+  let franchiseWhereClause2 = '';
   const client = new Client(dbConfig)
+
+  if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
+    franchiseWhereClause1 = 'where franchise_id = '+franchiseId;
+    franchiseWhereClause2 = 'and franchise_id = '+franchiseId;
+  } else {
+    franchiseWhereClause1 = '';
+    franchiseWhereClause2 = '';
+  }
 
   client.connect(err => {
         if (err) {
@@ -1221,7 +1239,7 @@ app.get("/stats/", function(req, res) {
           res.send('{}');
         } else {
           console.log('connected')
-          client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order",
+          client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1,
                       [], (err, response) => {
                             if (err) {
                               console.log(err)

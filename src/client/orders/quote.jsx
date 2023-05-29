@@ -358,48 +358,8 @@ class Dashboard extends Component {
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
-
-    /*autoReadSmsOtp(callback) {
-        alert('in autoReadSmsOtp');
-        const autoReadSmsOtpError = 'auto_read_sms_otp_error';
-        //feature not supported
-        if (!window.AbortController || !navigator.credentials) {
-            alert('feature not supported1');
-            return;
-        }
-        // eslint-disable-next-line compat/compat -- Handled via feature detection at the start of this function
-        const abortController = new AbortController();
-        async function readOtp() {
-            //feature detection to check if auto detection of OTP SMS functionality is supported by the browser
-            if (!('OTPCredential' in window) || !('credentials' in navigator)) {
-                alert('feature not supported2');
-                return;
-            }
-            // eslint-disable-next-line compat/compat -- Handled via feature detection at the start of this function
-            navigator.credentials
-                .get({ signal: abortController.signal, otp: { transport: ['sms'] } })
-                .then((content) => {
-                    if (content.code) {
-                        callback(content.code);
-                    }
-                })
-                .catch(e => {
-                    alert('error caught: ' +e.message);
-                    reportEvent(autoReadSmsOtpError, { error: e.message });
-                });
-        }
-        readOtp();
-    };*/
     componentDidMount() {
         var winHeight = window.innerHeight;
-        alert('calling Device.autoReadSmsOtp');
-        new Device().autoReadSmsOtp((otpArr) => {
-            alert('typeof otpArr: '+typeof otpArr);
-            alert(otpArr);
-            Array.from(otpArr).forEach((item, index) => {
-                    alert('item: '+item);
-            });
-        });
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
