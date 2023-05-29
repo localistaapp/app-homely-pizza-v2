@@ -361,7 +361,6 @@ class Dashboard extends Component {
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
-        this.initializeStats();
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
@@ -403,8 +402,8 @@ class Dashboard extends Component {
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
-                    <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => console.log(response)} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com' }} />
-                    <Paper>
+                    <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);document.getElementById('dash-content').style.display='block';this.initializeStats();}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />
+                    <Paper id="dash-content" style={{display:'none'}}>
 
                                               <TabPanel value={this.state.value} index={0}>
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RestaurantIcon />&nbsp;&nbsp;Business Dashboard</span>
