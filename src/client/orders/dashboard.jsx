@@ -365,6 +365,7 @@ class Dashboard extends Component {
     componentDidMount() {
         var winHeight = window.innerHeight;
         if(sessionStorage.getItem('user') != null) {
+            this.initializeStats(sessionStorage.getItem('user'));
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
         }
