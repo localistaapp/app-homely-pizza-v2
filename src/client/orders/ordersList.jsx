@@ -274,7 +274,7 @@ class Calendar extends React.Component {
 
     let allEvents = [];
 
-    axios.get(`/event-orders/COMPLETED`)
+    axios.get(`/event-orders/${sessionStorage.getItem('user').replaceAll('"','')}`)
               .then(function (response) {
                 console.log('Order data-----', response.data);
                 //this.setState({results: response.data.results});

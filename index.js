@@ -1163,8 +1163,8 @@ app.post('/homelyOrder', function(req, res) {
 
 })
 
-app.get("/event-orders/:status", function(req, res) {
-  let orderStatus = req.params.status;
+app.get("/event-orders/:email", function(req, res) {
+  let email = req.params.email;
   const client = new Client(dbConfig)
 
   client.connect(err => {
@@ -1172,8 +1172,14 @@ app.get("/event-orders/:status", function(req, res) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
-          console.log('connected')
-          client.query("Select event_date, event_time, pizza_quantity, wraps_quantity, garlic_bread_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id, order_type From confirmed_order where order_status IN ('COMPLETED','CONFIRMED')",
+          console.log('connected');
+            let franchiseWhereClause = '';
+            if (email != null && email != '' && email != 'support@slimcrust.com') {
+              franchiseWhereClause = "and franchise_email IN ('"+email+"')";
+            } else {
+              franchiseWhereClause = '';
+            }
+          client.query("Select event_date, event_time, pizza_quantity, wraps_quantity, garlic_bread_quantity, quote_price, venue_address, event_contact_mobile, venue_map_url, booking_amount_paid, customer_name, topping_ingredients, extras, special_ingredients, size, comments, order_status, order_id, order_type From confirmed_order where order_status IN ('COMPLETED','CONFIRMED') "+franchiseWhereClause,
                       [], (err, response) => {
                             if (err) {
                               console.log(err)
