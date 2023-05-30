@@ -364,7 +364,7 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-
+        //this.initializeStats('sampath.oops@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -379,22 +379,30 @@ class Dashboard extends Component {
         }
         return formatted + "," + s + ".00";
     }
-    initializeStats() {
+    initializeStats(email) {
         let enquiriesArr = [];
-        axios.get(`/stats/`)
+        axios.get(`/stats/${email}`)
           .then(function (response) {
             console.log('Order data-----', response.data);
-            this.setState({
-              statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
-              statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
-              statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
-            });
-
+            if(response.data != 'auth error') {
+                sessionStorage.setItem('user', JSON.stringify(email));
+                this.setState({
+                  statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
+                  statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
+                  statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
+                });
+                document.getElementById('dash-content').style.display='block';
+                document.getElementById('logout').style.display='block';
+            }
           }.bind(this));
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
+    }
+    logout() {
+        sessionStorage.removeItem('user');
+        location.reload();
     }
 
     render() {
@@ -402,7 +410,8 @@ class Dashboard extends Component {
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
-                    <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);document.getElementById('dash-content').style.display='block';this.initializeStats();}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />
+                    <span id="logout" className="logout" onClick={this.logout}>Logout</span>
+                    {sessionStorage.getItem('user') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                     <Paper id="dash-content" style={{display:'none'}}>
 
                                               <TabPanel value={this.state.value} index={0}>

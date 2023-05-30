@@ -1218,22 +1218,56 @@ app.get("/enquiry-orders/:status", function(req, res) {
       })
 });
 
-app.get("/stats/", function(req, res) {
+app.get("/stats/:email", function(req, res) {
   let orderStatus = req.params.status;
-  let franchiseId = req.params.franchiseId;
+  let email = req.params.email;
   let franchiseWhereClause1 = '';
   let franchiseWhereClause2 = '';
   const client = new Client(dbConfig)
 
-  if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
-    franchiseWhereClause1 = 'where franchise_id = '+franchiseId;
-    franchiseWhereClause2 = 'and franchise_id = '+franchiseId;
-  } else {
-    franchiseWhereClause1 = '';
-    franchiseWhereClause2 = '';
-  }
+client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+  client.query("Select id from franchise where owner_email IN ('"+email+"') ",
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("auth error");
+                                 } else {
+                                    let franchiseId = response.rows[0]['id'];
+                                    if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
+                                        franchiseWhereClause1 = 'where franchise_id = '+franchiseId;
+                                        franchiseWhereClause2 = 'and franchise_id = '+franchiseId;
+                                      } else {
+                                        franchiseWhereClause1 = '';
+                                        franchiseWhereClause2 = '';
+                                      }
+                                    client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1,
+                                       [], (err, response) => {
+                                             if (err) {
+                                               console.log(err)
+                                                res.send("error");
+                                             } else {
+                                                res.send(response.rows);
+                                             }
 
-  client.connect(err => {
+                                           });
+                                 }
+
+                              }
+
+                            });
+        }
+    });
+
+
+  /*client.connect(err => {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
@@ -1250,7 +1284,7 @@ app.get("/stats/", function(req, res) {
 
                           });
         }
-      })
+      })*/
 });
 
 app.post('/eventOrder', function(req, res) {
