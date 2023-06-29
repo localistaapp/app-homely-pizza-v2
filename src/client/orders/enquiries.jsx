@@ -384,7 +384,13 @@ class Dashboard extends Component {
       }
     initializeEnquiries(){
         let enquiriesArr = [];
-        axios.get(`/enquiry-orders/PENDING`)
+        let location = '';
+        let franchiseId = '';
+        if (sessionStorage.getItem('user-profile') != null) {
+            location = JSON.parse(sessionStorage.getItem('user-profile'))[0].city;
+            franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+        }
+        axios.get(`/enquiry-orders/${location}/${franchiseId}`)
           .then(function (response) {
             console.log('Order data-----', response.data);
             //this.setState({results: response.data.results});

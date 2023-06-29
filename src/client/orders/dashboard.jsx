@@ -384,6 +384,15 @@ class Dashboard extends Component {
         }
         return formatted + "," + s + ".00";
     }
+    getUserProfile(email) {
+        axios.get(`/franchise-profile/${email}`)
+          .then(function (response) {
+            console.log('Frnachise data-----', response.data);
+            if(response.data != 'error') {
+                sessionStorage.setItem('user-profile', JSON.stringify(response.data));
+            }
+          }.bind(this));
+    }
     initializeStats(email) {
         let enquiriesArr = [];
         axios.get(`/stats/${email}`)
@@ -391,13 +400,16 @@ class Dashboard extends Component {
             console.log('Order data-----', response.data);
             if(response.data != 'auth error') {
                 sessionStorage.setItem('user', JSON.stringify(email));
-                this.setState({
-                  statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
-                  statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
-                  statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
-                });
+                if (response.data && response.data.length > 1) {
+                    this.setState({
+                      statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
+                      statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
+                      statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
+                    });
+                }
                 document.getElementById('dash-content').style.display='block';
                 document.getElementById('logout').style.display='block';
+                this.getUserProfile(email);
             }
           }.bind(this));
     }
@@ -407,6 +419,7 @@ class Dashboard extends Component {
     }
     logout() {
         sessionStorage.removeItem('user');
+        sessionStorage.removeItem('user-profile');
         location.reload();
     }
 
@@ -432,7 +445,7 @@ class Dashboard extends Component {
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span><span class="stage-desc desc-btn" onClick={()=>{window.location.href='/dashboard-create-order';}}>+ Create</span><span class="stage-desc desc-btn blue" style={{marginLeft: '8px'}} onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>+ Sample</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span>
+                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span><span class="stage-desc desc-btn" style={{background: '#808080'}} onClick={()=>{window.location.href='/dashboard-create-enquiry';}}>+ Create</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc"><InventoryIcon /> Inventory</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>

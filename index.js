@@ -803,6 +803,10 @@ app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-enquiry/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-sample-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1193,8 +1197,8 @@ app.get("/event-orders/:email", function(req, res) {
       })
 });
 
-app.get("/enquiry-orders/:status", function(req, res) {
-  let orderStatus = req.params.status;
+app.get("/enquiry-orders/:location/:franchiseId", function(req, res) {
+  let location = req.params.location;
   const client = new Client(dbConfig)
 
   client.connect(err => {
@@ -1206,7 +1210,7 @@ app.get("/enquiry-orders/:status", function(req, res) {
           let franchiseId = req.params.franchiseId;
           let franchiseWhereClause = '';
           if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
-            franchiseWhereClause = 'where franchise_id = '+franchiseId;
+            franchiseWhereClause = " and location =  '" + location +"'";
           } else {
             franchiseWhereClause = '';
           }
@@ -1271,26 +1275,38 @@ client.connect(err => {
                             });
         }
     });
+});
 
+app.get("/franchise-profile/:email", function(req, res) {
+  let orderStatus = req.params.status;
+  let email = req.params.email;
+  const client = new Client(dbConfig)
 
-  /*client.connect(err => {
+    client.connect(err => {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
-          console.log('connected')
-          client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1,
-                      [], (err, response) => {
-                            if (err) {
-                              console.log(err)
-                               res.send("error");
-                            } else {
-                               res.send(response.rows);
-                            }
+            client.query("Select id, owner_name, city, role from franchise where owner_email IN ('"+email+"') ",
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                 res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("auth error");
+                                 } else {
+                                    res.send(response.rows);
+                                 }
 
-                          });
-        }
-      })*/
+                              }
+
+                            });
+         }
+    });
+
+
 });
 
 app.post('/eventOrder', function(req, res) {
@@ -1384,6 +1400,70 @@ app.post('/createConfirmedOrder', function(req, res) {
       }
     })
 })
+
+app.post('/createEnquiry/:franchiseId', function(req, res) {
+    let whitelisted = false;
+    const eDate = req.body.orderDate;
+    const eTime = req.body.orderTime;
+    const pizzaQty = req.body.orderPizzaQty || 0;
+    const venueAddress = req.body.orderAddress;
+    const customerMobile = req.body.orderContact;
+    const customerName = req.body.orderName;
+    const toppingIngredients = req.body.orderToppingIng;
+    const etxras = req.body.orderExtras;
+    const specialIngredients = req.body.orderSpecialIng;
+    const pizzaSize = req.body.orderPizzaSize || 0;
+    const comments = req.body.orderComments;
+    const wrapsQty = req.body.orderWrapsQty || 0;
+    const garlicBreadQty = req.body.orderGarlicBreadQty || 0;
+    const city = req.body.orderCity;
+    let franchiseId = req.params.franchiseId;
+
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        console.log('connected');
+
+
+            client.query("INSERT INTO \"public\".\"booking\"(date, event_time, pizza_qty, address, mobile, customer_name, topping_ingredients, extras, special_ingredients, pizza_size, comments, wraps_qty, garlic_bread_qty, city, franchise_id, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)",
+                        [eDate, eTime, pizzaQty, venueAddress, customerMobile, customerName, toppingIngredients, etxras, specialIngredients, pizzaSize, comments, wrapsQty, garlicBreadQty, city, franchiseId, city], (err, response) => {
+                              if (err) {
+                                 res.send('{"status":"error","message":'+err+'}');
+                              } else {
+                                console.log(response);
+
+                                    client.query("select distinct franchise_id, count(*) from booking where franchise_id is not null and franchise_id NOT IN (1) and city = '"+city+"' group by franchise_id order by count;",
+                                            [], (err, response) => {
+                                                  if (err) {
+                                                    console.log(err)
+                                                     res.send("error");
+                                                  } else {
+                                                    console.log('--f id--', response.rows[0]['franchise_id']);
+                                                     //res.send(response.rows);
+                                                     if (response.rows.length == 0) {
+                                                        res.send("auth error");
+                                                     } else {
+                                                        let franchiseId = response.rows[0]['franchise_id'];
+                                                        client.query("UPDATE \"public\".\"booking\" SET franchise_id = $1 WHERE ID IN (SELECT ID FROM BOOKING WHERE location = '"+city+"' ORDER BY ID DESC LIMIT 1)",
+                                                                                [franchiseId], (err, response) => {
+                                                                                      if (err) {
+                                                                                         res.send('{"status":"error","message":'+err+'}');
+                                                                                      } else {
+                                                                                            res.send('{"status":"success"}');
+                                                                                      }
+                                                                                  });
+                                                     }
+
+                                                  }
+                                            });
+                              }
+
+                            });
+      }
+    })
+});
 
 app.post('/createBooking', function(req, res) {
 
