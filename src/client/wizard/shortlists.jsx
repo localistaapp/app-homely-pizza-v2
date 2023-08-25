@@ -1341,14 +1341,15 @@ class Shortlists extends Component {
 
 
                         <Paper>
-                          <Tabs
+                        <Tabs
                             value={this.state.value}
                             onChange={this.handleTabChange}
                             indicatorColor="primary"
                             textColor="primary"
                             centered
                           >
-
+                            <Tab icon={<LocalPizzaIcon />} label="&nbsp;&nbsp;&nbsp;Pizzas&nbsp;&nbsp;&nbsp;" />
+                            <Tab icon={<RestaurantIcon />} label="&nbsp;&nbsp;&nbsp;Starters&nbsp;&nbsp;&nbsp;" />
                           </Tabs>
                           <TabPanel value={this.state.value} index={0}>
 

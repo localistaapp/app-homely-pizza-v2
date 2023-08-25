@@ -204,6 +204,14 @@ class LocationService {
         
         return this.localityArr;
     }
+    static fetch(loc) {
+        let existingLocData = fs.readFileSync(`${__dirname}/list/${loc}.json`, 'utf8');
+        existingLocData = JSON.parse(existingLocData);
+        existingLocData.sort((item1,item2)=> { 
+            return item1.users_lower_bound - item2.users_lower_bound;
+        });
+        return existingLocData.reverse();
+    }
 }
 LocationService.localityArr = [];
 module.exports = LocationService;
