@@ -213,9 +213,7 @@ class LocationService {
         return existingLocData.reverse();
     }
     static async fetchNearByPlaces(loc) {
-        console.log('--loc--', loc);
         const responseData = await retrieve('https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&query=pizza%20restaurant%20%25in%20'+escape(loc)+'&inputtype=textquery&key=%20AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg');
-        console.log('--res--', responseData.results);
         return responseData.results;
     }
 }
