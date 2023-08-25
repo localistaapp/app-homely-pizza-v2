@@ -16,6 +16,9 @@ import RequestQuoteIcon from '@material-ui/icons/NotesSharp';
 import OrdersIcon from '@material-ui/icons/ViewListSharp';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+import BackIcon from '@material-ui/icons/ArrowBack';
+import StarHalfIcon from '@material-ui/icons/StarHalf';
+import Button from '@material-ui/core/Button';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
@@ -50,6 +53,35 @@ class SearchInput extends Component {
   }
 }
 
+class Nearby extends Component {
+  render() {
+    return (
+      <div>
+        {
+          this.props.places.map((place)=> {
+            return (
+              <div className="nearby-card-container" onClick={()=>{window.location.href = `https://www.google.com/maps/place/?q=place_id:${place.place_id}`;}}>
+                  <span className="heading">{place.name}</span>
+                  
+                  <div className="image-container">
+                    <img src={`https://maps.googleapis.com/maps/api/place/photo?photoreference=${place.photos && place.photos.length > 0 && place.photos[0].photo_reference}&sensor=false&maxheight=250&maxwidth=250&key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg`} />
+                  </div>
+                  <div className="nearby-address">
+                  {place.formatted_address}
+                  </div>
+                  <div className="nearby-ratings">
+                    <StarHalfIcon /><span>{place.rating}</span><span style={{marginLeft: '32px'}}>({place.user_ratings_total})</span>
+                  </div>
+              </div>
+            )
+          })
+        }
+      </div>
+    );
+  }
+}
+
+
 class Dashboard extends Component {
 
     constructor() {
@@ -70,7 +102,9 @@ class Dashboard extends Component {
             mobileNum: '',
             curStep: 1,
             redirect: false,
-            status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default'
+            status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
+            selectedLocality: '',
+            nearby: []
         };
         this.handleListItemClick = this.handleListItemClick.bind(this);
         window.currSlotSelected = '';
@@ -101,7 +135,7 @@ class Dashboard extends Component {
       $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization,geometry&key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg")
               .done(function(script, textStatus) {
                 var myLatlng = new google.maps.LatLng(defaultLat, defaultLong);
-                var map = new google.maps.Map(document.getElementById("map-canvas"), {
+                window.globalmap = new google.maps.Map(document.getElementById("map-canvas"), {
                   zoom: 13,
                   center: myLatlng,
                   mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -112,11 +146,11 @@ class Dashboard extends Component {
                 });
                 var heatmap = new google.maps.visualization.HeatmapLayer({
                   data: loc,
-                  map: map,
+                  map: window.globalmap,
                   radius: 100, 
                   opacity: 1
                 });
-                heatmap.setMap(map);
+                heatmap.setMap(window.globalmap);
                 console.log(loc);
               });
     }
@@ -189,9 +223,32 @@ class Dashboard extends Component {
     clear() {
       this.setState({localities: this.localitiesOrig});
     }
+    getNearbyRestaurants(queryLocation) {
+      this.setState({selectedLocality: queryLocation});
+      queryLocation = escape(queryLocation);
+      let queryUrl = '/nearby/'+queryLocation;
+      let that = this;
+      axios.get(queryUrl)
+          .then(function (response) {
+            let nearbyRes = response;
+            console.log('-nearbyRes-', nearbyRes.data);
+            that.setState({nearby: nearbyRes.data});
+            nearbyRes.data.forEach((item)=> {
+              let lat = item.geometry.location.lat;
+              let lng = item.geometry.location.lng;
+              let myLatLng = new google.maps.LatLng(lat, lng);
+              new google.maps.Marker({
+                position: myLatLng,
+                map: window.globalmap,
+                title: item.name,
+              });
+            })
+          });
+    }
     handleListItemClick(item) {
-      console.log('..item: ', item);
+      console.log('..item: ', item.locality);
       this.drawMap(this.localitiesOrig, item.latitude, item.longitude);
+      this.getNearbyRestaurants(item.locality);
       this.setState({value: 1});
     }
     render() {
@@ -217,14 +274,20 @@ class Dashboard extends Component {
 
                                               <TabPanel value={this.state.value} index={0}>
                                                   <div className="tab-container">
+                                                    <div className="search-container" style={{display: this.state.selectedLocality == '' ? 'block' : 'none'}}>
                                                       <SearchInput onSearch={(v)=>{this.search(v)}} onClear={()=>{this.clear()}} />
-                                                    <div className="list-container">
-                                                      {
-                                                        localities.map(item=> {
-                                                          return <div className={`list-item item-${item.color}`} onClick={()=>{this.handleListItemClick(item)}}>{item.locality} ({item.users_lower_bound})</div>
-                                                        })
-                                                      }
-                                                    </div>        
+                                                      <div className="list-container">
+                                                        {
+                                                          localities.map(item=> {
+                                                            return <div className={`list-item item-${item.color}`} onClick={()=>{this.handleListItemClick(item)}}>{item.locality} ({item.users_lower_bound})</div>
+                                                          })
+                                                        }
+                                                      </div>   
+                                                    </div>  
+                                                    <div className="detail-container" style={{display: this.state.selectedLocality == '' ? 'none' : 'block'}}>
+                                                    <Button variant="contained" color="#fe1715" size="small" startIcon={<BackIcon />} onClick={()=>{this.setState({selectedLocality: ''})}}>Back</Button>
+                                                        <Nearby places={this.state.nearby} />
+                                                    </div>   
                                                   </div>
                                                   
                                               </TabPanel>

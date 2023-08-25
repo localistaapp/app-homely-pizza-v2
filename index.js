@@ -1296,6 +1296,14 @@ app.get("/locations/:loc", function(req, res) {
   res.send(localities);
 });
 
+app.get("/nearby/:loc", function(req, res) {
+  let loc = req.params.loc;
+  const localities =  LocationService.fetchNearByPlaces(loc).then((data)=> {
+    res.send(data);
+  });
+  
+});
+
 app.get("/franchise-profile/:email", function(req, res) {
   let orderStatus = req.params.status;
   let email = req.params.email;
