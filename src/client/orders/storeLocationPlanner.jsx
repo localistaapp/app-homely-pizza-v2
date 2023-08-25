@@ -72,6 +72,7 @@ class Dashboard extends Component {
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default'
         };
+        this.handleListItemClick = this.handleListItemClick.bind(this);
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.styles = [{
@@ -96,10 +97,10 @@ class Dashboard extends Component {
           }]
         }];
     }
-    drawMap(loc) {
+    drawMap(loc, defaultLat, defaultLong) {
       $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization,geometry&key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg")
               .done(function(script, textStatus) {
-                var myLatlng = new google.maps.LatLng(12.9226373, 77.6174442);
+                var myLatlng = new google.maps.LatLng(defaultLat, defaultLong);
                 var map = new google.maps.Map(document.getElementById("map-canvas"), {
                   zoom: 13,
                   center: myLatlng,
@@ -161,7 +162,7 @@ class Dashboard extends Component {
             });
             this.setState({localities: formattedArr});
             this.localitiesOrig = formattedArr;
-            this.drawMap(formattedArr);
+            this.drawMap(formattedArr, 12.9226373, 77.6174442);
           }.bind(this));
     }
     componentDidMount() {
@@ -187,6 +188,11 @@ class Dashboard extends Component {
     }
     clear() {
       this.setState({localities: this.localitiesOrig});
+    }
+    handleListItemClick(item) {
+      console.log('..item: ', item);
+      this.drawMap(this.localitiesOrig, item.latitude, item.longitude);
+      this.setState({value: 1});
     }
     render() {
         const {localities, status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -215,7 +221,7 @@ class Dashboard extends Component {
                                                     <div className="list-container">
                                                       {
                                                         localities.map(item=> {
-                                                          return <div className={`list-item item-${item.color}`}>{item.locality} ({item.users_lower_bound})</div>
+                                                          return <div className={`list-item item-${item.color}`} onClick={()=>{this.handleListItemClick(item)}}>{item.locality} ({item.users_lower_bound})</div>
                                                         })
                                                       }
                                                     </div>        
