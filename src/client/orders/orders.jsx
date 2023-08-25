@@ -10,6 +10,7 @@ import QuoteRes from './quoteRes.jsx';
 import CreateOrder from './createOrder.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
+import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import Enquiries from './enquiries.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ var QuoteResWithRouter = withRouter(QuoteRes);
 var CreateOrderWithRouter = withRouter(CreateOrder);
 var CreateEnquiryWithRouter = withRouter(CreateEnquiry);
 var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
+var StoreLocationPannerWithRouter = withRouter(StoreLocationPlanner);
 var EnquiriesWithRouter = withRouter(Enquiries);
 
 render(<Router>
@@ -76,6 +78,11 @@ render(<Router>
                     <div className="results">
                             <Route exact path="/" component={EnquiriesWithRouter} />
                         <Route  path="/dashboard-enquiries" component={EnquiriesWithRouter} />
+                    </div>)} />
+        <Route path="/store-location-planner" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={StoreLocationPannerWithRouter} />
+                        <Route  path="/store-location-planner" component={StoreLocationPannerWithRouter} />
                     </div>)} />
     </div>
 </Router>, document.getElementById('containerWiz'));

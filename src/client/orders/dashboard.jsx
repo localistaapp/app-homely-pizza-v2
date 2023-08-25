@@ -364,12 +364,12 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        if(sessionStorage.getItem('user') != null) {
+        /*if(sessionStorage.getItem('user') != null) {
             this.initializeStats(sessionStorage.getItem('user').replaceAll('"',''));
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
-        }
-        //this.initializeStats('sampath.oops@gmail.com');
+        }*/
+        this.initializeStats('sampath.oops@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -447,9 +447,8 @@ class Dashboard extends Component {
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span><span class="stage-desc desc-btn" style={{background: '#808080'}} onClick={()=>{window.location.href='/dashboard-create-enquiry';}}>+ Create</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc"><InventoryIcon /> Inventory</span>
+                                                   <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><InventoryIcon /> Store</span><span class="stage-desc desc-btn blue" onClick={()=>{window.location.href='/store-location-planner';}}>Plan</span><span class="stage-desc desc-btn blue" style={{marginLeft: '8px'}} onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>Inventory</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-
                                                    <br/><br/><br/>
 
                                               </TabPanel>

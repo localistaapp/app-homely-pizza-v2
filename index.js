@@ -14,6 +14,7 @@ var axios = require('axios');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
+var LocationService = require('./src/server/locations/location-service.js');
 const pgClient = new Client({
       host: 'ec2-54-247-188-247.eu-west-1.compute.amazonaws.com',
       port: 5432,
@@ -811,6 +812,11 @@ app.get("/dashboard-create-sample-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/store-location-planner/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
+
 app.get("/stage2/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'process.html'));
 });
@@ -1275,6 +1281,13 @@ client.connect(err => {
                             });
         }
     });
+});
+
+app.get("/locations-reach/:loc", function(req, res) {
+  let loc = req.params.loc;
+  console.log('--Location--', loc);
+  const localities = LocationService.fetchLocalities();
+  res.send(localities);
 });
 
 app.get("/franchise-profile/:email", function(req, res) {
