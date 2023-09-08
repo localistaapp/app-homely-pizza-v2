@@ -812,6 +812,10 @@ app.get("/dashboard-create-sample-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-store/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/store-location-planner/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1429,6 +1433,127 @@ app.post('/createConfirmedOrder', function(req, res) {
                             });
       }
     })
+})
+
+app.post('/createStore', function(req, res) {
+  
+  const lat = req.body.lat;
+  const long = req.body.long;
+  
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected')
+
+
+          client.query("INSERT INTO \"public\".\"store\"(lat, long) VALUES($1, $2)",
+                      [lat, long], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                console.log('--store creation response--', response);
+                                //res.send(response);
+                                //res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                client.query("select id from store order by created_at desc",
+                                            [], (err, response) => {
+                                                  if (err) {
+                                                    console.log(err)
+                                                     res.send("error");
+                                                  } else {
+                                                    res.send('{"id": '+response.rows[0].id+'}');
+                                                  }
+                                            });
+                            }
+
+                          });
+    }
+  })
+})
+
+app.post('/updateStore', function(req, res) {
+  
+  const lat = req.body.storeLat;
+  const long = req.body.storeLong;
+  const storeAddress = req.body.storeAddress;
+  const storeArea = req.body.storeArea;
+  const storeCity = req.body.storeCity;
+  const storeCountry = req.body.storeCountry;
+  const storeFranchise = req.body.storeFranchise;
+  const storeNum = req.body.storeNum;
+  const paymentQr = req.body.paymentQr.replace(/ /g, '+');
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+
+      client.query("select id from store where lat = '"+lat+"' and long = '"+long+"'",
+                                            [], (err, response) => {
+                                                  if (err) {
+                                                    console.log(err)
+                                                     res.send("error");
+                                                  } else {
+                                                    //res.send('{"id": '+response.rows[0].id+'}');
+                                                      let storeId = response.rows[0].id;
+                                                      client.query("UPDATE \"public\".\"store\" SET locality = $1, city = $2, country = $3, full_address = $4, franchise_id = $5 where id = $6",
+                                                        [storeArea, storeCity, storeCountry, storeAddress, storeFranchise, storeId], (err, response) => {
+                                                              if (err) {
+                                                                console.log(err)
+                                                                res.send("error");
+                                                              } else {
+                                                                  console.log('--store update response--', response);
+
+                                                                  client.query("INSERT INTO \"public\".\"store_profile\"(store_id, store_contact_number, payment_qr_base64) VALUES($1, $2, $3)",
+                                                                      [storeId, storeNum, paymentQr], (err, response) => {
+                                                                            if (err) {
+                                                                              console.log(err)
+                                                                              res.send("error");
+                                                                            } else {
+                                                                                //console.log('--store creation response--', response);
+                                                                                //res.send(response);
+                                                                                res.send('{"storeId":"'+storeId+'"}');
+                                                                                
+                                                                            }
+
+                                                                          });
+                                                              }
+
+                                                            });
+                                                  }
+                                            });
+
+
+          
+    }
+  })
+})
+
+app.get('/franchises', function(req, res) {
+  
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      client.query("select owner_name,id from franchise",
+                  [], (err, response) => {
+                        if (err) {
+                          console.log(err)
+                            res.send("error");
+                        } else {
+                          res.send(response.rows);
+                        }
+                  });
+
+      }});
 })
 
 app.post('/createEnquiry/:franchiseId', function(req, res) {

@@ -8,6 +8,7 @@ import Dashboard from './dashboard.jsx';
 import Quote from './quote.jsx';
 import QuoteRes from './quoteRes.jsx';
 import CreateOrder from './createOrder.jsx';
+import CreateStore from './createStore.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
@@ -28,6 +29,7 @@ var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
 var StoreLocationPannerWithRouter = withRouter(StoreLocationPlanner);
 var StoreMenuWithRouter = withRouter(StoreMenu);
 var EnquiriesWithRouter = withRouter(Enquiries);
+var CreateStoreWithRouter = withRouter(CreateStore);
 
 render(<Router>
     <div>
@@ -86,6 +88,11 @@ render(<Router>
                             <Route exact path="/" component={StoreLocationPannerWithRouter} />
                         <Route  path="/store-location-planner" component={StoreLocationPannerWithRouter} />
                     </div>)} />
+        <Route path="/dashboard-create-store" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={CreateStoreWithRouter} />
+            <Route  path="/dashboard-create-store" component={CreateStoreWithRouter} />
+        </div>)} />
         <Route path="/store" exact render={() => (
         <div className="results">
                 <Route exact path="/" component={StoreMenuWithRouter} />
