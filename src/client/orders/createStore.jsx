@@ -466,7 +466,7 @@ class Dashboard extends Component {
         var storeArea = document.getElementById('storeArea').value;
         var storeCity = document.getElementById('storeCity').value;
         var storeCountry = document.getElementById('storeCountry').value;
-        var storeFranchise = document.getElementById('storeFranchise').value;
+        var storeFranchise = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
         var storeNum = document.getElementById('storeNum').value;
         var paymentQr = window.storeQr;
         var storeLat = window.storeLat;
@@ -764,11 +764,6 @@ class Dashboard extends Component {
                                                         </select>
                                                    </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc">Franchise: 
-                                                    <select name="storeFranchise" id="storeFranchise" className="txt-field right" style={{padding:'6px'}}>
-                                                        {franchises && franchises.map((franchise) => <option id={franchise.id} value={franchise.id}>{franchise.owner_name}</option>)}
-                                                    </select></span>
-                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc">Store mobile #: <input id="storeNum" type="number" className="txt-field right" /></span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc">Payment QR: 
@@ -776,7 +771,7 @@ class Dashboard extends Component {
                                                    </span>
                                                    
 
-                                                   <br/><br/><br/>
+                                                   <br/><br/><br/><br/>
                                                    <a className="button" onClick={()=>{this.createStore();}} style={{position:'fixed', bottom: '12px'}}>Create Store →</a>
                                                    <br/><br/><br/><br/>
 

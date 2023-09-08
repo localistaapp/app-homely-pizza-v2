@@ -816,6 +816,10 @@ app.get("/dashboard-create-store/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-store-order/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/store-location-planner/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1343,6 +1347,35 @@ app.get("/franchise-profile/:email", function(req, res) {
 
 });
 
+app.get("/store/name/:franchiseId", function(req, res) {
+  let franchiseId = req.params.franchiseId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+            client.query("Select locality from store where franchise_id = "+franchiseId,
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                 } else {
+                                    res.send(response.rows[0].locality);
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
 app.post('/eventOrder', function(req, res) {
 
     const eDate = req.body.eDate;
@@ -1455,7 +1488,6 @@ app.post('/createStore', function(req, res) {
                               console.log(err)
                                res.send("error");
                             } else {
-                                console.log('--store creation response--', response);
                                 //res.send(response);
                                 //res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                                 client.query("select id from store order by created_at desc",

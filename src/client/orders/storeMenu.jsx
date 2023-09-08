@@ -77,7 +77,9 @@ class Dashboard extends Component {
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             selectedLocality: '',
-            nearby: []
+            nearby: [],
+            storeName: '',
+            storeNotExists: false
         };
         window.currSlotSelected = '';
         this.styles = [{
@@ -102,7 +104,21 @@ class Dashboard extends Component {
           }]
         }];
     }
+    getStoreName() {
+      if (sessionStorage.getItem('user-profile') != null) {
+          var franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+          axios.get('/store/name/'+franchiseId)
+                .then(function (response) {
+                  if(response.data.indexOf('error') == -1) {
+                      this.setState({storeName: '('+response.data+')'});
+                  } else {
+                    this.setState({storeNotExists: true});
+                  }
+                }.bind(this));
+          }
+    }
     componentDidMount() {
+        this.getStoreName();
     }
     render() {
 
@@ -112,13 +128,13 @@ class Dashboard extends Component {
         <Paper id="dash-content">
           <TabPanel value={this.state.value} index={0}>
             <br/>
-          <span className="stage-desc" onClick={()=>{window.location.href='/dashboard';}}><span style={{marginTop:'-6px',position:'absolute',color:'#afafaf'}}>Dashboard > <span style={{color: '#666'}}>Store</span></span></span>
+          <span className="stage-desc" onClick={()=>{window.location.href='/dashboard';}}><span style={{marginTop:'-6px',position:'absolute',color:'#afafaf'}}>Dashboard > <span style={{color: '#666'}}>Store</span><span>&nbsp; {this.state.storeName}</span></span></span>
                 <hr className="line-light" style={{visibility: 'hidden',marginTop: '8px'}}/>
                 <span className="stage-desc">
-                  <span class="stage-desc" style={{marginLeft: '0px'}} onClick={()=>{window.location.href='/store-location-planner';}}>Plan</span><span class="stage-desc" style={{marginLeft: '18px'}} onClick={()=>{if (confirm("Please make sure you're accessing this page from your store's physical location. If not, your store won't be configured correctly. Do you want to proceed?")) {window.location.href = '/dashboard-create-store';}}}>Create Store</span>
+                  <span class="stage-desc" style={{marginLeft: '0px'}} onClick={()=>{window.location.href='/store-location-planner';}}>Plan</span>{this.state.storeNotExists && <span class="stage-desc" style={{marginLeft: '18px'}} onClick={()=>{if (confirm("Please make sure you're accessing this page from your store's physical location. If not, your store won't be configured correctly. Do you want to proceed?")) {window.location.href = '/dashboard-create-store';}}}>Create Store</span>}
                 </span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
-                <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}>Create Order</span>
+                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-store-order';}}>Create Order</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}> Web Orders (0)</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>

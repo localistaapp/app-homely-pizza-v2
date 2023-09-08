@@ -10,13 +10,8 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import LocalPizzaIcon from '@material-ui/icons/LocalPizza';
-import RestaurantIcon from '@material-ui/icons/Business';
-import RequestQuoteIcon from '@material-ui/icons/NotesSharp';
-import OrdersIcon from '@material-ui/icons/ViewListSharp';
-import InventoryIcon from '@material-ui/icons/ShoppingBasket';
-import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import GoogleOneTapLogin from 'react-google-one-tap-login';
+import StoreIcon from '@material-ui/icons/Store';
+import WarningIcon from '@material-ui/icons/Warning'
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
@@ -355,102 +350,183 @@ class Dashboard extends Component {
             mobileNum: '',
             curStep: 1,
             redirect: false,
-            statTotalSales: '',
-            statTotalPizzas: '',
-            statMonthlySales: ''
+            franchises: [],
+            status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
+            pizzaQty: 0,
+            wrapsQty: 0,
+            breadQty: 0,
+            takeAwayQty: 0,
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
+    getLocation() {
+        var msg; 
+        if(window.location.href.indexOf('status=success')>=0) {
+            return;
+        }
+      
+        /** 
+        first, test for feature support
+        **/
+        if('geolocation' in navigator){
+          // geolocation is supported :)
+          requestLocation();
+        }else{
+          // no geolocation :(
+          msg = "Sorry, looks like your browser doesn't support geolocation";
+          outputResult(msg); // output error message
+          $('.pure-button').removeClass('pure-button-primary').addClass('pure-button-success'); // change button style
+        }
+      
+        /*** 
+        requestLocation() returns a message, either the users coordinates, or an error message
+        **/
+        function requestLocation(){
+          /**
+          getCurrentPosition() below accepts 3 arguments:
+          a success callback (required), an error callback  (optional), and a set of options (optional)
+          **/
+        
+          var options = {
+            // enableHighAccuracy = should the device take extra time or power to return a really accurate result, or should it give you the quick (but less accurate) answer?
+            enableHighAccuracy: false,
+            // timeout = how long does the device have, in milliseconds to return a result?
+            timeout: 5000,
+            // maximumAge = maximum age for a possible previously-cached position. 0 = must return the current position, not a prior cached position
+            maximumAge: 0
+          };
+        
+          navigator.geolocation.getCurrentPosition(success, error, options); 
+        
+          // upon success, do this
+          function success(pos){
+            // get longitude and latitude from the position object passed in
+            var lng = pos.coords.longitude;
+            var lat = pos.coords.latitude;
+            window.storeLat = lat;
+            window.storeLong = lng;
+            msg = 'You appear to be at longitude: ' + lng + ' and latitude ' + lat;
+            outputResult(msg); // output message
+          }
+        
+          function error(err){
+            msg = 'Error: ' + err + ' :(';
+            outputResult(msg);
+          }  
+        } // end requestLocation();
+      
+        function outputResult(msg){
+            var lat = window.storeLat;
+            var long = window.storeLong;
+            //Make axios GET call passing lat & long
+        }
+      } // end getLocation()
+    getFranchises() {
+        axios.get('/franchises')
+          .then(function (response) {
+            this.setState({franchises: response.data});
+          }.bind(this));
+    }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        if(sessionStorage.getItem('user') != null) {
-            this.initializeStats(sessionStorage.getItem('user').replaceAll('"',''));
-            document.getElementById('dash-content').style.display='block';
-            document.getElementById('logout').style.display='block';
-        }
-        //this.initializeStats('sampath.oops@gmail.com');
-    }
-    fmt(s){
-        var formatted = "";
-        if(s.length > 1){
-            formatted = s.substring(0,1);
-            s = s.substring(1);
-        }
-
-        while(s.length > 3){
-            formatted += "," + s.substring(0,2);
-            s = s.substring(2);
-        }
-        return formatted + "," + s + ".00";
-    }
-    getUserProfile(email) {
-        axios.get(`/franchise-profile/${email}`)
-          .then(function (response) {
-            console.log('Frnachise data-----', response.data);
-            if(response.data != 'error') {
-                sessionStorage.setItem('user-profile', JSON.stringify(response.data));
-            }
-          }.bind(this));
-    }
-    initializeStats(email) {
-        let enquiriesArr = [];
-        axios.get(`/stats/${email}`)
-          .then(function (response) {
-            console.log('Order data-----', response.data);
-            if(response.data != 'auth error') {
-                sessionStorage.setItem('user', JSON.stringify(email));
-                if (response.data && response.data.length > 1) {
-                    this.setState({
-                      statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
-                      statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
-                      statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
-                    });
-                }
-                document.getElementById('dash-content').style.display='block';
-                document.getElementById('logout').style.display='block';
-                this.getUserProfile(email);
-            }
-          }.bind(this));
+        this.getLocation();
+        this.getFranchises();
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
     }
-    logout() {
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('user-profile');
-        location.reload();
+    createStore() {
+        var storeAddress = document.getElementById('storeAddress').value;
+        var storeArea = document.getElementById('storeArea').value;
+        var storeCity = document.getElementById('storeCity').value;
+        var storeCountry = document.getElementById('storeCountry').value;
+        var storeFranchise = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+        var storeNum = document.getElementById('storeNum').value;
+        var paymentQr = window.storeQr;
+        var storeLat = window.storeLat;
+        var storeLong = window.storeLong;
+
+        //create store
+        var http = new XMLHttpRequest();
+        var url = '/updateStore';
+        var params = 'storeAddress='+storeAddress+'&storeArea='+storeArea+'&storeCity='+storeCity;
+        params += '&storeCountry='+storeCountry+'&storeFranchise='+storeFranchise+'&storeNum='+storeNum;
+        params += '&paymentQr='+paymentQr+'&storeLat='+storeLat+'&storeLong='+storeLong;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res != null){
+                    res = JSON.parse(res);
+                    console.log('--store id--', res);
+                    sessionStorage.setItem('storeId', res.storeId);
+                    window.location.href='/dashboard-create-store?status=success';
+                }
+            }
+        }.bind(this);
+        http.send(params);
     }
 
     render() {
-        const {statTotalSales, statTotalPizzas, statMonthlySales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {franchises, status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
-                    <span id="logout" className="logout" onClick={this.logout}>Logout</span>
-                    {sessionStorage.getItem('user') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
-                    <Paper id="dash-content" style={{display:'none'}}>
+                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    {status == 'success' && <span className="stage-heading status-success">Store created successfully</span>}
+                    <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
-                                                   <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RestaurantIcon />&nbsp;&nbsp;Business Dashboard</span>
+                                                   <span className="stage-heading" style={{top: '12px'}}><StoreIcon />&nbsp;&nbsp;Create Store Order</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
-                                                   <div className="sales-dashlet">
-                                                       <img className="dashboard-icon" src="../img/images/increase.png"/><span className="stage-desc dash">{statTotalSales}</span>
-                                                       <img className="dashboard-icon" src="../img/images/monthly.png" style={{marginLeft: '80px'}}/><span className="stage-desc dash">{statMonthlySales}</span>
-                                                       <img className="dashboard-icon" src="../img/images/pizzaic1.png" style={{marginLeft: '72px', width: '24px'}}/><span className="stage-desc dash">{statTotalPizzas}</span>
-                                                   </div>
-                                                   <br/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-quote';}}><RequestQuoteIcon /> Get Quote</span>
+                                                   <span className="stage-desc" >Pizzas: 
+                                                        <div class="quantity" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizzaQty>0){this.setState({pizzaQty: this.state.pizzaQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizzaQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizzaQty: this.state.pizzaQty + 1});}}>+</span></a>
+                                                        </div>
+                                                   </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span><span class="stage-desc desc-btn" onClick={()=>{window.location.href='/dashboard-create-order';}}>+ Create</span><span class="stage-desc desc-btn blue" style={{marginLeft: '8px'}} onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>+ Sample</span>
+                                                   <span className="stage-desc" >Wraps: 
+                                                        <div class="quantity" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.wrapsQty>0){this.setState({wrapsQty: this.state.wrapsQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.wrapsQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({wrapsQty: this.state.wrapsQty + 1});}}>+</span></a>
+                                                        </div>
+                                                   </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span><span class="stage-desc desc-btn" style={{background: '#808080'}} onClick={()=>{window.location.href='/dashboard-create-enquiry';}}>+ Create</span>
+                                                   <span className="stage-desc" >Garlic Bread: 
+                                                        <div class="quantity" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.breadQty>0){this.setState({breadQty: this.state.breadQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.breadQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({breadQty: this.state.breadQty + 1});}}>+</span></a>
+                                                        </div>
+                                                   </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" onClick={()=>{window.location.href='/store';}}>
-                                                        <InventoryIcon /> Store</span>
+                                                   <span className="stage-desc" >Take away: 
+                                                        <div class="quantity" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.takeAwayQty>0){this.setState({takeAwayQty: this.state.takeAwayQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.takeAwayQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({takeAwayQty: this.state.takeAwayQty + 1});}}>+</span></a>
+                                                        </div>
+                                                   </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <br/><br/><br/>
+                                                   <span className="stage-desc" >Club code: 
+                                                        <input id="clubCode" type="text" className="txt-field right" style={{left: '143px',textTransform: 'uppercase'}}/>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Reviewed: 
+                                                        <input id="hasReviewed" type="checkbox" className="txt-field right" style={{left: '143px', width: '30px'}}/>
+                                                   </span>
+                                                   
+
+                                                   <br/><br/><br/><br/>
+                                                   <a className="button" onClick={()=>{this.createStore();}} style={{position:'fixed', bottom: '12px'}}>Create Order →</a>
+                                                   <br/><br/><br/><br/>
 
                                               </TabPanel>
                                               <TabPanel value={this.state.value} index={1}>
