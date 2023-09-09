@@ -369,7 +369,7 @@ class Dashboard extends Component {
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
         }
-        this.initializeStats('sampath.oops@gmail.com');
+        //this.initializeStats('sampath.oops@gmail.com');
     }
     fmt(s){
         var formatted = "";
