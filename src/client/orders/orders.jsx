@@ -10,6 +10,8 @@ import QuoteRes from './quoteRes.jsx';
 import CreateOrder from './createOrder.jsx';
 import CreateStore from './createStore.jsx';
 import CreateStoreOrder from './createStoreOrder.jsx';
+import PayStoreOrder from './payStoreOrder.jsx';
+import StoreInventory from './storeInventory.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
@@ -32,6 +34,8 @@ var StoreMenuWithRouter = withRouter(StoreMenu);
 var EnquiriesWithRouter = withRouter(Enquiries);
 var CreateStoreWithRouter = withRouter(CreateStore);
 var CreateStoreOrderWithRouter = withRouter(CreateStoreOrder);
+var PayStoreOrderWithRouter = withRouter(PayStoreOrder);
+var StoreInventoryWithRouter = withRouter(StoreInventory);
 
 render(<Router>
     <div>
@@ -99,6 +103,16 @@ render(<Router>
         <div className="results">
                 <Route exact path="/" component={CreateStoreOrderWithRouter} />
             <Route  path="/dashboard-create-store-order" component={CreateStoreOrderWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-pay-store-order" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={PayStoreOrderWithRouter} />
+            <Route  path="/dashboard-pay-store-order" component={PayStoreOrderWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-store-inventory" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreInventoryWithRouter} />
+            <Route  path="/dashboard-store-inventory" component={StoreInventoryWithRouter} />
         </div>)} />
         <Route path="/store" exact render={() => (
         <div className="results">

@@ -446,14 +446,18 @@ class Dashboard extends Component {
         var takeAwayQty = this.state.takeAwayQty;
         var storeLat = window.storeLat;
         var storeLong = window.storeLong;
-        var storeId = sessionStorage.getItem('storeId');
+
+        let franchiseId = -1;
+        if (sessionStorage.getItem('user-profile') != null) {
+            franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+        }
 
         //create store
         var http = new XMLHttpRequest();
         var url = '/createStoreOrder';
         var params = 'hasReviewed='+hasReviewed+'&clubCode='+clubCode+'&pizzaQty='+pizzaQty;
         params += '&wrapsQty='+wrapsQty+'&breadQty='+breadQty+'&takeAwayQty='+takeAwayQty;
-        params += '&storeLat='+storeLat+'&storeLong='+storeLong+'&storeId='+storeId;
+        params += '&storeLat='+storeLat+'&storeLong='+storeLong+'&franchiseId='+franchiseId;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -467,9 +471,9 @@ class Dashboard extends Component {
                     alert('Sorry! Unable to process to your order.');
                 } else if(res != null){
                     res = JSON.parse(res);
-                    console.log('--store id--', res);
                     sessionStorage.setItem('orderId', res.orderId);
-                    window.location.href='/dashboard-create-order-pay';
+                    sessionStorage.setItem('storeIdFromOrder', res.storeId);
+                    window.location.href='/dashboard-pay-store-order?id='+res.orderId+'&p='+res.price;
                 }
             }
         }.bind(this);

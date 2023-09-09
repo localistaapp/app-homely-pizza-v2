@@ -806,6 +806,10 @@ app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-store-inventory/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-enquiry/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -819,6 +823,10 @@ app.get("/dashboard-create-store/", function(request, response) {
 });
 
 app.get("/dashboard-create-store-order/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
+app.get("/dashboard-pay-store-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
@@ -1378,6 +1386,35 @@ app.get("/store/name/:franchiseId", function(req, res) {
 
 });
 
+app.get("/store/inventory/:franchiseId", function(req, res) {
+  let franchiseId = req.params.franchiseId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+            client.query("Select id,store_id,pizza_mix_qty,cheese_qty,pizza_sauce_qty,tomato_sauce_qty,white_sauce_qty,peri_peri_qty,oregano_qty,olives_qty,paneer_qty,capsicum_qty,onion_qty,jalapenos_qty,sweet_corn_qty,mushroom_qty,hand_cover_qty,takeaway_box_qty,last_updated,basil_qty,wastebin_cover_qty from store_inventory where franchise_id = "+franchiseId,
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                 } else {
+                                    res.send(response.rows[0]);
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
 app.post('/eventOrder', function(req, res) {
 
     const eDate = req.body.eDate;
@@ -1541,7 +1578,6 @@ app.post('/updateStore', function(req, res) {
                                                                 console.log(err)
                                                                 res.send("error");
                                                               } else {
-                                                                  console.log('--store update response--', response);
 
                                                                   client.query("INSERT INTO \"public\".\"store_profile\"(store_id, store_contact_number, payment_qr_base64) VALUES($1, $2, $3)",
                                                                       [storeId, storeNum, paymentQr], (err, response) => {
@@ -1551,7 +1587,19 @@ app.post('/updateStore', function(req, res) {
                                                                             } else {
                                                                                 //console.log('--store creation response--', response);
                                                                                 //res.send(response);
-                                                                                res.send('{"storeId":"'+storeId+'"}');
+                                                                                client.query("INSERT INTO \"public\".\"store_inventory\"(store_id,franchise_id) VALUES($1,$2)",
+                                                                                  [storeId,storeFranchise], (err, response) => {
+                                                                                        if (err) {
+                                                                                          console.log(err)
+                                                                                          res.send("error");
+                                                                                        } else {
+                                                                                            //console.log('--store creation response--', response);
+                                                                                            //res.send(response);
+                                                                                            res.send('{"storeId":"'+storeId+'"}');
+                                                                                            
+                                                                                        }
+
+                                                                                      });
                                                                                 
                                                                             }
 
@@ -1578,7 +1626,7 @@ app.post('/createStoreOrder', function(req, res) {
   const wrapsQty = req.body.wrapsQty;
   const breadQty = req.body.breadQty;
   const takeAwayQty = req.body.takeAwayQty;
-  const storeId = req.body.storeId;
+  const franchiseId = req.body.franchiseId;
 
 
   const client = new Client(dbConfig)
@@ -1588,7 +1636,7 @@ app.post('/createStoreOrder', function(req, res) {
     } else {
       console.log('connected')
 
-      client.query("select lat, long from store where id = "+storeId,
+      client.query("select lat, long, id from store where franchise_id = "+franchiseId,
           [], (err, response) => {
                 if (err) {
                   console.log(err)
@@ -1596,6 +1644,7 @@ app.post('/createStoreOrder', function(req, res) {
                 } else {
                   const storeLat = response.rows[0].lat;
                   const storeLong = response.rows[0].long;
+                  const storeId = response.rows[0].id;
                   const isInVicinity = GeofencingService.isLocationInVicinity(lat, long, storeLat,storeLong);
                   if (!isInVicinity) {
                     res.send("error-not-in-vicinity");
@@ -1613,7 +1662,7 @@ app.post('/createStoreOrder', function(req, res) {
                               console.log(err)
                                res.send("error");
                             } else {
-                              res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'"}');
+                              res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'", "storeId": '+storeId+'}');
                             }
                           });
                   }
@@ -1622,6 +1671,74 @@ app.post('/createStoreOrder', function(req, res) {
 
     }
   })
+})
+
+app.post('/updateStoreOrder/status/:status', function(req, res) {
+  const status = req.params.status;
+  const orderId = req.body.orderId;
+  const mode = req.body.mode;
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+          console.log('connected');
+          client.query("UPDATE \"public\".\"store_order\" SET status = $1, payment_mode = $2 where id = $3",
+            [status, mode, orderId], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                    res.send("error");
+                  } else {
+                      res.send('{"orderId":"'+orderId+'"}');
+                  }
+
+                });
+          }
+    });
+
+})
+
+app.post('/updateStoreInventory', function(req, res) {
+  const basil_qty = req.body.basil_qty;
+  const capsicum_qty = req.body.capsicum_qty;
+  const cheese_qty = req.body.cheese_qty;
+  const hand_cover_qty = req.body.hand_cover_qty;
+  const jalapenos_qty = req.body.jalapenos_qty;
+  const mushroom_qty = req.body.mushroom_qty;
+  const olives_qty = req.body.olives_qty;
+  const onion_qty = req.body.onion_qty;
+  const oregano_qty = req.body.oregano_qty;
+  const paneer_qty = req.body.paneer_qty;
+  const peri_peri_qty = req.body.peri_peri_qty;
+  const pizza_mix_qty = req.body.pizza_mix_qty;
+  const pizza_sauce_qty = req.body.pizza_sauce_qty;
+  const sweet_corn_qty = req.body.sweet_corn_qty;
+  const takeaway_box_qty = req.body.takeaway_box_qty;
+  const tomato_sauce_qty = req.body.tomato_sauce_qty;
+  const wastebin_cover_qty = req.body.wastebin_cover_qty;
+  const white_sauce_qty = req.body.white_sauce_qty;
+  const franchise_id = req.body.franchiseId;
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+          console.log('connected');
+          client.query("UPDATE \"public\".\"store_inventory\" SET pizza_mix_qty=$1, cheese_qty=$2, pizza_sauce_qty=$3, tomato_sauce_qty=$4, white_sauce_qty=$5, peri_peri_qty=$6, oregano_qty=$7, olives_qty=$8, paneer_qty=$9, capsicum_qty=$10, onion_qty=$11, jalapenos_qty=$12, sweet_corn_qty=$13, mushroom_qty=$14, hand_cover_qty=$15, takeaway_box_qty=$16, basil_qty=$17, wastebin_cover_qty=$18 where franchise_id = $19",
+            [pizza_mix_qty, cheese_qty, pizza_sauce_qty, tomato_sauce_qty, white_sauce_qty, peri_peri_qty, oregano_qty, olives_qty, paneer_qty, capsicum_qty, onion_qty, jalapenos_qty, sweet_corn_qty, mushroom_qty, hand_cover_qty, takeaway_box_qty, basil_qty, wastebin_cover_qty, franchise_id], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                    res.send("error");
+                  } else {
+                      res.send('{"franchiseId":"'+franchise_id+'"}');
+                  }
+
+                });
+          }
+    });
+
 })
 
 app.get('/franchises', function(req, res) {
@@ -1640,6 +1757,31 @@ app.get('/franchises', function(req, res) {
                             res.send("error");
                         } else {
                           res.send(response.rows);
+                        }
+                  });
+
+      }});
+})
+
+app.get('/payQrByStore/:storeId', function(req, res) {
+  let storeId = req.params.storeId;
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      client.query("select payment_qr_base64 from store_profile where store_id="+storeId,
+                  [], (err, response) => {
+                        if (err) {
+                          console.log(err)
+                            res.send("error");
+                        } else {
+                          if(response.rows.length > 0) {
+                            res.send(response.rows[0].payment_qr_base64);
+                          } else {
+                            res.send("error");
+                          }
                         }
                   });
 
