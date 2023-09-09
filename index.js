@@ -15,6 +15,8 @@ var axios = require('axios');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
 var LocationService = require('./src/server/locations/location-service.js');
+var GeofencingService = require('./src/server/geofencing/geofencing-service.js');
+var PricingService = require('./src/server/pricing/pricing-service.js');
 const pgClient = new Client({
       host: 'ec2-54-247-188-247.eu-west-1.compute.amazonaws.com',
       port: 5432,
@@ -1562,6 +1564,62 @@ app.post('/updateStore', function(req, res) {
 
 
           
+    }
+  })
+})
+
+app.post('/createStoreOrder', function(req, res) {
+  
+  const lat = req.body.storeLat;
+  const long = req.body.storeLong;
+  const hasReviewed = req.body.hasReviewed == 'true' ? 'y' : 'n';
+  const clubCode = req.body.clubCode;
+  const pizzaQty = req.body.pizzaQty;
+  const wrapsQty = req.body.wrapsQty;
+  const breadQty = req.body.breadQty;
+  const takeAwayQty = req.body.takeAwayQty;
+  const storeId = req.body.storeId;
+
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected')
+
+      client.query("select lat, long from store where id = "+storeId,
+          [], (err, response) => {
+                if (err) {
+                  console.log(err)
+                    res.send("error");
+                } else {
+                  const storeLat = response.rows[0].lat;
+                  const storeLong = response.rows[0].long;
+                  const isInVicinity = GeofencingService.isLocationInVicinity(lat, long, storeLat,storeLong);
+                  if (!isInVicinity) {
+                    res.send("error-not-in-vicinity");
+                  } else {
+                    //ToDo: Query to read user id based on club code & derive returning customer based on number of store orders for user id before current date
+                    let hasValidCode = true;
+                    const orderJson = "{\"pizzaQty\":"+pizzaQty+", \"wrapsQty\":"+wrapsQty+", \"breadQty\":"+breadQty+", \"takeAwayQty\":"+takeAwayQty+"}";
+                    const totalPrice = PricingService.getTotalPrice(pizzaQty, wrapsQty, breadQty, takeAwayQty, hasValidCode, hasReviewed);
+                    const discountedPrice = PricingService.getDiscountedPrice(pizzaQty, wrapsQty, breadQty, takeAwayQty, hasValidCode, hasReviewed);
+                    const returningCustomer = 'N'; 
+                    
+                    client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer) VALUES($1, $2, $3, $4, $5, $6) RETURNING id",
+                      [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', returningCustomer], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                              res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'"}');
+                            }
+                          });
+                  }
+                }
+          });
+
     }
   })
 })

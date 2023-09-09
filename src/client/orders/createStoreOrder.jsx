@@ -437,23 +437,23 @@ class Dashboard extends Component {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
     }
-    createStore() {
-        var storeAddress = document.getElementById('storeAddress').value;
-        var storeArea = document.getElementById('storeArea').value;
-        var storeCity = document.getElementById('storeCity').value;
-        var storeCountry = document.getElementById('storeCountry').value;
-        var storeFranchise = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
-        var storeNum = document.getElementById('storeNum').value;
-        var paymentQr = window.storeQr;
+    createStoreOrder() {
+        var hasReviewed = document.getElementById('hasReviewed').checked;
+        var clubCode = document.getElementById('clubCode').value.toUpperCase();
+        var pizzaQty = this.state.pizzaQty;
+        var wrapsQty = this.state.wrapsQty;
+        var breadQty = this.state.breadQty;
+        var takeAwayQty = this.state.takeAwayQty;
         var storeLat = window.storeLat;
         var storeLong = window.storeLong;
+        var storeId = sessionStorage.getItem('storeId');
 
         //create store
         var http = new XMLHttpRequest();
-        var url = '/updateStore';
-        var params = 'storeAddress='+storeAddress+'&storeArea='+storeArea+'&storeCity='+storeCity;
-        params += '&storeCountry='+storeCountry+'&storeFranchise='+storeFranchise+'&storeNum='+storeNum;
-        params += '&paymentQr='+paymentQr+'&storeLat='+storeLat+'&storeLong='+storeLong;
+        var url = '/createStoreOrder';
+        var params = 'hasReviewed='+hasReviewed+'&clubCode='+clubCode+'&pizzaQty='+pizzaQty;
+        params += '&wrapsQty='+wrapsQty+'&breadQty='+breadQty+'&takeAwayQty='+takeAwayQty;
+        params += '&storeLat='+storeLat+'&storeLong='+storeLong+'&storeId='+storeId;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -461,11 +461,15 @@ class Dashboard extends Component {
             if(http.readyState == 4 && http.status == 200) {
                 console.log('confirmed order creation post response:', http.responseText);
                 var res = http.responseText;
-                if(res != null){
+                if(res.indexOf('error-not-in-vicinity') >= 0) {
+                    alert('There was an issue processing your order. Please contact the franchisor.');
+                } else if(res.indexOf('error') >= 0){
+                    alert('Sorry! Unable to process to your order.');
+                } else if(res != null){
                     res = JSON.parse(res);
                     console.log('--store id--', res);
-                    sessionStorage.setItem('storeId', res.storeId);
-                    window.location.href='/dashboard-create-store?status=success';
+                    sessionStorage.setItem('orderId', res.orderId);
+                    window.location.href='/dashboard-create-order-pay';
                 }
             }
         }.bind(this);
@@ -525,7 +529,7 @@ class Dashboard extends Component {
                                                    
 
                                                    <br/><br/><br/><br/>
-                                                   <a className="button" onClick={()=>{this.createStore();}} style={{position:'fixed', bottom: '12px'}}>Create Order →</a>
+                                                   <a className="button" onClick={()=>{this.createStoreOrder();}} style={{position:'fixed', bottom: '12px'}}>Create Order →</a>
                                                    <br/><br/><br/><br/>
 
                                               </TabPanel>
