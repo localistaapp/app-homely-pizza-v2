@@ -5,6 +5,7 @@ var BUILD_DIR = path.resolve(__dirname, 'public');
 var WIZ_DIR = path.resolve(__dirname, 'src/client/wizard');
 var PROC_DIR = path.resolve(__dirname, 'src/client/process');
 var ORD_DIR = path.resolve(__dirname, 'src/client/orders');
+var CLUB_DIR = path.resolve(__dirname, 'src/client/club');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var BrotliPlugin = require('brotli-webpack-plugin');
@@ -13,7 +14,8 @@ var config = {
   entry: {
     guide: WIZ_DIR + '/guide.jsx',
     process: PROC_DIR + '/process.jsx',
-    orders: ORD_DIR + '/orders.jsx'
+    orders: ORD_DIR + '/orders.jsx',
+    club: CLUB_DIR + '/club.jsx'
   },
   output: {
     path: BUILD_DIR,
@@ -28,7 +30,7 @@ var config = {
     rules : [
       {
         test : /\.jsx?/,
-        include : [WIZ_DIR, PROC_DIR, ORD_DIR],
+        include : [WIZ_DIR, PROC_DIR, ORD_DIR, CLUB_DIR],
         exclude: [/node_modules/],
         loader : 'babel',
         query:

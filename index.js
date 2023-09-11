@@ -778,6 +778,10 @@ app.get("/orders/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/club/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'club.html'));
+});
+
 app.get("/packages/:id", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });
