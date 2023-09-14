@@ -1691,7 +1691,7 @@ div#containerWiz {
 }
 
 .md-stepper-horizontal {
-    margin-top: 72px !important;
+    margin-top: 0px !important;
 	display:table;
 	width:100%;
 	margin:0 auto;
@@ -1777,13 +1777,16 @@ div#containerWiz {
 	margin-top:16px;
 	font-size:16px;
 	font-weight:600;
-	font-family: Source Sans Pro;
+	font-family: Quicksand;
     font-weight: bold !important;
+}
+.md-stepper-horizontal .md-step .md-step-title.active {
+	color: #000;
 }
 .md-stepper-horizontal .md-step .md-step-title,
 .md-stepper-horizontal .md-step .md-step-optional {
 	text-align: center;
-	color:#454545;
+	color:#666;
 	font-weight: normal;
 }
 .md-stepper-horizontal .md-step.active .md-step-title {
@@ -2479,11 +2482,12 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator:hover { opacity:0.15
     letter-spacing: 4px;
 }
 .club-user-avatar {
-    width: 48px;
+    width: 42px;
     position: absolute;
     float: right;
-    right: 20px;
-    top: 16px;
+    right: 25px;
+    top: 24px;
+    border-radius: 30px;
 }
 .checkbox-container {
     text-align: left;

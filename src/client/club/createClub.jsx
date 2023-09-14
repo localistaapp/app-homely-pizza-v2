@@ -355,7 +355,8 @@ class Dashboard extends Component {
             curStep: 1,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
-            clubUserSrc: ''
+            clubUserSrc: '',
+            loggedIn: sessionStorage.getItem('club-user-email') != null
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
@@ -368,34 +369,21 @@ class Dashboard extends Component {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
     }
-    createOrder() {
-        var orderName = document.getElementById('orderName').value;
-        var orderDate = document.getElementById('orderDate').value;
-        var orderTime = document.getElementById('orderTime').value;
-        var orderContact = document.getElementById('orderContact').value;
-        var orderPrice = document.getElementById('orderPrice').value;
-        var orderAmtPaid = document.getElementById('orderAmtPaid').value;
-        var orderAddress = document.getElementById('orderAddress').value;
-        var orderMapURL = document.getElementById('orderMapURL').value;
-        var orderCity = document.getElementById('orderCity').value;
-        var orderZone = document.getElementById('orderZone').value;
-        var orderPizzaQty = document.getElementById('orderPizzaQty').value;
-        var orderPizzaSize = document.getElementById('orderPizzaSize').value;
-        var orderGarlicBreadQty = document.getElementById('orderGarlicBreadQty').value;
-        var orderWrapsQty = document.getElementById('orderWrapsQty').value;
-        var orderToppingIng = document.getElementById('orderToppingIng').value;
-        var orderSpecialIng = document.getElementById('orderSpecialIng').value;
-        var orderExtras = document.getElementById('orderExtras').value;
-        var orderComments = document.getElementById('orderComments').value;
+    login(user) {
+        /*user = {
+            email: "sampath.oops@gmail.com",
+            name: "Sampath Kumar",
+            picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
+        }*/
+        this.setState({clubUserSrc: user.picture});
+        var email = user.email;
+        var name = user.name
+        sessionStorage.setItem('club-user-pic',user.picture);
+
         //create order
         var http = new XMLHttpRequest();
-        var url = '/createConfirmedOrder';
-        var params = 'orderName='+orderName+'&orderDate='+orderDate+'&orderTime='+orderTime;
-        params += '&orderContact='+orderContact+'&orderPrice='+orderPrice+'&orderAmtPaid='+orderAmtPaid;
-        params += '&orderAddress='+orderAddress+'&orderMapURL='+orderMapURL+'&orderCity='+orderCity;
-        params += '&orderZone='+orderZone+'&orderPizzaQty='+orderPizzaQty+'&orderPizzaSize='+orderPizzaSize;
-        params += '&orderGarlicBreadQty='+orderGarlicBreadQty+'&orderWrapsQty='+orderWrapsQty+'&orderToppingIng='+orderToppingIng;
-        params += '&orderSpecialIng='+orderSpecialIng+'&orderExtras='+orderExtras+'&orderComments='+orderComments+'&orderType=EVENT';
+        var url = '/createClubUser';
+        var params = 'email='+email+'&name='+name;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -405,9 +393,10 @@ class Dashboard extends Component {
                 var res = http.responseText;
                 if(res != null){
                     res = JSON.parse(res);
-                    console.log('--event order id--', res);
-                    sessionStorage.setItem('confirmedOrderId', res.orderId);
-                    window.location.href='/dashboard-create-order?status=success';
+                    console.log('--res--', res);
+                    sessionStorage.setItem('clubCode', res.code);
+                    sessionStorage.setItem('club-user-email',email);
+                    this.setState({loggedIn: true});
                 }
             }
         }.bind(this);
@@ -426,22 +415,41 @@ class Dashboard extends Component {
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
+                                                {!this.state.loggedIn && <div className="club-main" >
                                                    <span className="club-heading" style={{top: '12px'}}>Welcome to the club!</span>
                                                    <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
                                                    <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
                                                    <img className='club-banner' src="../img/images/club-banner.png" />
-                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.setState({clubUserSrc: response.picture});}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
+                                                </div>}
+                                                {this.state.loggedIn &&
+                                                   <div className="md-stepper-horizontal orange">
+                                                        <div id="step1" className="md-step" style={{paddingLeft: '10px'}}>
+                                                        <div className="md-step-circle active"><span>1</span></div>
+                                                        <div className="md-step-title active">Subscribe</div>
+                                                        <div className="md-step-bar-left"></div>
+                                                        <div className="md-step-bar-right"></div>
+                                                        </div>
+                                                        <div id="step2" className="md-step">
+                                                        <div className="md-step-circle" id="step2Circle"><span>2</span></div>
+                                                        <div className="md-step-title">Review</div>
+                                                        <div className="md-step-bar-left"></div>
+                                                        <div className="md-step-bar-right"></div>
+                                                        </div>
+                                                        <div id="step3" className="md-step">
+                                                        <div className="md-step-circle" id="step3Circle"><span>3</span></div>
+                                                        <div className="md-step-title">Avail</div>
+                                                        <div className="md-step-bar-left"></div>
+                                                        <div className="md-step-bar-right"></div>
+                                                        </div>
+                                                    </div>}
 
                                               </TabPanel>
-                                              <TabPanel value={this.state.value} index={1}>
-
-
-
-                                              </TabPanel>
-                                            </Paper>
+                                              
+                    </Paper>
                 </div>)
     }
 }
