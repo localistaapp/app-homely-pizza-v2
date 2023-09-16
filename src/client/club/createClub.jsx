@@ -406,7 +406,6 @@ class Dashboard extends Component {
                     sessionStorage.setItem('clubCode', res.code);
                     sessionStorage.setItem('club-user-email',email);
                     this.setState({loggedIn: true});
-                    this.showNotificationDialog();
                 }
             }
         }.bind(this);
