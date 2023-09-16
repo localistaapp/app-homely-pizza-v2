@@ -370,13 +370,8 @@ class Dashboard extends Component {
         this.setState({value: newValue});
     }
     showNotificationDialog() {
-        alert('triggering');
-        (function(d, t) {
-            var g = d.createElement(t),
-            s = d.getElementsByTagName(t)[0];
-            g.src = "https://cdn.pushalert.co/integrate_38cd90a01ecd59656bdb6985aac33f38.js";
-            s.parentNode.insertBefore(g, s);
-         }(document, "script"));
+        sessionStorage.setItem('notification-dialog', true);
+        setTimeout(()=>{location.reload();},800);
     }
     login(user) {
         /*user = {
@@ -406,6 +401,7 @@ class Dashboard extends Component {
                     sessionStorage.setItem('clubCode', res.code);
                     sessionStorage.setItem('club-user-email',email);
                     this.setState({loggedIn: true});
+                    this.showNotificationDialog();
                 }
             }
         }.bind(this);
