@@ -377,6 +377,10 @@ class Dashboard extends Component {
             setTimeout(()=>{location.reload();},800);
         }
     }
+    onPAReady() {
+        alert('--onPAReady7--');
+        console.log(PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
+    }
     login(user) {
         /*user = {
             email: "sampath.oops@gmail.com",
@@ -410,6 +414,10 @@ class Dashboard extends Component {
             }
         }.bind(this);
         http.send(params);
+
+        if(window.pushalertbyiw ) {
+            (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady]);
+        }
     }
 
     render() {
