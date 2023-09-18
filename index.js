@@ -782,6 +782,10 @@ app.get("/club/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'club.html'));
 });
 
+app.get("/reset/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'reset_session.html'));
+});
+
 app.get("/packages/:id", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });

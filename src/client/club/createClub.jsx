@@ -372,8 +372,10 @@ class Dashboard extends Component {
         this.setState({value: newValue});
     }
     showNotificationDialog() {
-        sessionStorage.setItem('notification-dialog', true);
-        setTimeout(()=>{location.reload();},800);
+        if(sessionStorage.getItem('notification-dialog') == null) {
+            sessionStorage.setItem('notification-dialog', true);
+            setTimeout(()=>{location.reload();},800);
+        }
     }
     login(user) {
         /*user = {
