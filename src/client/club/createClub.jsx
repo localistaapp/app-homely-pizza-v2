@@ -352,7 +352,7 @@ class Dashboard extends Component {
             showWizard: '',
             numVistors: 0,
             mobileNum: '',
-            curStep: 1,
+            curStep: 0,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
@@ -363,7 +363,9 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-
+        if(sessionStorage.getItem('notification-dialog')!=null) {
+            this.setState({curStep: 1});
+        }
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
@@ -426,7 +428,7 @@ class Dashboard extends Component {
                                                    <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
                                                    <img className='club-banner' src="../img/images/club-banner.png" />
-                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && this.login() && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
                                                 </div>}
@@ -451,6 +453,16 @@ class Dashboard extends Component {
                                                         <div className="md-step-bar-right"></div>
                                                         </div>
                                                     </div>}
+                                                {curStep == 1 && <div>
+                                                    <span className="club-heading" style={{top: '12px'}}></span>
+                                                        <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
+                                                        <span className="club-desc" >Subscribe to special offers to continue. We will not send unnecessary notifications at any time.</span>
+                                                        <br/><br/><br/>
+                                                        <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
+                                                        {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        <br/><br/><br/><br/><br/>
+                                                        <br/><br/><br/><br/>
+                                                   </div>}
 
                                               </TabPanel>
                                               
