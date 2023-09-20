@@ -403,16 +403,19 @@ class Dashboard extends Component {
             email = sessionStorage.getItem('club-user-email');
             name = sessionStorage.getItem('club-user-name');
             picture = sessionStorage.getItem('club-user-pic');
+            this.setState({loggedIn: true});
+            this.setState({clubUserSrc: picture});
+            this.setState({curStep: 1});
+            return;
         } else {
             email = user.email;
             name = user.name;
             picture = user.picture;
             sessionStorage.setItem('club-user-pic',user.picture);
+            this.setState({clubUserSrc: picture});
         }
-        this.setState({clubUserSrc: picture});
-        this.setState({loggedIn: true});
-        return;
-
+        
+        
         //create order
         var http = new XMLHttpRequest();
         var url = '/createClubUser';
