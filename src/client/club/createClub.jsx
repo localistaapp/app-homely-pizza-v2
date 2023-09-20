@@ -374,11 +374,12 @@ class Dashboard extends Component {
     showNotificationDialog() {
         if(sessionStorage.getItem('notification-dialog') == null) {
             sessionStorage.setItem('notification-dialog', true);
-            setTimeout(()=>{location.reload();},800);
+            setTimeout(()=>{location.reload();},500);
         }
     }
     onPAReady() {
         console.log(PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
+        this.setState({curStep: 2});
     }
     loadSurvey() {
         (function (w,d,s,o,f,js,fjs) {
@@ -405,7 +406,7 @@ class Dashboard extends Component {
             picture = sessionStorage.getItem('club-user-pic');
             this.setState({loggedIn: true});
             this.setState({clubUserSrc: picture});
-            this.setState({curStep: 1});
+            this.setState({curStep: 3});
             return;
         } else {
             email = user.email;
