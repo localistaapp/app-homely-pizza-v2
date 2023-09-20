@@ -396,10 +396,22 @@ class Dashboard extends Component {
             name: "Sampath Kumar",
             picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
         }*/
-        this.setState({clubUserSrc: user.picture});
-        var email = user.email;
-        var name = user.name
-        sessionStorage.setItem('club-user-pic',user.picture);
+        var email = '';
+        var name = '';
+        var picture = '';
+        if (sessionStorage.getItem('club-user-name') != null) {
+            email = sessionStorage.getItem('club-user-email');
+            name = sessionStorage.getItem('club-user-name');
+            picture = sessionStorage.getItem('club-user-pic');
+        } else {
+            email = user.email;
+            name = user.name;
+            picture = user.picture;
+            sessionStorage.setItem('club-user-pic',user.picture);
+        }
+        this.setState({clubUserSrc: picture});
+        this.setState({loggedIn: true});
+        return;
 
         //create order
         var http = new XMLHttpRequest();
@@ -417,6 +429,7 @@ class Dashboard extends Component {
                     console.log('--res--', res);
                     sessionStorage.setItem('clubCode', res.code);
                     sessionStorage.setItem('club-user-email',email);
+                    sessionStorage.setItem('club-user-name',name);
                     this.setState({loggedIn: true});
                     this.showNotificationDialog();
                 }
