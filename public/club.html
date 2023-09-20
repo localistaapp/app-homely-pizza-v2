@@ -3021,7 +3021,20 @@ span.club-code {
     // Add other bootstrap parameters as needed, using camel case.
   });
 
-  if(sessionStorage.getItem('notification-dialog') != null) {
+  function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
+
+  if(sessionStorage.getItem('notification-dialog') != null || iOS()) {
         (function(d, t) {
                     var g = d.createElement(t),
                     s = d.getElementsByTagName(t)[0];
