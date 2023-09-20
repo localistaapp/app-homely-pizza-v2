@@ -363,6 +363,9 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
+        if(window.pushalertbyiw ) {
+            (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady]);
+        }
         if(sessionStorage.getItem('notification-dialog')!=null && sessionStorage.getItem('notification-dialog')=='true') {
             this.setState({curStep: 1});
         }
@@ -451,10 +454,6 @@ class Dashboard extends Component {
             }
         }.bind(this);
         http.send(params);
-
-        if(window.pushalertbyiw ) {
-            (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady]);
-        }
     }
 
     render() {
