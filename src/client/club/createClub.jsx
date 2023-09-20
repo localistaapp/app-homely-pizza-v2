@@ -363,7 +363,7 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        if(sessionStorage.getItem('notification-dialog')!=null) {
+        if(sessionStorage.getItem('notification-dialog')!=null && sessionStorage.getItem('notification-dialog')=='true') {
             this.setState({curStep: 1});
         }
     }
@@ -373,13 +373,14 @@ class Dashboard extends Component {
     }
     showNotificationDialog() {
         if(sessionStorage.getItem('notification-dialog') == null) {
-            sessionStorage.setItem('notification-dialog', true);
+            sessionStorage.setItem('notification-dialog', 'true');
             setTimeout(()=>{location.reload();},500);
         }
     }
     onPAReady() {
-        console.log(PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
-        this.setState({curStep: 2});
+        console.log('notification sub data: ', PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
+        //set sessionStorage.getItem('notification-dialog','false') after subscrbed
+        //this.setState({curStep: 2});
     }
     loadSurvey() {
         (function (w,d,s,o,f,js,fjs) {
@@ -406,7 +407,12 @@ class Dashboard extends Component {
             picture = sessionStorage.getItem('club-user-pic');
             this.setState({loggedIn: true});
             this.setState({clubUserSrc: picture});
-            this.setState({curStep: 3});
+            if (sessionStorage.getItem('notification-dialog') == 'false') {
+                this.setState({curStep: 3});
+            } else {
+                this.setState({curStep: 1});
+            }
+            
             return;
         } else {
             email = user.email;
