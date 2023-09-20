@@ -364,7 +364,7 @@ class Dashboard extends Component {
     componentDidMount() {
         var winHeight = window.innerHeight;
         if(window.pushalertbyiw ) {
-            (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady]);
+            (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         if(sessionStorage.getItem('notification-dialog')!=null && sessionStorage.getItem('notification-dialog')=='true') {
             this.setState({curStep: 1});
