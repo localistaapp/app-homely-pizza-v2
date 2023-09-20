@@ -382,6 +382,8 @@ class Dashboard extends Component {
         //set sessionStorage.getItem('notification-dialog','false') after subscrbed
         //this.setState({curStep: 2});
         if (PushAlertCo.getSubsInfo().status == "subscribed") {
+            alert('already subscribed');
+            sessionStorage.getItem('notification-dialog','false');
             this.setState({curStep: 3});
         }
     }
