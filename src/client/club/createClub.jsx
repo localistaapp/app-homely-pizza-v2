@@ -378,7 +378,6 @@ class Dashboard extends Component {
         }
     }
     onPAReady() {
-        alert('--onPAReady7--');
         console.log(PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
     }
     loadSurvey() {
@@ -392,11 +391,11 @@ class Dashboard extends Component {
         this.setState({curStep: stepNum});
     }
     login(user) {
-        user = {
+        /*user = {
             email: "sampath.oops@gmail.com",
             name: "Sampath Kumar",
             picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
-        }
+        }*/
         this.setState({clubUserSrc: user.picture});
         var email = user.email;
         var name = user.name
@@ -448,7 +447,7 @@ class Dashboard extends Component {
                                                    <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
                                                    <img className='club-banner' src="../img/images/club-banner.png" />
-                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && this.login() && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
                                                 </div>}
@@ -476,7 +475,7 @@ class Dashboard extends Component {
                                                 {curStep == 1 && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '22px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-1" >Subscribe to special offers to continue. We will not send unnecessary notifications at any time.</span>
+                                                        <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
                                                         {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && this.login() && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
