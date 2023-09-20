@@ -377,7 +377,7 @@ class Dashboard extends Component {
     showNotificationDialog() {
         if(sessionStorage.getItem('notification-dialog') == null) {
             sessionStorage.setItem('notification-dialog', 'true');
-            setTimeout(()=>{location.reload();},500);
+            setTimeout(()=>{location.reload();},1000);
         }
     }
     onPAReady() {
