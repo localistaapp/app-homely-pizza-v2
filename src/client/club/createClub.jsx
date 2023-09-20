@@ -381,6 +381,9 @@ class Dashboard extends Component {
         console.log('notification sub data: ', PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
         //set sessionStorage.getItem('notification-dialog','false') after subscrbed
         //this.setState({curStep: 2});
+        if (PushAlertCo.getSubsInfo().status == "subscribed") {
+            this.setState({curStep: 3});
+        }
     }
     loadSurvey() {
         (function (w,d,s,o,f,js,fjs) {
