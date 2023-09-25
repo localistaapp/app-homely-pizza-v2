@@ -501,7 +501,7 @@ class Dashboard extends Component {
                                                    <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
                                                    <img className='club-banner' src="../img/images/club-banner.png" />
-                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                   {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && sessionStorage.getItem('club-user-pic') == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
                                                 </div>}
