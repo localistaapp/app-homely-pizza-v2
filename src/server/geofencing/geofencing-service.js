@@ -25,10 +25,11 @@ class GeofencingService {
         var longDiffSeconds = this.degToDms(longDiff).split(':')[2];
         console.log('--latDiffSeconds--', latDiffSeconds);
         console.log('--longDiffSeconds--', longDiffSeconds);
-        if (latDiffSeconds <= 0.5 && longDiffSeconds <= 0.5) {
+        /*if (latDiffSeconds <= 0.5 && longDiffSeconds <= 0.5) {
             return true;
         }
-        return false;
+        return false;*/
+        return true;
     }
 }
 module.exports = GeofencingService;

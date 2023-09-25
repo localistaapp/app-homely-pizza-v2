@@ -480,7 +480,7 @@ class Dashboard extends Component {
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
                                                 </div>}
-                                                {this.state.loggedIn &&
+                                                {this.state.loggedIn && curStep != 3 &&
                                                    <div className="md-stepper-horizontal orange">
                                                         <div id="step1" className="md-step" style={{paddingLeft: '10px'}}>
                                                         <div className={`md-step-circle ${this.state.curStep == 1 ? 'active' : ''}`}><span>1</span></div>
