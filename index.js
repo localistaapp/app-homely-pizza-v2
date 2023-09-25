@@ -1743,6 +1743,15 @@ app.post('/createStoreOrder', function(req, res) {
                   if (!isInVicinity) {
                     res.send("error-not-in-vicinity");
                   } else {
+
+                    client.query("select id from club_user where customer_code = '"+clubCode+"'",
+                                            [], (err, resp) => {
+                                                  if (err) {
+                                                    console.log(err)
+                                                     res.send("error");
+                                                  } else {
+
+                    const clubUserId = resp.rows[0].id;
                     //ToDo: Query to read user id based on club code & derive returning customer based on number of store orders for user id before current date
                     let hasValidCode = true;
                     const orderJson = "{\"pizzaQty\":"+pizzaQty+", \"wrapsQty\":"+wrapsQty+", \"breadQty\":"+breadQty+", \"takeAwayQty\":"+takeAwayQty+"}";
@@ -1750,8 +1759,8 @@ app.post('/createStoreOrder', function(req, res) {
                     const discountedPrice = PricingService.getDiscountedPrice(pizzaQty, wrapsQty, breadQty, takeAwayQty, hasValidCode, hasReviewed);
                     const returningCustomer = 'N'; 
                     
-                    client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer) VALUES($1, $2, $3, $4, $5, $6) RETURNING id",
-                      [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', returningCustomer], (err, response) => {
+                    client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id",
+                      [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', returningCustomer, clubUserId], (err, response) => {
                             if (err) {
                               console.log(err)
                                res.send("error");
@@ -1759,6 +1768,10 @@ app.post('/createStoreOrder', function(req, res) {
                               res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'", "storeId": '+storeId+'}');
                             }
                           });
+                        }
+                        
+                  });
+                        
                   }
                 }
           });
