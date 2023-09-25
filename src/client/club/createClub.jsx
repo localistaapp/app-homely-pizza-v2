@@ -385,7 +385,6 @@ class Dashboard extends Component {
         //set sessionStorage.getItem('notification-dialog','false') after subscrbed
         //this.setState({curStep: 2});
         if (PushAlertCo.getSubsInfo().status == "subscribed") {
-            alert('already subscribed');
             sessionStorage.getItem('notification-dialog','false');
             this.setState({curStep: 3});
         }
@@ -445,6 +444,9 @@ class Dashboard extends Component {
                 if(res != null){
                     res = JSON.parse(res);
                     console.log('--res--', res);
+                    if(res.registered != null && res.registered == 'true') {
+                        this.setState({curStep: 3});
+                    }
                     sessionStorage.setItem('clubCode', res.code);
                     sessionStorage.setItem('club-user-email',email);
                     sessionStorage.setItem('club-user-name',name);

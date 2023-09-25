@@ -1582,7 +1582,7 @@ app.post('/createClubUser', function(req, res) {
                                res.send("error");
                             } else {
                                 //res.send(response);
-                                res.send('{"code":"'+customerCode+'"}');
+                                res.send('{"code":"'+customerCode+'","registered":"true"}');
                             }
 
                           });
@@ -1603,7 +1603,7 @@ app.post('/createClubUser', function(req, res) {
                                res.send("error");
                             } else {
                                 //res.send(response);
-                                res.send('{"code":"'+code+'"}');
+                                res.send('{"code":"'+code+'","registered":"false"}');
                             }
 
                           });
