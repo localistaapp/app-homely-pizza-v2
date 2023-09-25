@@ -10,6 +10,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import GoogleOneTapLogin from 'react-google-one-tap-login';
+import Dialog from "@material-ui/core/Dialog";
 
 import LocalPizzaIcon from '@material-ui/icons/LocalPizza';
 import RestaurantIcon from '@material-ui/icons/Business';
@@ -50,6 +51,10 @@ class ReviewContainer extends Component {
         this.setActiveTopic = this.setActiveTopic.bind(this);
     }
     componentDidMount() {
+        const dialog = document.querySelector("#dialog");
+        const openDialogButton = document.querySelector("#openDialog");
+        openDialogButton.addEventListener("click", () => dialog.showModal());
+        dialog.addEventListener('close', () => console.log(dialog.returnValue ))
     }
     setOpinionArray(topicName) {
         let reviewTopics = this.props.reviewTopics;
@@ -457,6 +462,9 @@ class Dashboard extends Component {
         }.bind(this);
         http.send(params);
     }
+    handleDialogClose() {
+
+    }
 
     render() {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -525,6 +533,23 @@ class Dashboard extends Component {
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);}}>Next</a>
                                                         <br/>
                                                    </div>}
+                                                   
+                                                   <button id="openDialog" className="bg-orange text-white font-semibold m-4 p-4 rounded hover:bg-orange-dark" onClick={()=>{document.querySelector("#dialog").showModal()}}>Open modal</button>
+
+                                                        <dialog id="dialog" className="bg-white   rounded-lg border-t-8 border-orange p-0   font-sans">
+                                                        <form  id="form" method="dialog">
+                                                            <header className="text-2xl text-center py-4 text-black bg-grey-lighter border-b border-grey-light">
+                                                                <span>Club Code</span>
+                                                            </header>
+
+                                                            <p className="text-xl p-4 h-16 text-center leading-normal">Your club code: </p>
+                                                            <footer className="actions flex">
+
+                                                            <button type="submit" autofocus className="bg-orange flex-1 text-white p-2 yes-button" value="yes">Close</button>
+                                                            
+                                                            </footer>
+                                                        </form>
+                                                        </dialog>
 
                                               </TabPanel>
                                               
