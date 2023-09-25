@@ -464,7 +464,7 @@ class Dashboard extends Component {
     onboardClubUser() {
         var http = new XMLHttpRequest();
         var url = '/onboardClubUser';
-        var params = 'email='+email;
+        var params = 'email='+sessionStorage.getItem('club-user-email');
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -476,6 +476,13 @@ class Dashboard extends Component {
                     res = JSON.parse(res);
                     if(res.registered != null && res.registered == 'true') {
                         sessionStorage.setItem('onboarded', 'true');
+                            /*axios.get(`/franchise-profile/${email}`)
+                              .then(function (response) {
+                                console.log('Frnachise data-----', response.data);
+                                if(response.data != 'error') {
+                                    sessionStorage.setItem('user-profile', JSON.stringify(response.data));
+                                }
+                              }.bind(this));*/
                     }
                 }
             }
@@ -532,7 +539,7 @@ class Dashboard extends Component {
                                                         <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
-                                                        {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && sessionStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
                                                         <br/>
