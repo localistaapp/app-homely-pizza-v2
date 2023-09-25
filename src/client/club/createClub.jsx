@@ -476,13 +476,14 @@ class Dashboard extends Component {
                     res = JSON.parse(res);
                     if(res.registered != null && res.registered == 'true') {
                         sessionStorage.setItem('onboarded', 'true');
-                            /*axios.get(`/franchise-profile/${email}`)
+                            axios.get(`/user-orders/${sessionStorage.getItem('club-user-email')}`)
                               .then(function (response) {
-                                console.log('Frnachise data-----', response.data);
+                                console.log('User orders-----', response.data);
                                 if(response.data != 'error') {
-                                    sessionStorage.setItem('user-profile', JSON.stringify(response.data));
+                                    var userOrders = JSON.stringify(response.data);
+                                    console.log('--user orders--', userOrders);
                                 }
-                              }.bind(this));*/
+                              }.bind(this));
                     }
                 }
             }

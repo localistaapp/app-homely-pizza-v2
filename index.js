@@ -1365,6 +1365,38 @@ app.get("/franchise-profile/:email", function(req, res) {
 
 });
 
+app.get("/user-orders/:email", function(req, res) {
+  let orderStatus = req.params.status;
+  let email = req.params.email;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+            client.query("Select total_price, discounted_price from store_order where user_id IN (select id from club_user where email IN ('"+email+"')) AND status = 'PAID' order by created_at desc",
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                 res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("auth error");
+                                 } else {
+                                    res.send(response.rows);
+                                 }
+
+                              }
+
+                            });
+         }
+    });
+
+
+});
+
 app.get("/store/name/:franchiseId", function(req, res) {
   let franchiseId = req.params.franchiseId;
   const client = new Client(dbConfig)
@@ -1624,7 +1656,7 @@ app.post('/onboardClubUser', function(req, res) {
     if (err) {
       console.error('error connecting', err.stack)
     } else {
-      client.query("UPDATE \"public\".\"club_user\" SET onboarded = $1, last_active_on = now() where email = $1",
+      client.query("UPDATE \"public\".\"club_user\" SET onboarded = $1, last_active_on = now() where email = $2",
           ['Y', email], (err, response) => {
                 if (err) {
                   console.log(err)
