@@ -1615,6 +1615,30 @@ app.post('/createClubUser', function(req, res) {
  })
 });
 
+app.post('/onboardClubUser', function(req, res) {
+  
+  const email = req.body.email;
+  
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      client.query("UPDATE \"public\".\"club_user\" SET onboarded = $1, last_active_on = now() where email = $1",
+          ['Y', email], (err, response) => {
+                if (err) {
+                  console.log(err)
+                    res.send("error");
+                } else {
+                    //res.send(response);
+                    res.send('{"registered":"true"}');
+                }
+
+              });
+  }
+ })
+});
+
 app.post('/updateStore', function(req, res) {
   
   const lat = req.body.storeLat;

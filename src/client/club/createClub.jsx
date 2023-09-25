@@ -389,7 +389,7 @@ class Dashboard extends Component {
         console.log('notification sub data: ', PushAlertCo.getSubsInfo()); //You can call this method to get the subscription status of the subscriber
         //set sessionStorage.getItem('notification-dialog','false') after subscrbed
         //this.setState({curStep: 2});
-        if (PushAlertCo.getSubsInfo().status == "subscribed") {
+        if (PushAlertCo.getSubsInfo().status == "subscribed" && sessionStorage.getItem('onboarded')!=null && sessionStorage.getItem('onboarded')=='true') {
             sessionStorage.getItem('notification-dialog','false');
             this.setState({curStep: 3});
         }
@@ -419,7 +419,7 @@ class Dashboard extends Component {
             picture = sessionStorage.getItem('club-user-pic');
             this.setState({loggedIn: true});
             this.setState({clubUserSrc: picture});
-            if (sessionStorage.getItem('notification-dialog') == 'false') {
+            if (sessionStorage.getItem('notification-dialog') == 'false' && sessionStorage.getItem('onboarded')!=null && sessionStorage.getItem('onboarded')=='true') {
                 this.setState({curStep: 3});
             } else {
                 this.setState({curStep: 1});
@@ -433,7 +433,6 @@ class Dashboard extends Component {
             sessionStorage.setItem('club-user-pic',user.picture);
             this.setState({clubUserSrc: picture});
         }
-        
         
         //create order
         var http = new XMLHttpRequest();
@@ -449,7 +448,7 @@ class Dashboard extends Component {
                 if(res != null){
                     res = JSON.parse(res);
                     console.log('--res--', res);
-                    if(res.registered != null && res.registered == 'true') {
+                    if(res.registered != null && res.registered == 'true' && sessionStorage.getItem('onboarded')!=null && sessionStorage.getItem('onboarded')=='true') {
                         this.setState({curStep: 3});
                     }
                     sessionStorage.setItem('clubCode', res.code);
@@ -462,8 +461,26 @@ class Dashboard extends Component {
         }.bind(this);
         http.send(params);
     }
-    handleDialogClose() {
+    onboardClubUser() {
+        var http = new XMLHttpRequest();
+        var url = '/onboardClubUser';
+        var params = 'email='+email;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res != null){
+                    res = JSON.parse(res);
+                    if(res.registered != null && res.registered == 'true') {
+                        sessionStorage.setItem('onboarded', 'true');
+                    }
+                }
+            }
+        }.bind(this);
+        http.send(params);
     }
 
     render() {
@@ -473,7 +490,7 @@ class Dashboard extends Component {
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/offer.png" />
                     <span className='club'>Club</span>
-                    {this.state.clubUserSrc != '' && <img className='club-user-avatar' src={this.state.clubUserSrc} />}
+                    {this.state.clubUserSrc != '' && <img className='club-user-avatar' src={this.state.clubUserSrc} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <Paper>
 
@@ -515,7 +532,7 @@ class Dashboard extends Component {
                                                         <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
-                                                        {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && this.login() && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        {sessionStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
                                                         <br/>
@@ -530,24 +547,18 @@ class Dashboard extends Component {
                                                         </span>
                                                         <br/>
                                                         <button type="button" className="login-with-google-btn" onClick={()=>{window.open('https://g.page/r/CQwiiF6lQrvREBM/review');}}>Share via Google</button>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);}}>Next</a>
+                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();}}>Next</a>
                                                         <br/>
                                                    </div>}
                                                    
-                                                   <button id="openDialog" className="bg-orange text-white font-semibold m-4 p-4 rounded hover:bg-orange-dark" onClick={()=>{document.querySelector("#dialog").showModal()}}>Open modal</button>
 
                                                         <dialog id="dialog" className="bg-white   rounded-lg border-t-8 border-orange p-0   font-sans">
                                                         <form  id="form" method="dialog">
-                                                            <header className="text-2xl text-center py-4 text-black bg-grey-lighter border-b border-grey-light">
-                                                                <span>Club Code</span>
+                                                            <header className="text-2xl text-center py-4 text-black bg-grey-lighter border-b border-grey-light" style={{marginTop: '6px'}}>
+                                                                <span>Your club code: {sessionStorage.getItem('clubCode')}</span>
                                                             </header>
-
-                                                            <p className="text-xl p-4 h-16 text-center leading-normal">Your club code: </p>
-                                                            <footer className="actions flex">
-
-                                                            <button type="submit" autofocus className="bg-orange flex-1 text-white p-2 yes-button" value="yes">Close</button>
+                                                            <button type="submit" className="bg-orange flex-1 text-white p-2 yes-button" value="yes">Close</button>
                                                             
-                                                            </footer>
                                                         </form>
                                                         </dialog>
 
