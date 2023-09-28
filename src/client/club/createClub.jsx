@@ -361,6 +361,7 @@ class Dashboard extends Component {
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
+            orderSavings: 0,
             loggedIn: localStorage.getItem('club-user-email') != null
         };
         window.currSlotSelected = '';
@@ -484,11 +485,12 @@ class Dashboard extends Component {
                                     console.log('--user orders--', userOrders);
                                     if(response.data.length == 1) {
                                         clearInterval(window.userOrdersInterval);
-                                        alert(response.data[0].total_price - response.data[0].discounted_price);
+                                        this.setState({orderSavings: response.data[0].total_price - response.data[0].discounted_price});
+                                        //alert(response.data[0].total_price - response.data[0].discounted_price);
                                     }
                                 }
                               }.bind(this));
-                            }.bind(this), 500);
+                            }.bind(this), 2000);
                     }
                 }
             }
@@ -503,7 +505,7 @@ class Dashboard extends Component {
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/offer.png" />
                     <span className='club'>Club</span>
-                    {this.state.clubUserSrc != '' && <img className='club-user-avatar' src={this.state.clubUserSrc} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
+                    {this.state.clubUserSrc != '' || localStorage.getItem('club-user-pic') != null && <img className='club-user-avatar' src={localStorage.getItem('club-user-pic')} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <Paper>
 
@@ -561,6 +563,13 @@ class Dashboard extends Component {
                                                         <br/>
                                                         <button type="button" className="login-with-google-btn" onClick={()=>{window.open('https://g.page/r/CQwiiF6lQrvREBM/review');}}>Share via Google</button>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();}}>Next</a>
+                                                        <br/>
+                                                   </div>}
+                                                   {curStep == 3 && <div>
+                                                    <span className="club-heading" style={{top: '12px'}}></span>
+                                                        <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
+                                                        {this.state.orderSavings != 0 && <span className="club-desc-2" >🎉  Thank you for your order! You saved ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span> with club!</span>}
+                                                        <br/>
                                                         <br/>
                                                    </div>}
                                                    
