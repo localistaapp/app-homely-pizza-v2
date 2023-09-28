@@ -482,7 +482,7 @@ class Dashboard extends Component {
                                 if(response.data != 'error') {
                                     var userOrders = JSON.stringify(response.data);
                                     console.log('--user orders--', userOrders);
-                                    if(response.data.length > 0) {
+                                    if(response.data.length == 1) {
                                         clearInterval(window.userOrdersInterval);
                                         alert(response.data[0].total_price - response.data[0].discounted_price);
                                     }
