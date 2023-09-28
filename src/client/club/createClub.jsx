@@ -476,14 +476,19 @@ class Dashboard extends Component {
                     res = JSON.parse(res);
                     if(res.registered != null && res.registered == 'true') {
                         localStorage.setItem('onboarded', 'true');
-                            axios.get(`/user-orders/${localStorage.getItem('club-user-email')}`)
+                        window.userOrdersInterval = setInterval(function(){axios.get(`/user-orders/${localStorage.getItem('club-user-email')}`)
                               .then(function (response) {
                                 console.log('User orders-----', response.data);
                                 if(response.data != 'error') {
                                     var userOrders = JSON.stringify(response.data);
                                     console.log('--user orders--', userOrders);
+                                    if(response.data.length > 0) {
+                                        clearInterval(window.userOrdersInterval);
+                                        alert(response.data[0].total_price - response.data[0].discounted_price);
+                                    }
                                 }
                               }.bind(this));
+                            }.bind(this), 500);
                     }
                 }
             }
