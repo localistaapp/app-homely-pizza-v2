@@ -53,8 +53,63 @@ class ReviewContainer extends Component {
     componentDidMount() {
         const dialog = document.querySelector("#dialog");
         const openDialogButton = document.querySelector("#openDialog");
-        openDialogButton.addEventListener("click", () => dialog.showModal());
-        dialog.addEventListener('close', () => console.log(dialog.returnValue ))
+        openDialogButton != null && openDialogButton.addEventListener("click", () => dialog.showModal());
+        dialog != null && dialog.addEventListener('close', () => console.log(dialog.returnValue ));
+
+        if(isValidCoupon()) {
+            document.getElementById('discountModal').style.top = '1200px';
+        }
+
+        window.addEventListener("scroll",function () {
+            if(window.scrollY <= 120) {
+                document.querySelector("#checkoutHeader").style.top = "0px";
+            } else {
+                document.querySelector("#checkoutHeader").style.top = (window.scrollY-2)+"px";
+            }
+        });
+
+        document.addEventListener('basket-updated', function(e) {
+            console.log('basket-updated event', e.detail);
+            var currBasketData = localStorage.getItem("basket");
+            var basketData;
+            if(currBasketData == null) {
+                 basketData = new Object();
+            } else {
+                basketData = JSON.parse(currBasketData);
+            }
+            if(e.detail != null) {
+                console.log('e.detail.itemId: ', e.detail.itemId);
+                console.log('e.detail.qty: ', e.detail.qty);
+                if (e.detail.qty <=0 && basketData[e.detail.itemId] != null) {
+                    delete basketData[e.detail.itemId];
+                    document.getElementById('checkoutCount').innerHTML = Object.keys(basketData).length;
+                    if (Object.keys(basketData).length == 0) {
+                        document.getElementById('checkoutHeader').style.display = 'none';
+                    }
+                } else {
+                    basketData[e.detail.itemId] = e.detail;
+                }
+            }
+
+            if(Object.keys(basketData).length >= 1) {
+                document.getElementById('checkoutHeader').style.display = 'inline';
+                document.getElementById('checkoutCount').innerHTML = Object.keys(basketData).length;
+            }
+            var basketStr = JSON.stringify(basketData);
+            localStorage.setItem("basket",basketStr)
+        });
+
+        if (location.href.indexOf('/redirect') >= 0) {
+            this.setState({redirect: true});
+        }
+        const label = document.querySelector('.dropdown__filter-selected')
+        const options = Array.from(document.querySelectorAll('.dropdown__select-option'))
+
+        options.forEach((option) => {
+        	option.addEventListener('click', () => {
+        		label.textContent = option.textContent
+        	})
+        })
     }
     setOpinionArray(topicName) {
         let reviewTopics = this.props.reviewTopics;
@@ -353,7 +408,7 @@ class Dashboard extends Component {
             couponApplied: false,
             showSlot: false,
             slotSelected: '',
-            showList: 'hidden',
+            showList: '',
             showWizard: '',
             numVistors: 0,
             mobileNum: '',
@@ -364,6 +419,7 @@ class Dashboard extends Component {
             orderSavings: 0,
             loggedIn: localStorage.getItem('club-user-email') != null
         };
+        this.fetchJson();
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
@@ -393,6 +449,7 @@ class Dashboard extends Component {
         if (PushAlertCo.getSubsInfo().status == "subscribed" && localStorage.getItem('onboarded')!=null && localStorage.getItem('onboarded')=='true') {
             localStorage.getItem('notification-dialog','false');
             this.setState({curStep: 3});
+            this.fetchJson();
         }
     }
     loadSurvey() {
@@ -405,6 +462,209 @@ class Dashboard extends Component {
     changeStep(stepNum) {
         this.setState({curStep: stepNum});
     }
+    fetchJson() {
+        let task = 'interior';
+        let loc = 'blr';
+        let zone = 'east';
+
+        axios.get(`/data/${task}/${loc}/${zone}`)
+          .then(function (response) {
+            console.log('response data-----', response.data);
+            this.setState({results: response.data.results});
+          }.bind(this));
+        axios.get(`/data/${task}/${loc}/${zone}/starter`)
+                  .then(function (response) {
+                    this.setState({starters: response.data.results});
+                  }.bind(this));
+    }
+    getTotal() {
+        let orderSummary = this.state.orderSummary;
+        let total = 0;
+        let discounted = 1;
+
+        if(isValidCoupon()) {
+            discounted = 0.85;
+        }
+        orderSummary && Object.keys(orderSummary).map((index) => {
+            if(typeof index !== 'undefined') {
+                //total += orderSummary[index].price;
+                total += Math.ceil(Math.round(orderSummary[index].price*discounted) / 10) * 10
+            }
+        });
+
+        total = total + (0.04*total) + 75;
+        if(!this.state.couponApplied) {
+            localStorage.setItem('dPrice', Math.round(total));
+        }
+        return Math.round(total);
+    }
+    applyCoupon() {
+        let curPrice = document.getElementById('price').innerHTML;
+        let couponCode = document.getElementById('dCoupon').value;
+        if(!this.state.couponApplied && couponCode != '' && couponCode.toUpperCase() == 'SLICE20') {
+            curPrice = parseInt(curPrice,10);
+            let revPrice = curPrice - curPrice * .2;;
+            revPrice = Math.round(revPrice);
+            document.getElementById('price').innerHTML = revPrice;
+            localStorage.setItem('dPrice', revPrice);
+            this.setState({couponApplied: true});
+        }
+    }
+    selectSlot() {
+        var e = document.getElementById("slots");
+        var slot = e.options[e.selectedIndex].value;
+        window.currSlotSelected = slot;
+    }
+    captureAddress() {
+        let pincode = document.getElementById('dPincode').value;
+
+        let address = document.getElementById('dAddress').value;
+        let mobile = document.getElementById('dMobile').value;
+        let name = document.getElementById('dName').value;
+        localStorage.setItem('dPincode',pincode);
+        localStorage.setItem('dAddress',address);
+        localStorage.setItem('dMobile',mobile);
+        localStorage.setItem('dName',name);
+        let price = localStorage.getItem('dPrice');
+        let slot = sessionStorage.getItem('deliverySlot') != null ? sessionStorage.getItem('deliverySlot') : '';
+        let summary = localStorage.getItem('basket');
+        let referralCode = localStorage.getItem('discountCode');
+        let eOrderId = sessionStorage.getItem('eventOrderId');
+        summary = summary != null ? summary : '';
+        //create order
+        var http = new XMLHttpRequest();
+        var url = '/homelyOrder';
+        var params = 'dPrice='+price+'&dMobile='+localStorage.getItem('dMobile')+'&dName='+localStorage.getItem('dName')+'&dSlot='+slot+'&dItems='+summary+'&dPincode='+pincode+'&referralCode='+referralCode+'&dAddress='+address+'&eOrderId='+eOrderId;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(!pincode.includes('560') || !this.slotsAvailable) {
+                    alert('Sorry, our slots are full. Pls check back again later!');
+                    location.href = '/';
+                }
+                if(res != null){
+                    res = JSON.parse(res);
+                    /*if(res.whitelisted == false) {
+                        alert("Sorry, we're not able to deliver to your location temporarily!");
+                        this.setState({activeStep: 2});
+                    } else {*/
+                        document.getElementById('step3Circle').classList.add('active');this.setState({showSlot: true, activeStep: 3});
+                        localStorage.setItem('orderId', res.orderId);
+                    /*}*/
+                }
+            }
+        }.bind(this);
+        http.send(params);
+        fbq('track', 'InitiateCheckout');
+    }
+    makePaymentRequest() {
+        //uncomment
+        //return;
+        var http = new XMLHttpRequest();
+        var url = '/paymentRequest';
+        var orderId = 0;
+        orderId = localStorage.getItem('orderId') != null ? localStorage.getItem('orderId') : orderId;
+
+        var params = 'amount='+localStorage.getItem('dPrice')+'&phone='+localStorage.getItem('dMobile')+'&name='+localStorage.getItem('dName')+'&orderId='+orderId+'&slot='+sessionStorage.getItem('deliverySlot');
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('post response:', http.responseText);
+                var res = http.responseText;
+                res = JSON.parse(res);
+                localStorage.setItem('paymentLink',res.payment_request.longurl);
+                localStorage.setItem('paymentRequestId', res.payment_request.id);
+
+                location.href = res.payment_request.longurl;
+            }
+        }
+        http.send(params);
+    }
+    zeroPrefix(min) {
+        return min < 10 ? '0'+min : min;
+    }
+    getDeliveryTime() {
+        var newDateObj = new Date(new Date().getTime() + 90*60000);
+        var lastDateObj = new Date(new Date().getTime() + 120*60000);
+        var startHours = newDateObj.getHours() > 12 ? newDateObj.getHours() % 12 : newDateObj.getHours();
+        var endHours = lastDateObj.getHours() > 12 ? lastDateObj.getHours() % 12 : lastDateObj.getHours();
+        var ampmstart = newDateObj.getHours() >= 12 ? 'PM' : 'AM';
+        var ampmend = lastDateObj.getHours() >= 12 ? 'PM' : 'AM';
+        return startHours+":"+this.zeroPrefix(newDateObj.getMinutes() < 50 ? Math.ceil(newDateObj.getMinutes() / 10) * 10 : 50)+ampmstart+" and "+endHours+":"+this.zeroPrefix(lastDateObj.getMinutes() < 50 ? Math.ceil(lastDateObj.getMinutes() / 10) * 10 : 50)+ampmend;
+    }
+    setCOD() {
+        var http = new XMLHttpRequest();
+                var url = '/setCOD';
+                var orderId = 0;
+                orderId = localStorage.getItem('orderId') != null ? localStorage.getItem('orderId') : orderId;
+                var params = 'orderId='+orderId;
+                http.open('POST', url, true);
+                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                http.onreadystatechange = function() {//Call a function when the state changes.
+                    if(http.readyState == 4 && http.status == 200) {
+                        console.log('post response:', http.responseText);
+                        var res = http.responseText;
+                        location.href = '/redirect/?payment_id=MOJO0629U05N96486745&payment_status=Credit&payment_request_id=388ed5d05e75428f9dc74327df7aa314';
+                    }
+                }
+                http.send(params);
+    }
+    getQuoteString(numVistors) {
+                return <div className="quote-txt" style={{marginTop: '22px'}}>Quote for {numVistors} large pizzas:</div>
+            }
+    saveEvent() {
+        if (sessionStorage.getItem('mobileNum') == null || sessionStorage.getItem('mobileNum') == "") {
+            alert("Mobile number is mandatory for an instant quote.");
+            return;
+        }
+        //create order
+        var http = new XMLHttpRequest();
+        var url = '/eventOrder';
+        var params = 'eDate='+sessionStorage.getItem('eventDate')+'&ePincode='+sessionStorage.getItem('venuePinCode')+'&eMobile='+sessionStorage.getItem('mobileNum');
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('event order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res != null){
+                    res = JSON.parse(res);
+                    console.log('--event order id--', res);
+                    sessionStorage.setItem('eventOrderId', res.orderId);
+                }
+            }
+        }.bind(this);
+        http.send(params);
+        this.setState({curStep:2});
+        gtag('event', 'entered_event_details', {'eDate': sessionStorage.getItem('eventDate')});
+    }
+    updateQuantity(eventQty) {
+            //create order
+            var http = new XMLHttpRequest();
+            var url = '/updateEventOrder';
+            var defaultPrice = 235;
+            var eventQuote = Math.ceil(defaultPrice * parseInt(sessionStorage.getItem('qty'),10) * 0.85);
+            var params = 'eventOrderId='+sessionStorage.getItem('eventOrderId')+'&eventQuantity='+eventQty+'&eventQuote='+eventQuote;
+            http.open('POST', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    console.log('event order update post response:', http.responseText);
+                    var res = http.responseText;
+                }
+            }.bind(this);
+            http.send(params);
+            gtag('event', 'entered_num_guests', {'eDate': eventQty});
+        }
     login(user) {
         /*user = {
             email: "sampath.oops@gmail.com",
@@ -422,6 +682,7 @@ class Dashboard extends Component {
             this.setState({clubUserSrc: picture});
             if (localStorage.getItem('notification-dialog') == 'false' && localStorage.getItem('onboarded')!=null && localStorage.getItem('onboarded')=='true') {
                 this.setState({curStep: 3});
+                this.fetchJson();
             } else {
                 this.setState({curStep: 1});
             }
@@ -451,6 +712,7 @@ class Dashboard extends Component {
                     console.log('--res--', res);
                     if(res.registered != null && res.registered == 'true' && localStorage.getItem('onboarded')!=null && localStorage.getItem('onboarded')=='true') {
                         this.setState({curStep: 3});
+                        this.fetchJson();
                     }
                     localStorage.setItem('clubCode', res.code);
                     localStorage.setItem('club-user-email',email);
@@ -500,11 +762,17 @@ class Dashboard extends Component {
 
     render() {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
-
+        console.log('::results::', results);
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/offer.png" />
                     <span className='club'>Club</span>
+                    <div id="checkoutHeader">
+                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-20px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
+                            <div className=""></div>
+                            <div id="checkoutCount" class="c-count">0</div>
+                        </div>
+                    </div>
                     {this.state.clubUserSrc != '' || localStorage.getItem('club-user-pic') != null && <img className='club-user-avatar' src={localStorage.getItem('club-user-pic')} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <Paper>
@@ -568,8 +836,259 @@ class Dashboard extends Component {
                                                    {curStep == 3 && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        {this.state.orderSavings != 0 && <span className="club-desc-2" >🎉  Thank you for your order! You saved ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span> with club!</span>}
+                                                        {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
                                                         <br/>
+                                                       
+                                                       
+                                                       
+                                                        <div className={`main fadeInBottom ${this.state.showList}`}>
+                        <div id="discountModal" className="card-container checkout-modal modal-show" style={{top:'74px'}}>
+                            <div className="modal-heading">
+                                <div className="left">
+                                    Coupon Code
+                                </div>
+                                <div className="right" onClick={()=>{document.getElementById('discountModal').style.top='1200px';}}>
+                                    <img src="../../../img/images/ic_close.png" />
+                                </div>
+                                <div className="checkout-content" style={{height: 'calc(100% - 350px)', marginTop:'30px'}}>
+                                    <div class="title">
+                                        <div>Have a coupon code?</div>
+                                        <input id="discountCodeText" type="text" className="step-input" placeholder="Enter coupon code" style={{marginTop: '100px',color: '#000', height: '38px'}}/>
+                                        <div id="applyDiscountBtn" className="card-btn coupon-btn" onClick={()=>{localStorage.setItem('discountCode',document.getElementById('discountCodeText').value);location.reload();}}>Apply
+                                            <div className=""></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="checkoutModal" className="card-container checkout-modal modal-show">
+                            <div className="modal-heading">
+                                <div className="right" onClick={()=>{document.getElementById('checkoutModal').style.top='1200px';this.setState({activeStep: 1, showCoupon: false, showSlot: false, couponApplied: false});}}>
+                                    <img src="../../../img/images/ic_close.png" />
+                                </div>
+                            </div>
+                            <div className="md-stepper-horizontal orange">
+                                <div id="step1" className="md-step">
+                                  <div className="md-step-circle active"><span>1</span></div>
+                                  <div className="md-step-title">Order Summary</div>
+                                  <div className="md-step-bar-left"></div>
+                                  <div className="md-step-bar-right"></div>
+                                </div>
+                                <div id="step2" className="md-step">
+                                  <div className="md-step-circle" id="step2Circle"><span>2</span></div>
+                                  <div className="md-step-title">Delivery Address</div>
+                                  <div className="md-step-bar-left"></div>
+                                  <div className="md-step-bar-right"></div>
+                                </div>
+                                <div id="step3" className="md-step">
+                                  <div className="md-step-circle" id="step3Circle"><span>3</span></div>
+                                  <div className="md-step-title">Make Payment</div>
+                                  <div className="md-step-bar-left"></div>
+                                  <div className="md-step-bar-right"></div>
+                                </div>
+                              </div>
+                              {this.state.activeStep == 1 &&
+                              <div className="checkout-content" style={{height: 'calc(100% - 350px)', overflowY: 'scroll'}}>
+                                {orderSummary && Object.keys(orderSummary).map((index) => {
+                                    if(typeof index !== 'undefined') {
+                                        let sumId = index;
+                                        sumId = sumId.replace('p','').replace('g','');
+                                        sumId = parseInt(sumId, 10);
+                                        return (<SummaryCard index={index} data={orderSummary[index]} summaryId={sumId+1} />);
+                                    }
+                                })}
+                                <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
+                                    <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl GST + delivery charges)</div>
+                                </div>
+                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '60px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 2});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
+                                    <div className=""></div>
+                                </div>
+                              </div>}
+                              {this.state.showCoupon &&
+                                <div className="checkout-content">
+                                    <div className="card-container small" style={{padding: '0px 12px 0px 12px'}}>
+                                        <div className="section-one">
+                                            <div className="top-right">
+                                                <div className="usp-title" style={{left: '0',right: '0',margin: '0 auto'}}>
+                                                    <span className="title-ff" style={{top:'7px'}}>Use slice20 as the coupon code:</span>
+                                                    <input id="dCoupon" type="text" className="step-input" placeholder="Enter coupon code" style={{marginTop: '10px'}}/>
+                                                     <div id="applyCouponBtn" className="card-btn coupon-btn" style={{marginTop: '20px'}} onClick={()=>{this.applyCoupon()}}>Apply
+                                                        <div className=""></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {this.state.couponApplied == true &&
+                                        <div className="summary-total" style={{top: '496px'}}><span style={{opacity: '0.5'}}>Total:  </span><span className="rupee" style={{opacity: '0.5'}}>₹</span><span id="priceOriginal" style={{textDecoration: 'line-through', opacity: '0.5'}}>{this.getTotal()}</span>
+                                        <span><img src="../../../img/images/ic_btick.png" style={{width: '32px', marginLeft: '20px'}}/><span style={{fontSize: '18px',marginLeft: '4px'}}>Coupon applied!</span></span>
+                                        </div>
+                                    }
+                                    <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{this.getTotal()}</span>
+                                        <div style={{fontSize: '14px', marginTop: '5px', marginLeft: '2px'}}>(incl GST at 4%)</div>
+                                    </div>
+                                        <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '532px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step2').classList.add('active');document.getElementById('step2Circle').classList.add('active');this.setState({showCoupon: false, activeStep: 2});}}>Next&nbsp;→
+                                            <div className=""></div>
+                                        </div>
+                                </div>
+                              }
+                              {this.state.activeStep == 2 &&
+                                <div className="checkout-content">
+
+                                <div className="card-container" style={{padding: '0px 12px 0px 12px'}}>
+                                            <div className="section-one">
+                                                <div className="top">
+                                                    <div className="top-right">
+                                                        <div className="usp-title">
+                                                            <input id="dPincode" type="text" className="step-input" placeholder="Your pincode"/>
+                                                            <textarea id="dAddress" className="step-input" className="step-input step-textarea" placeholder="Delivery address (with landmark)" />
+                                                            <input id="dMobile" type="text" className="step-input" placeholder="Mobile number" style={{top:'198px'}}/>
+                                                            <input id="dName" type="text" className="step-input" placeholder="Your full name" style={{top:'238px'}}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                <div id="checkoutBtnStep2" className="card-btn checkout" style={{top: '532px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step2').classList.add('done');this.captureAddress();}}>Next&nbsp;→
+                                    <div className=""></div>
+                                </div>
+                              </div>}
+                              {this.state.showSlot &&
+                              <div className="checkout-content">
+                                  <div className="card-container small" style={{padding: '0px 12px 0px 12px', minHeight: '246px'}}>
+                                      <div className="section-one">
+                                          <div className="top-right">
+                                              <img src="../img/images/delivery.png" className="delivery-icon" />
+                                              <div className="usp-title" style={{left: '0',right: '0',margin: '0 auto'}}>
+                                                  <span className="title-ff" style={{top:'-14px', padding: '20px', lineHeight: '22px'}}>When should we deliver your sample order?</span>
+                                                  <div className="delivery-section">
+                                                      <div className="deliver-cell" style={{marginTop: '60px'}}>
+                                                          <span>Date:</span><input type="date" value={this.state.deliveryDate} onChange={(e)=>{this.setState({deliveryDate:e.target.value});sessionStorage.setItem('deliveryDate',e.target.value);}}/>
+                                                      </div>
+                                                      <div className="deliver-cell" style={{marginTop: '12px'}}>
+                                                        <span>Slot:</span>
+                                                          <select name="slot" id="slot" className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
+                                                              <option value="Saturday 6pm to 7p">Saturday 6pm to 7pm</option>
+                                                              <option value="Saturday 7pm to 8pm">Saturday 7pm to 8pm</option>
+                                                              <option value="Saturday 8pm to 9pm">Saturday 8pm to 9pm</option>
+                                                              <option value="Saturday 9pm to 10pm">Saturday 9pm to 10pm</option>
+                                                              <option value="Sunday 6pm to 7p">Sunday 6pm to 7pm</option>
+                                                              <option value="Sunday 7pm to 8pm">Sunday 7pm to 8pm</option>
+                                                              <option value="Sunday 8pm to 9pm">Sunday 8pm to 9pm</option>
+                                                              <option value="Sunday 9pm to 10pm">Sunday 9pm to 10pm</option>
+                                                            </select>
+                                                      </div>
+                                                      <div className="slot"></div>
+                                                  </div>
+                                                  <br/>
+                                                  <span className="title-ff" style={{top: '210px', padding: '20px', lineHeight: '22px', fontWeight: 'normal', fontSize: '15px', marginLeft: '4px'}}>Proceed to next step to make payment.</span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                      <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '532px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step2').classList.add('active');document.getElementById('step3Circle').classList.add('active');this.setState({showCoupon: false, showSlot: false, activeStep: 3});this.makePaymentRequest();}}>Next&nbsp;→
+                                          <div className=""></div>
+                                      </div>
+                              </div>
+                            }
+                              {!this.state.showSlot && this.state.activeStep == 3 &&
+                                  <div className="checkout-content">
+
+                                  <div className="card-container" style={{padding: '0px 12px 0px 12px',minHeight: '200px'}}>
+                                              <div className="section-one">
+                                                  <div className="top">
+                                                      <div className="top-right">
+                                                          <div className="label-redirect">
+                                                            Redirecting to payment partner... Please wait...
+                                                          </div>
+                                                          <div className="pizza">
+                                                           {loaderElems}
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+
+
+                                          </div>
+
+
+                                </div>}
+                        </div></div>
+                                                       
+                                                       
+                                                       
+                                                       
+                                                       
+                                                        {results && window.location.href.indexOf('/redirect/')==-1 && window.location.href.indexOf('/credits/')==-1 && results.map((resultItem, index) => {
+                                                                       return (<Card index={index} data={resultItem} type="pizzas" />);
+                                                                   })}
+
+                                
+
+
+                               {window.location.href.indexOf('/redirect/')!=-1 && window.location.href.indexOf('&payment_status=Credit') !=-1 && <div className="card-container">
+                                       <div className="status-title">
+                                           <br/>
+                                           <span>Thanks for ordering your homely pizza!</span>
+                                           <br/>
+                                           <img className="ic-delivery" src="../img/images/ic_delivery.png" />
+                                           <br/>
+                                           <div className="small-title">Our delivery executive will get in touch with you once your pizza is dispatched.</div>
+                                        </div>
+
+                               </div>}
+
+                               {window.location.href.indexOf('/redirect/')!=-1 && window.location.href.indexOf('&payment_status=Credit') == -1 && <div className="card-container">
+                                       <div className="status-title" style={{paddingTop: '38px'}}>
+                                           <span>Your order is still pending</span>
+                                           <br/><br/>
+                                           <span className="small-title">Payment failed. Please retry by clicking the button below.</span>
+                                           <br/>
+                                           <div className="card-btn checkout small" onClick={()=>{window.location.href=localStorage.getItem('paymentLink');}}>Retry Payment
+                                                                               <div className=""></div>
+                                                                           </div>
+                                           <br/>
+                                           <span className="small-title" style={{marginTop: '92px', fontSize: '16px'}}>If you continue to face issues, please call us at <a style={{color: '#ffd355'}} href="tel:+91-7619514999">+91-7619514999</a></span>
+                                        </div>
+
+                               </div>}
+
+                               {window.location.href.indexOf('/credits/')!=-1 && <div className="card-container">
+                                                                           <div className="status-title">
+
+                                                                               <span>Special Credits</span>
+                                                                               <br/>
+                                                                               <img className="ic-delivery" src="../../../img/images/medal.png" style={{marginLeft: '0px'}} />
+                                                                               <span className="small-title" style={{textAlign: 'justify'}}>We take pride in our team, especially our junior artists who strive to craft a memorable experience in their own creative ways.</span>
+
+                                                                            </div>
+                                                                            <div className="status-title" style={{marginTop: '140px'}}>
+
+                                                                                <span style={{fontSize: '20px',marginTop:'14px',fontWeight: 'bold'}}>Akshara, Creative logo & concept</span>
+                                                                                <div className="ic-delivery avataraks"  style={{marginLeft: '0px'}} />
+
+                                                                             </div>
+                                                                             <div className="status-title" style={{marginTop: '10px'}}>
+
+                                                                              <span style={{fontSize: '20px',marginTop:'14px',fontWeight: 'bold'}}>Antara, Visual design & logo art</span>
+                                                                              <div className="ic-delivery avatarant"  style={{marginLeft: '0px'}} />
+
+                                                                           </div>
+                                                                           <div className="status-title" style={{marginTop: '10px'}}>
+
+                                                                              <span style={{fontSize: '20px',marginTop:'14px',fontWeight: 'bold'}}>Srishti, Customer happiness</span>
+                                                                              <div className="ic-delivery avatarsr"  style={{marginLeft: '0px'}} />
+                                                                              <br/><br/><br/>
+
+                                                                           </div>
+
+                                <div className="credits"> © 2020 homely.pizza<span style={{marginLeft: '20px',textDecoration: 'underline'}} onClick={()=>{location.href='/credits/'}}>Special Credits</span></div>
+
+                                                                   </div>}
                                                         <br/>
                                                    </div>}
                                                    
