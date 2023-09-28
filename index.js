@@ -1900,7 +1900,7 @@ app.get('/franchises', function(req, res) {
                   });
 
       }});
-})
+});
 
 app.get('/payQrByStore/:storeId', function(req, res) {
   let storeId = req.params.storeId;
