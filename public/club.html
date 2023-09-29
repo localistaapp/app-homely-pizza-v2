@@ -100,6 +100,9 @@
     left: 100px;
     top: 20px;
 }
+.usp-title .title {
+    left: -116px !important;
+}
 .special-msg {
     top: 72px;
     background: rgb(246, 246, 246);
@@ -564,20 +567,28 @@
     padding: 4px;
 }
 
+.section-one .top-left-mini {
+    width: 85px;
+    margin: 0px;
+    overflow: hidden;
+    padding: 4px;
+}
+
 .section-one .top-right .usp-title {
     font-size: 14px;
     color: #484848;
     margin-bottom: 2px;
-    padding-top: 8px;
+    top: 0px;
 }
 
 .section-one .top-right .usp-desc {
     font-size: 15px;
     color: #454545;
-    margin-top: -24px;
-    height: 122px;
-    position: absolute;
-    width: 100px;
+    top:60px;
+    height:122px;
+    position:absolute;
+    width:100px;
+    left:0px;
 }
 
 .label-redirect {
@@ -592,6 +603,14 @@
 
 .section-one .top-right {
     padding: 8px;
+    position: absolute;
+}
+
+.section-one .top-right-mini {
+    padding: 8px;
+    position: relative;
+    top: -73px;
+    left: 99px;
 }
 
 .section-one .top-left img.primary-img {
@@ -1691,7 +1710,7 @@ div#containerWiz {
 }
 
 .md-stepper-horizontal {
-    margin-top: 0px !important;
+    margin-top: 0px;
 	display:table;
 	width:100%;
 	margin:0 auto;
@@ -3111,11 +3130,7 @@ fbq('track', 'PageView');
 <script>
 
 function isValidCoupon() {
-   return  localStorage.getItem('discountCode') != null
-    && (localStorage.getItem('discountCode').toUpperCase() == 'RAGEN15'
-     || localStorage.getItem('discountCode').toUpperCase() == 'PRATU15'
-     || localStorage.getItem('discountCode').toUpperCase() == 'AMRIT15'
-     || localStorage.getItem('discountCode').toUpperCase() == 'SLICE15')
+   return false;
 }
 
     localStorage.removeItem("basket");

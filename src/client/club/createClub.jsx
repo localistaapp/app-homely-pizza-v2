@@ -56,10 +56,6 @@ class ReviewContainer extends Component {
         openDialogButton != null && openDialogButton.addEventListener("click", () => dialog.showModal());
         dialog != null && dialog.addEventListener('close', () => console.log(dialog.returnValue ));
 
-        if(isValidCoupon()) {
-            document.getElementById('discountModal').style.top = '1200px';
-        }
-
         window.addEventListener("scroll",function () {
             if(window.scrollY <= 120) {
                 document.querySelector("#checkoutHeader").style.top = "0px";
@@ -372,15 +368,15 @@ class SummaryCard extends Component {
             prefix = 'g';
         }
         return (
-        <div className="card-container small" style={{padding: '0px 12px 0px 12px'}}>
+        <div className="card-container small" style={{padding: '0px 12px 0px 12px', height: '163px'}}>
             <div className="section-one">
                 <div className="top">
-                    <div className="top-left">
+                    <div className="top-left-mini">
                             <img id={`primaryImg${index}`} className="primary-img rotatable" src={`../../../img/images/${prefix}${summaryId}.png`} style={{width: '72px',paddingTop: '0px'}} />
                     </div>
-                    <div className="top-right">
-                        <div className="usp-title"><div className="title" style={{marginTop: '10px'}}>{data.name}</div></div>
-                        {data.type == 'starter' ? <div className="usp-desc">{data.qty} single starter(s)</div> : <div className="usp-desc">{data.qty} {data.size} pizza(s)</div>}
+                    <div className="top-right-mini">
+                        <div className="usp-title"><div className="title" style={{marginTop: '-10px'}}>{data.name}</div></div>
+                        {data.type == 'starter' ? <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} single starter(s)</div> : <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} {data.size} pizza(s)</div>}
                     </div>
                 </div>
             </div>
@@ -417,6 +413,7 @@ class Dashboard extends Component {
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
             orderSavings: 0,
+            qty: 0,
             loggedIn: localStorage.getItem('club-user-email') != null
         };
         this.fetchJson();
@@ -544,7 +541,7 @@ class Dashboard extends Component {
                 var res = http.responseText;
                 if(!pincode.includes('560') || !this.slotsAvailable) {
                     alert('Sorry, our slots are full. Pls check back again later!');
-                    location.href = '/';
+                    location.href = '/club';
                 }
                 if(res != null){
                     res = JSON.parse(res);
@@ -764,11 +761,11 @@ class Dashboard extends Component {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         console.log('::results::', results);
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
-                    <img className='club-logo' src="../img/images/offer.png" />
-                    <span className='club'>Club</span>
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px',zIndex:'-1'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img className='club-logo' src="../img/images/offer.png" style={{zIndex:'-1'}} />
+                    <span className='club'  style={{zIndex:'-1'}}>Club</span>
                     <div id="checkoutHeader">
-                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-20px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
+                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-40px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
                             <div className=""></div>
                             <div id="checkoutCount" class="c-count">0</div>
                         </div>
@@ -837,37 +834,20 @@ class Dashboard extends Component {
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
                                                         {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
+                                                        {this.state.orderSavings == 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Place your order with best of savings!</span>}
                                                         <br/>
                                                        
                                                        
                                                        
                                                         <div className={`main fadeInBottom ${this.state.showList}`}>
-                        <div id="discountModal" className="card-container checkout-modal modal-show" style={{top:'74px'}}>
-                            <div className="modal-heading">
-                                <div className="left">
-                                    Coupon Code
-                                </div>
-                                <div className="right" onClick={()=>{document.getElementById('discountModal').style.top='1200px';}}>
-                                    <img src="../../../img/images/ic_close.png" />
-                                </div>
-                                <div className="checkout-content" style={{height: 'calc(100% - 350px)', marginTop:'30px'}}>
-                                    <div class="title">
-                                        <div>Have a coupon code?</div>
-                                        <input id="discountCodeText" type="text" className="step-input" placeholder="Enter coupon code" style={{marginTop: '100px',color: '#000', height: '38px'}}/>
-                                        <div id="applyDiscountBtn" className="card-btn coupon-btn" onClick={()=>{localStorage.setItem('discountCode',document.getElementById('discountCodeText').value);location.reload();}}>Apply
-                                            <div className=""></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div id="checkoutModal" className="card-container checkout-modal modal-show">
                             <div className="modal-heading">
                                 <div className="right" onClick={()=>{document.getElementById('checkoutModal').style.top='1200px';this.setState({activeStep: 1, showCoupon: false, showSlot: false, couponApplied: false});}}>
                                     <img src="../../../img/images/ic_close.png" />
                                 </div>
                             </div>
-                            <div className="md-stepper-horizontal orange">
+                            <div className="md-stepper-horizontal orange" style={{marginTop:'56px'}}>
                                 <div id="step1" className="md-step">
                                   <div className="md-step-circle active"><span>1</span></div>
                                   <div className="md-step-title">Order Summary</div>
@@ -888,7 +868,7 @@ class Dashboard extends Component {
                                 </div>
                               </div>
                               {this.state.activeStep == 1 &&
-                              <div className="checkout-content" style={{height: 'calc(100% - 350px)', overflowY: 'scroll'}}>
+                              <div className="checkout-content" style={{height: '312px', overflowY: 'scroll'}}>
                                 {orderSummary && Object.keys(orderSummary).map((index) => {
                                     if(typeof index !== 'undefined') {
                                         let sumId = index;
@@ -904,7 +884,7 @@ class Dashboard extends Component {
                                     <div className=""></div>
                                 </div>
                               </div>}
-                              {this.state.showCoupon &&
+                              {this.state.showCoupon == true &&
                                 <div className="checkout-content">
                                     <div className="card-container small" style={{padding: '0px 12px 0px 12px'}}>
                                         <div className="section-one">
