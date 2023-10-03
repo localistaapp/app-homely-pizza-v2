@@ -1406,7 +1406,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
-            client.query("Select locality from store where franchise_id = "+franchiseId,
+            client.query("Select id, locality, accepting_online_orders from store where franchise_id = "+franchiseId,
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
@@ -1416,7 +1416,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
                                  if (response.rows.length == 0) {
                                     res.send("error");
                                  } else {
-                                    res.send(response.rows[0].locality);
+                                    res.send(response.rows);
                                  }
                               }
                             });
@@ -1581,6 +1581,57 @@ app.post('/createStore', function(req, res) {
                             }
 
                           });
+    }
+  })
+})
+
+app.post('/store/web-order', function(req, res) {
+  
+  const price = req.body.price;
+  const mobile = req.body.mobile;
+  const name = req.body.name;
+  const slot = req.body.slot;
+  const items = req.body.items;
+  const pincode = req.body.pincode;
+  const schedule = req.body.schedule;
+  const address = req.body.address;
+  const clubCode = req.body.clubCode;
+  const storeId = req.body.storeId;
+  let userId = 0;
+
+  console.log('--items--', items);
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+
+      client.query("select id from club_user where customer_code = '"+clubCode+"'",
+      [], (err, response) => {
+            if (err) {
+              console.log(err)
+               res.send("error");
+            } else {
+              if(response.rows && response.rows.length > 0) {
+                  userId = response.rows[0].id;
+              }
+
+          client.query("INSERT INTO \"public\".\"online_order\"(name, mobile, address, delivery_pincode, delivery_schedule, delivery_timeslot, \"order\", price, user_id, store_id) VALUES('"+name+"', '"+mobile+"', '"+address+"', '"+pincode+"', '"+schedule+"', '"+slot+"', '"+items+"', '"+price+"', '"+userId+"', '"+storeId+"')",
+                      [], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                res.send("success");
+                            }
+
+                          });
+
+                        }
+      });
+                        
     }
   })
 })
@@ -1838,6 +1889,32 @@ app.post('/updateStoreOrder/status/:status', function(req, res) {
 
 })
 
+app.post('/updateStoreWebOrder/:status', function(req, res) {
+  const status = req.params.status;
+  const storeId = req.body.storeId;
+  const mode = req.body.mode;
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+          console.log('connected');
+          client.query("UPDATE \"public\".\"store\" SET accepting_online_orders = $1 where id = $2",
+            [status, storeId], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                    res.send("error");
+                  } else {
+                      res.send('{"storeId":"'+storeId+'"}');
+                  }
+
+                });
+          }
+    });
+
+})
+
 app.post('/updateStoreInventory', function(req, res) {
   const basil_qty = req.body.basil_qty;
   const capsicum_qty = req.body.capsicum_qty;
@@ -1890,6 +1967,27 @@ app.get('/franchises', function(req, res) {
     } else {
       console.log('connected');
       client.query("select owner_name,id from franchise",
+                  [], (err, response) => {
+                        if (err) {
+                          console.log(err)
+                            res.send("error");
+                        } else {
+                          res.send(response.rows);
+                        }
+                  });
+
+      }});
+});
+
+app.get('/store/get/:clubCode', function(req, res) {
+  let clubCode = req.params.clubCode;
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id in (select store_id from store_order where user_id in (select id from club_user where customer_code='"+clubCode+"'))",
                   [], (err, response) => {
                         if (err) {
                           console.log(err)

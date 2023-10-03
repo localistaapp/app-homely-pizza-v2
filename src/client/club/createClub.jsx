@@ -83,7 +83,9 @@ class ReviewContainer extends Component {
                         document.getElementById('checkoutHeader').style.display = 'none';
                     }
                 } else {
-                    basketData[e.detail.itemId] = e.detail;
+                    if (e.detail.qty > 0) {
+                        basketData[e.detail.itemId] = e.detail;
+                    }
                 }
             }
 
@@ -367,26 +369,30 @@ class SummaryCard extends Component {
         if(data.type && data.type == 'starter') {
             prefix = 'g';
         }
-        return (
-        <div className="card-container small" style={{padding: '0px 12px 0px 12px', height: '163px'}}>
-            <div className="section-one">
-                <div className="top">
-                    <div className="top-left-mini">
-                            <img id={`primaryImg${index}`} className="primary-img rotatable" src={`../../../img/images/${prefix}${summaryId}.png`} style={{width: '72px',paddingTop: '0px'}} />
-                    </div>
-                    <div className="top-right-mini">
-                        <div className="usp-title"><div className="title" style={{marginTop: '-10px'}}>{data.name}</div></div>
-                        {data.type == 'starter' ? <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} single starter(s)</div> : <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} {data.size} pizza(s)</div>}
+        if (data.qty == 0) {
+            return null;
+        } else {
+            return (
+            <div className="card-container small" style={{padding: '0px 12px 0px 12px', height: '163px'}}>
+                <div className="section-one">
+                    <div className="top">
+                        <div className="top-left-mini">
+                                <img id={`primaryImg${index}`} className="primary-img rotatable" src={`../../../img/images/${prefix}${summaryId}.png`} style={{width: '72px',paddingTop: '0px'}} />
+                        </div>
+                        <div className="top-right-mini">
+                            <div className="usp-title"><div className="title" style={{marginTop: '-10px'}}>{data.name}</div></div>
+                            {data.type == 'starter' ? <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} single starter(s)</div> : <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} {data.size} pizza(s)</div>}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="section-two small">
-                <div className="pricing"><label className="price"><span className="slashed" id={`price${index}`}>{data.price}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" id={`priceNew${index}`}>{isValidCoupon() ? Math.ceil(Math.round(data.price*0.85) / 10) * 10 : Math.ceil(Math.round(data.price) / 10) * 10}</span></label></div>
-                <div className="top">
+                <div className="section-two small">
+                    <div className="pricing"><label className="price"><span className="slashed" id={`price${index}`}>{data.price}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" id={`priceNew${index}`}>{isValidCoupon() ? Math.ceil(Math.round(data.price*0.85) / 10) * 10 : Math.ceil(Math.round(data.price) / 10) * 10}</span></label></div>
+                    <div className="top">
+                    </div>
                 </div>
-            </div>
-        </div>)
+        </div>);
+        }
     }
 }
 
@@ -414,11 +420,26 @@ class Dashboard extends Component {
             clubUserSrc: '',
             orderSavings: 0,
             qty: 0,
+            storeAcceptingOrders: false,
+            showDeliveryOptions: false,
+            deliveryNotSupported: false,
+            onlineOrdersTimings: {},
+            currDayTimings: [],
+            showOrderConfirmationMsg: false,
             loggedIn: localStorage.getItem('club-user-email') != null
         };
+        window.weekdays = new Array(7);
+        window.weekdays[0] = "Sunday";
+        window.weekdays[1] = "Monday";
+        window.weekdays[2] = "Tuesday";
+        window.weekdays[3] = "Wednesday";
+        window.weekdays[4] = "Thursday";
+        window.weekdays[5] = "Friday";
+        window.weekdays[6] = "Saturday";
         this.fetchJson();
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
+        this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
@@ -473,6 +494,8 @@ class Dashboard extends Component {
                   .then(function (response) {
                     this.setState({starters: response.data.results});
                   }.bind(this));
+
+        this.isStoreAcceptingOrders();
     }
     getTotal() {
         let orderSummary = this.state.orderSummary;
@@ -512,51 +535,64 @@ class Dashboard extends Component {
         var slot = e.options[e.selectedIndex].value;
         window.currSlotSelected = slot;
     }
-    captureAddress() {
+    captureSchedule() {
         let pincode = document.getElementById('dPincode').value;
-
-        let address = document.getElementById('dAddress').value;
-        let mobile = document.getElementById('dMobile').value;
-        let name = document.getElementById('dName').value;
-        localStorage.setItem('dPincode',pincode);
-        localStorage.setItem('dAddress',address);
-        localStorage.setItem('dMobile',mobile);
-        localStorage.setItem('dName',name);
+        let deliverySchedule = 'unknown';
+        let deliveryTimeSlot = 'unknown';
+        if (document.getElementById('deliverNow').checked) {
+            deliverySchedule = 'now';
+        } else if (document.getElementById('deliverSchedule').checked) {
+            deliverySchedule = 'later';
+            deliveryTimeSlot = document.getElementById('slot').options[document.getElementById('slot').selectedIndex].value;
+        }
+        sessionStorage.setItem('delivery-pincode',pincode);
+        sessionStorage.setItem('delivery-schedule',deliverySchedule);
+        sessionStorage.setItem('delivery-timeslot',deliveryTimeSlot);
+        this.setState({activeStep: 3, showSlot: true});
+    }
+    captureAddress() {
+        let deliveryPincode = sessionStorage.getItem('delivery-pincode');
+        let deliverySchedule = sessionStorage.getItem('delivery-schedule');
+        let deliveryTimeslot = sessionStorage.getItem('delivery-timeslot');
+        let deliveryAddress = document.getElementById('dAddress').value;
+        let deliveryMobile = document.getElementById('dMobile').value;
+        let deliveryName = document.getElementById('dName').value;
+        let storeId = localStorage.getItem('storeId');
+        let clubCode = localStorage.getItem('clubCode');
+        
+        sessionStorage.setItem('dAddress',deliveryAddress);
+        sessionStorage.setItem('dMobile',deliveryMobile);
+        sessionStorage.setItem('dName',deliveryName);
         let price = localStorage.getItem('dPrice');
-        let slot = sessionStorage.getItem('deliverySlot') != null ? sessionStorage.getItem('deliverySlot') : '';
         let summary = localStorage.getItem('basket');
-        let referralCode = localStorage.getItem('discountCode');
-        let eOrderId = sessionStorage.getItem('eventOrderId');
+
+        this.setState({showOrderConfirmationMsg: true});
+        document.getElementById('checkoutBtnStep11').style.display = 'none';
+        document.getElementById('checkoutBtnStep12').style.display='block';
+
         summary = summary != null ? summary : '';
         //create order
         var http = new XMLHttpRequest();
-        var url = '/homelyOrder';
-        var params = 'dPrice='+price+'&dMobile='+localStorage.getItem('dMobile')+'&dName='+localStorage.getItem('dName')+'&dSlot='+slot+'&dItems='+summary+'&dPincode='+pincode+'&referralCode='+referralCode+'&dAddress='+address+'&eOrderId='+eOrderId;
+        var url = '/store/web-order';
+        var params = 'storeId='+storeId+'&clubCode='+clubCode+'&price='+price+'&mobile='+deliveryMobile+'&name='+deliveryName+'&slot='+deliveryTimeslot+'&items='+summary+'&pincode='+deliveryPincode+'&schedule='+deliverySchedule+'&address='+deliveryAddress;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
+        document.getElementById('step3Circle').classList.add('active');this.setState({showSlot: true, activeStep: 3});
         http.onreadystatechange = function() {//Call a function when the state changes.
             if(http.readyState == 4 && http.status == 200) {
                 console.log('order creation post response:', http.responseText);
                 var res = http.responseText;
-                if(!pincode.includes('560') || !this.slotsAvailable) {
-                    alert('Sorry, our slots are full. Pls check back again later!');
-                    location.href = '/club';
+                if(res.indexOf('error')>=0) {
+                    alert('There was an error creating your order! Please try again.');
+                } else {
+                    if(res != null) {
+                        console.log('---order created---', res);
+                    }
                 }
-                if(res != null){
-                    res = JSON.parse(res);
-                    /*if(res.whitelisted == false) {
-                        alert("Sorry, we're not able to deliver to your location temporarily!");
-                        this.setState({activeStep: 2});
-                    } else {*/
-                        document.getElementById('step3Circle').classList.add('active');this.setState({showSlot: true, activeStep: 3});
-                        localStorage.setItem('orderId', res.orderId);
-                    /*}*/
-                }
+                
             }
         }.bind(this);
         http.send(params);
-        fbq('track', 'InitiateCheckout');
     }
     makePaymentRequest() {
         //uncomment
@@ -721,6 +757,14 @@ class Dashboard extends Component {
         }.bind(this);
         http.send(params);
     }
+    isStoreAcceptingOrders() {
+        axios.get(`/store/get/${localStorage.getItem('clubCode')}`)
+          .then(function (response) {
+            console.log('storeAcceptingOrders-----', response.data);
+            this.setState({onlineOrdersTimings:response.data[0].online_orders_timings, storeAcceptingOrders: response.data[0].accepting_online_orders == 'Y' ? true: false, onlineOrdersPinCodes: response.data[0].online_orders_pincodes});
+          }.bind(this));
+        return true;
+    }
     onboardClubUser() {
         var http = new XMLHttpRequest();
         var url = '/onboardClubUser';
@@ -755,6 +799,24 @@ class Dashboard extends Component {
             }
         }.bind(this);
         http.send(params);
+    }
+    checkDeliveryOptions() {
+        if (this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>0) {
+            var curDay = weekdays[new Date().getDay()].toLowerCase();
+            if (this.state.onlineOrdersTimings.hasOwnProperty(curDay) && this.state.onlineOrdersTimings[curDay].length > 0) {
+                console.log('--schedule--', this.state.onlineOrdersTimings[curDay]);
+                this.setState({currDayTimings: this.state.onlineOrdersTimings[curDay]});
+
+                this.setState({showDeliveryOptions: true, deliveryNotSupported: false});
+                document.getElementById('checkoutBtnStep2').style.display = 'block';
+            } else {
+                this.setState({showDeliveryOptions: false, deliveryNotSupported: true});
+                document.getElementById('checkoutBtnStep2').style.display = 'none';
+            }
+        } else {
+            this.setState({showDeliveryOptions: false, deliveryNotSupported: true});
+            document.getElementById('checkoutBtnStep2').style.display = 'none';
+        }
     }
 
     render() {
@@ -856,13 +918,13 @@ class Dashboard extends Component {
                                 </div>
                                 <div id="step2" className="md-step">
                                   <div className="md-step-circle" id="step2Circle"><span>2</span></div>
-                                  <div className="md-step-title">Delivery Address</div>
+                                  <div className="md-step-title">Delivery Schedule</div>
                                   <div className="md-step-bar-left"></div>
                                   <div className="md-step-bar-right"></div>
                                 </div>
                                 <div id="step3" className="md-step">
                                   <div className="md-step-circle" id="step3Circle"><span>3</span></div>
-                                  <div className="md-step-title">Make Payment</div>
+                                  <div className="md-step-title">Delivery Details</div>
                                   <div className="md-step-bar-left"></div>
                                   <div className="md-step-bar-right"></div>
                                 </div>
@@ -919,58 +981,94 @@ class Dashboard extends Component {
                                             <div className="section-one">
                                                 <div className="top">
                                                     <div className="top-right">
-                                                        <div className="usp-title">
-                                                            <input id="dPincode" type="text" className="step-input" placeholder="Your pincode"/>
-                                                            <textarea id="dAddress" className="step-input" className="step-input step-textarea" placeholder="Delivery address (with landmark)" />
-                                                            <input id="dMobile" type="text" className="step-input" placeholder="Mobile number" style={{top:'198px'}}/>
-                                                            <input id="dName" type="text" className="step-input" placeholder="Your full name" style={{top:'238px'}}/>
-                                                        </div>
+                                                    <img src="../img/images/delivery.png" className="delivery-icon" style={{marginTop: '12px'}}/>
+
+                                                    <span className="title-ff" style={{top:'6px', padding: '10px', lineHeight: '22px', width: '260px'}}>Share your pincode to check delivery options:</span>
+
                                                     </div>
                                                 </div>
+                                                <div className="top-right" style={{marginTop: '70px'}}>
+                                              
+                                              <div className="usp-title" style={{left: '0',right: '0',margin: '0 auto'}}>
+                                                  <div className="usp-title">
+                                                            <input id="dPincode" type="text" className="step-input" placeholder="Your pincode" style={{left: '20px',top: '0px'}}/>
+                                                            <input type="button" class="pincode-btn" value="Check Options" onClick={this.checkDeliveryOptions} />
+                                                        </div>
+                                                  <div className="delivery-section" style={{top:'50px', display: `${this.state.showDeliveryOptions == true ? 'block' : 'none'}`}}>
+                                                    {this.state.storeAcceptingOrders == true && <div class="radios">
+                                                        <input type="radio" id="deliverNow" name="deliveryTime" value="deliverNow" checked/>
+                                                        <label for="deliverNow" style={{color:'green'}}>Deliver Now (Delivery in 30 minutes)</label><br/>
+                                                        <input type="radio" id="deliverSchedule" name="deliveryTime" value="deliverSchedule" style={{marginTop: '14px'}} selected />
+                                                        <label for="deliverSchedule">Deliver Later</label>
+                                                    </div>}
+                                                      <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '40px'}}>
+                                                          <span>Select your time slot for delivery today:</span>
+                                                          
+                                                      </div>
+                                                      <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '30px'}}>
+                                                          <select name="slot" id="slot" style={{height:'36px',marginLeft: '10px'}} className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
+                                                              {this.state.currDayTimings && this.state.currDayTimings.map((item)=> {
+                                                                return (<option value={item}>{item}</option>)
+                                                              })}
+                                                            </select>
+                                                      </div>
+                                                      <div className="slot"></div>
+                                                  </div>
+                                                  <div className="delivery-section msg" style={{top:'50px', display: `${this.state.deliveryNotSupported == true ? 'block' : 'none'}`}}>
+                                                    
+                                                      <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '6px'}}>
+                                                          <span>Sorry! We don't have any of your nearby stores accepting online orders at the moment.</span>
+                                                          
+                                                      </div>
+                                                      
+                                                      <div className="slot"></div>
+                                                  </div>
+                                                  <br/>
+                                              </div>
+                                          </div>
                                             </div>
 
 
                                         </div>
 
-                                <div id="checkoutBtnStep2" className="card-btn checkout" style={{top: '532px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step2').classList.add('done');this.captureAddress();}}>Next&nbsp;→
+                                <div id="checkoutBtnStep2" className="card-btn checkout" style={{top: '532px', marginTop: 'auto', display: 'none'}} onClick={()=>{document.getElementById('step2').classList.add('done');this.captureSchedule();}}>Next&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
                               {this.state.showSlot &&
                               <div className="checkout-content">
-                                  <div className="card-container small" style={{padding: '0px 12px 0px 12px', minHeight: '246px'}}>
+                                  <div className="card-container small" style={{padding: '0px 12px 0px 12px', minHeight: '246px',display: `${!this.state.showOrderConfirmationMsg ? 'block' : 'none'}`}}>
                                       <div className="section-one">
-                                          <div className="top-right">
-                                              <img src="../img/images/delivery.png" className="delivery-icon" />
-                                              <div className="usp-title" style={{left: '0',right: '0',margin: '0 auto'}}>
-                                                  <span className="title-ff" style={{top:'-14px', padding: '20px', lineHeight: '22px'}}>When should we deliver your sample order?</span>
-                                                  <div className="delivery-section">
-                                                      <div className="deliver-cell" style={{marginTop: '60px'}}>
-                                                          <span>Date:</span><input type="date" value={this.state.deliveryDate} onChange={(e)=>{this.setState({deliveryDate:e.target.value});sessionStorage.setItem('deliveryDate',e.target.value);}}/>
-                                                      </div>
-                                                      <div className="deliver-cell" style={{marginTop: '12px'}}>
-                                                        <span>Slot:</span>
-                                                          <select name="slot" id="slot" className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
-                                                              <option value="Saturday 6pm to 7p">Saturday 6pm to 7pm</option>
-                                                              <option value="Saturday 7pm to 8pm">Saturday 7pm to 8pm</option>
-                                                              <option value="Saturday 8pm to 9pm">Saturday 8pm to 9pm</option>
-                                                              <option value="Saturday 9pm to 10pm">Saturday 9pm to 10pm</option>
-                                                              <option value="Sunday 6pm to 7p">Sunday 6pm to 7pm</option>
-                                                              <option value="Sunday 7pm to 8pm">Sunday 7pm to 8pm</option>
-                                                              <option value="Sunday 8pm to 9pm">Sunday 8pm to 9pm</option>
-                                                              <option value="Sunday 9pm to 10pm">Sunday 9pm to 10pm</option>
-                                                            </select>
-                                                      </div>
-                                                      <div className="slot"></div>
-                                                  </div>
-                                                  <br/>
-                                                  <span className="title-ff" style={{top: '210px', padding: '20px', lineHeight: '22px', fontWeight: 'normal', fontSize: '15px', marginLeft: '4px'}}>Proceed to next step to make payment.</span>
-                                              </div>
-                                          </div>
+                                      <div className="top">
+                                                    <div className="top-right" style={{width: '90%'}}>
+                                                        <div className="usp-title" style={{left: '0px', top: '-68px',width: '100%'}}>
+                                                            <textarea id="dAddress"  style={{width: '100%'}} className="step-input" className="step-input step-textarea" placeholder="Delivery address (with landmark)" />
+                                                            <input id="dMobile" type="text" className="step-input" placeholder="Mobile number" style={{top:'198px',width: '100%'}}/>
+                                                            <input id="dName" type="text" className="step-input" placeholder="Your full name" style={{top:'238px',width: '100%'}}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                       </div>
+                                      <div className="deliver-cell" style={{marginTop: '104px', marginLeft: '6px', fontSize: '14px', paddingBottom: '24px', color:'#6c4c00'}}>
+                                                          <span>*You may use any payment mode to pay the delivery agent on delivery of your order.</span>
+                                                          
+                                                      </div>
                                   </div>
 
-                                      <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '532px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step2').classList.add('active');document.getElementById('step3Circle').classList.add('active');this.setState({showCoupon: false, showSlot: false, activeStep: 3});this.makePaymentRequest();}}>Next&nbsp;→
+                                  <div className="card-container small" style={{display: `${this.state.showOrderConfirmationMsg ? 'block' : 'none'}`,padding: '0px 12px 0px 12px', minHeight: '246px'}}>
+                                      <div className="section-one">
+                                      <div className="deliver-cell" style={{marginLeft: '6px', fontSize: '14px', paddingBottom: '24px', color:'#6c4c00', margin: '0 auto',width: '64px', marginTop: '36px',textAlign: 'center'}}>
+                                                          <img src="../img/images/icheck.png" style={{width: '64px'}} />  
+                                                          <span className="order-conf-msg">Thank you for your order! Our delivery agent will contact you as per your selected delivery time.</span>
+                                                          
+                                                      </div>
+                                    </div>
+                                  </div>
+
+                                      <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '548px', marginTop: 'auto', width: '190px'}} onClick={()=>{document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.add('done');document.getElementById('step3Circle').classList.add('active');this.captureAddress();}}>Complete Order&nbsp;→
+                                          <div className=""></div>
+                                      </div>
+                                      <div id="checkoutBtnStep12" className="card-btn checkout home-btn" style={{top: '548px', marginTop: 'auto', width: '190px', display: 'none'}} onClick={()=>{window.location.href='/club';}}>←&nbsp;Back Home
                                           <div className=""></div>
                                       </div>
                               </div>

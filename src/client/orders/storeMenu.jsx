@@ -3,12 +3,13 @@ import axios from 'axios';
 import { render } from 'react-dom';
 import { Link, withRouter } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Switch from '@material-ui/core/Switch';
 
 import RestaurantIcon from '@material-ui/icons/Business';
 import OrdersIcon from '@material-ui/icons/ViewListSharp';
@@ -23,6 +24,20 @@ import Button from '@material-ui/core/Button';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: '#fff',
+    '&$checked': {
+      color: '#19a836',
+    },
+    '&$checked + $track': {
+      backgroundColor: '#19a836',
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const useStyles = makeStyles({
   root: {
@@ -79,8 +94,10 @@ class Dashboard extends Component {
             selectedLocality: '',
             nearby: [],
             storeName: '',
-            storeNotExists: false
+            storeNotExists: false,
+            accepting: false,
         };
+        this.handleToggle = this.handleToggle.bind(this);
         window.currSlotSelected = '';
         this.styles = [{
           "featureType": "road",
@@ -110,7 +127,9 @@ class Dashboard extends Component {
           axios.get('/store/name/'+franchiseId)
                 .then(function (response) {
                   if(response.data.indexOf('error') == -1) {
-                      this.setState({storeName: '('+response.data+')'});
+                    console.log('--store res--', response.data);
+                    let res = response.data;
+                    this.setState({storeId: res[0].id,storeName: '('+res[0].locality+')', accepting: res[0].accepting_online_orders == 'N' ? false : true});
                   } else {
                     this.setState({storeNotExists: true});
                   }
@@ -119,6 +138,37 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         this.getStoreName();
+    }
+    handleToggle(event) {
+      this.setState({accepting: event.target.checked });
+      this.updateOnlineStatus(event.target.checked);
+    };
+    updateOnlineStatus(newStatus) {
+        var accepting = newStatus ? 'Y' : 'N';
+        //create store
+        var http = new XMLHttpRequest();
+        var url = 'updateStoreWebOrder/'+accepting;
+        var params = '&storeId='+this.state.storeId;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res.indexOf('error') >= 0){
+                    alert('Sorry! Unable to update status.');
+                } else if(res != null){
+                    res = JSON.parse(res);
+                    if(res.storeId != null) {
+                      alert('Order status updated successfuly!');
+                    } else {
+                        alert('Sorry! Unable to update status');
+                    }
+                }
+            }
+        }.bind(this);
+        http.send(params);
     }
     render() {
 
@@ -136,7 +186,19 @@ class Dashboard extends Component {
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-store-order';}}>Create Order</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
-                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}> Web Orders (0)</span>
+                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}> 
+                Web Orders (0) 
+                </span>
+                <div className='accepting'>
+                <GreenSwitch
+                  checked={this.state.accepting}
+                  onChange={this.handleToggle}
+                  color="primary"
+                  name="checkedB"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
+                <span>{this.state.accepting ? 'Accepting': 'Off'}</span>
+                </div>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-inventory';}}>
                     Inventory</span>
