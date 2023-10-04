@@ -494,8 +494,10 @@ class Dashboard extends Component {
                   .then(function (response) {
                     this.setState({starters: response.data.results});
                   }.bind(this));
-
-        this.isStoreAcceptingOrders();
+        if (localStorage.getItem('club-user-email') != null) {
+            this.isStoreAcceptingOrders();
+        }
+        
     }
     getTotal() {
         let orderSummary = this.state.orderSummary;
@@ -722,11 +724,13 @@ class Dashboard extends Component {
             
             return;
         } else {
-            email = user.email;
-            name = user.name;
-            picture = user.picture;
-            localStorage.setItem('club-user-pic',user.picture);
-            this.setState({clubUserSrc: picture});
+            if (user) {
+                email = user.email;
+                name = user.name;
+                picture = user.picture;
+                localStorage.setItem('club-user-pic',user.picture);
+                this.setState({clubUserSrc: picture});
+            }
         }
         
         //create order
