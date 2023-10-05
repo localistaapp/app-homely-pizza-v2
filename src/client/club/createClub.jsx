@@ -414,7 +414,7 @@ class Dashboard extends Component {
             showWizard: '',
             numVistors: 0,
             mobileNum: '',
-            curStep: 3,
+            curStep: 0,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
@@ -701,11 +701,11 @@ class Dashboard extends Component {
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     login(user) {
-        user = {
+        /*user = {
             email: "sampath.oops@gmail.com",
             name: "Sampath Kumar",
             picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
-        }
+        }*/
         var email = '';
         var name = '';
         var picture = '';
@@ -878,7 +878,7 @@ class Dashboard extends Component {
                                                         <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
-                                                        {this.login() && localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
                                                         <br/>
