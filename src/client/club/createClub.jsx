@@ -414,7 +414,7 @@ class Dashboard extends Component {
             showWizard: '',
             numVistors: 0,
             mobileNum: '',
-            curStep: 0,
+            curStep: 3,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
@@ -701,11 +701,11 @@ class Dashboard extends Component {
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
     login(user) {
-        /*user = {
+        user = {
             email: "sampath.oops@gmail.com",
             name: "Sampath Kumar",
             picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
-        }*/
+        }
         var email = '';
         var name = '';
         var picture = '';
@@ -805,7 +805,7 @@ class Dashboard extends Component {
         http.send(params);
     }
     checkDeliveryOptions() {
-        if (this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>0) {
+        if (this.state.onlineOrdersPinCodes && this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>0) {
             var curDay = weekdays[new Date().getDay()].toLowerCase();
             if (this.state.onlineOrdersTimings.hasOwnProperty(curDay) && this.state.onlineOrdersTimings[curDay].length > 0) {
                 console.log('--schedule--', this.state.onlineOrdersTimings[curDay]);
@@ -878,7 +878,7 @@ class Dashboard extends Component {
                                                         <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
-                                                        {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        {this.login() && localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
                                                         <br/>
@@ -944,9 +944,9 @@ class Dashboard extends Component {
                                     }
                                 })}
                                 <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
-                                    <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl GST + delivery charges)</div>
+                                    <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl GST + delivery apprx.)</div>
                                 </div>
-                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '60px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 2});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
+                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 2});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
@@ -1035,13 +1035,13 @@ class Dashboard extends Component {
 
                                         </div>
 
-                                <div id="checkoutBtnStep2" className="card-btn checkout" style={{top: '532px', marginTop: 'auto', display: 'none'}} onClick={()=>{document.getElementById('step2').classList.add('done');this.captureSchedule();}}>Next&nbsp;→
+                                <div id="checkoutBtnStep2" className="card-btn checkout" style={{top: '569px', marginTop: 'auto', display: 'none'}} onClick={()=>{document.getElementById('step2').classList.add('done');this.captureSchedule();}}>Next&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
                               {this.state.showSlot &&
                               <div className="checkout-content">
-                                  <div className="card-container small" style={{padding: '0px 12px 0px 12px', minHeight: '246px',display: `${!this.state.showOrderConfirmationMsg ? 'block' : 'none'}`}}>
+                                  <div className="card-container small" style={{position:'absolute',left:'20px',padding: '0px 12px 0px 12px', minHeight: '246px',display: `${!this.state.showOrderConfirmationMsg ? 'block' : 'none'}`}}>
                                       <div className="section-one">
                                       <div className="top">
                                                     <div className="top-right" style={{width: '90%'}}>
