@@ -96,6 +96,7 @@ class Dashboard extends Component {
             storeName: '',
             storeNotExists: false,
             accepting: false,
+            webOrderCount: 0
         };
         this.handleToggle = this.handleToggle.bind(this);
         window.currSlotSelected = '';
@@ -129,7 +130,7 @@ class Dashboard extends Component {
                   if(response.data.indexOf('error') == -1) {
                     console.log('--store res--', response.data);
                     let res = response.data;
-                    this.setState({storeId: res[0].id,storeName: '('+res[0].locality+')', accepting: res[0].accepting_online_orders == 'N' ? false : true});
+                    this.setState({storeId: res[0].id,storeName: '('+res[0].locality+')', accepting: res[0].accepting_online_orders == 'N' ? false : true, webOrderCount: res[0].count});
                   } else {
                     this.setState({storeNotExists: true});
                   }
@@ -186,8 +187,8 @@ class Dashboard extends Component {
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-store-order';}}>Create Order</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
-                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}> 
-                Web Orders (0) 
+                <span className="stage-desc" onClick={()=>{window.location.href='/web-orders';}}> 
+                Web Orders <span className="notif"><span>{this.state.webOrderCount}</span></span> 
                 </span>
                 <div className='accepting'>
                 <GreenSwitch

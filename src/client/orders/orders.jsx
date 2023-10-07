@@ -17,6 +17,7 @@ import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import StoreMenu from'./storeMenu.jsx';
 import Enquiries from './enquiries.jsx';
+import WebOrders from './webOrders.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
 
@@ -36,6 +37,7 @@ var CreateStoreWithRouter = withRouter(CreateStore);
 var CreateStoreOrderWithRouter = withRouter(CreateStoreOrder);
 var PayStoreOrderWithRouter = withRouter(PayStoreOrder);
 var StoreInventoryWithRouter = withRouter(StoreInventory);
+var WebOrdersWithRouter = withRouter(WebOrders);
 
 render(<Router>
     <div>
@@ -88,6 +90,11 @@ render(<Router>
                     <div className="results">
                             <Route exact path="/" component={EnquiriesWithRouter} />
                         <Route  path="/dashboard-enquiries" component={EnquiriesWithRouter} />
+                    </div>)} />
+        <Route path="/web-orders" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={WebOrdersWithRouter} />
+                        <Route  path="/web-orders" component={WebOrdersWithRouter} />
                     </div>)} />
         <Route path="/store-location-planner" exact render={() => (
                     <div className="results">

@@ -810,6 +810,10 @@ app.get("/dashboard-enquiries/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/web-orders/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1406,7 +1410,36 @@ app.get("/store/name/:franchiseId", function(req, res) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
-            client.query("Select id, locality, accepting_online_orders from store where franchise_id = "+franchiseId,
+            client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                 } else {
+                                    res.send(response.rows);
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
+app.get("/web-orders/:franchiseId", function(req, res) {
+  let franchiseId = req.params.franchiseId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+            client.query("Select o.id, o.name, o.mobile, o.address, o.delivery_pincode, o.delivery_schedule, o.delivery_timeslot, o.price, o.created_at, o.order from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId+" group by s.id, o.id",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
