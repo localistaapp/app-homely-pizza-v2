@@ -1410,6 +1410,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
+
             client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
                         [], (err, response) => {
                               if (err) {
@@ -1419,6 +1420,14 @@ app.get("/store/name/:franchiseId", function(req, res) {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("error");
+                                    client.query("Select id, locality from store where franchise_id = "+franchiseId,
+                                      [], (er, r) => {
+                                        if (response.rows.length == 0) {
+                                          res.send("error");
+                                        } else {
+                                          res.send(r.rows);
+                                        }
+                                      });
                                  } else {
                                     res.send(response.rows);
                                  }
