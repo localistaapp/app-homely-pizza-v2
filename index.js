@@ -1421,7 +1421,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
                                  if (response.rows.length == 0) {
                                     client.query("Select id, locality from store where franchise_id = "+franchiseId,
                                       [], (er, r) => {
-                                        if (response.rows.length == 0) {
+                                        if (r.rows.length == 0) {
                                           res.send("error");
                                         } else {
                                           res.send(r.rows);
