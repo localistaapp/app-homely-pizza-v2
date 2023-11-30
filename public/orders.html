@@ -1954,7 +1954,76 @@ div#containerWiz {
     font-family: Quicksand;
     color: #666;
 }
-
+.accordion {
+  margin: 0 auto;
+  width: 80%;
+}
+.accordion .title {
+    padding: 6px 30px;
+    cursor: pointer;
+    transform: translate3d(0, 0, 0);
+    color: white;
+    position: relative;
+    font-size: 20px;
+    background: #f4555a;
+    margin-bottom: -1px;
+    border-bottom: 1px solid #c64132;
+    text-align: left;
+    border-radius: 8px;
+    font-size: 15px;
+}
+.accordion .title::after {
+  content: "+";
+  font-size: 18px;
+  color: white;
+  transition: transform 0.5s ease-in-out;
+  position: absolute;
+  right: 30px;
+  font-family: monospace;
+}
+.accordion .title.is-expanded {
+  transition: background 0.5s;
+  background: #fe1712;
+}
+.accordion .title.is-expanded::after {
+  content: "-";
+  transform: rotate(-360deg);
+}
+.accordion .content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s;
+  margin: 0;
+  padding: 0 30px;
+  border: solid 1px #eeeeee;
+  border-top: 0;
+  background: #f6f6f6;
+}
+.accordion .content p {
+  padding: 30px 0;
+  margin: 0;
+  opacity: 0;
+  transition: 0.5s;
+}
+.accordion .content.is-expanded {
+  max-height: 500px;
+  overflow: hidden;
+}
+.accordion .content.is-expanded p {
+    opacity: 1;
+    font-size: 16px;
+    font-family: Quicksand;
+}
+.accordion .content.is-expanded p input {
+    margin-right: 6px;
+}
+.title .due {
+    position: absolute;
+    float: right;
+    right: 50px;
+    font-size: 12px;
+    padding-top: 4px;
+}
 </style>
     <!-- Basic -->
     <title>Slimcrust - Pizza Process Orchestrator</title>

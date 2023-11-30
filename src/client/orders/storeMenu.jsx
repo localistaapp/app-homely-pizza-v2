@@ -212,11 +212,11 @@ class Dashboard extends Component {
                 <span>{this.state.accepting ? 'Accepting': 'Off'}</span>
                 </div>}
 
-                <hr className="line-light" style={{marginTop: '18px'}}/>
+                {this.state.role == 'SUPERUSER' && <hr className="line-light" style={{marginTop: '18px'}}/>}
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-inventory';}}>
                     Inventory</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
-                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>
+                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-checklist';}}>
                     Checklist</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 
