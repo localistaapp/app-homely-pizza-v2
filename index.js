@@ -1637,7 +1637,7 @@ app.post('/store/web-order', function(req, res) {
   const schedule = req.body.schedule;
   const address = req.body.address;
   const clubCode = req.body.clubCode;
-  const storeId = req.body.storeId;
+  const storeId = 0;
   let userId = 0;
 
   console.log('--items--', items);
@@ -1835,17 +1835,21 @@ app.post('/updateStore', function(req, res) {
 })
 
 app.post('/createStoreOrder', function(req, res) {
-  
   const lat = req.body.storeLat;
   const long = req.body.storeLong;
   const hasReviewed = req.body.hasReviewed == 'true' ? 'y' : 'n';
   const clubCode = req.body.clubCode;
-  const pizzaQty = req.body.pizzaQty;
-  const wrapsQty = req.body.wrapsQty;
-  const breadQty = req.body.breadQty;
+  const pizza1Qty = req.body.pizza1Qty;
+  const pizza2Qty = req.body.pizza2Qty;
+  const pizza3Qty = req.body.pizza3Qty;
+  const pizza4Qty = req.body.pizza4Qty;
+  const pizza5Qty = req.body.pizza5Qty;
+  const pizza6Qty = req.body.pizza6Qty;
+  const pizza7Qty = req.body.pizza7Qty;
+  const pizza8Qty = req.body.pizza8Qty;
   const takeAwayQty = req.body.takeAwayQty;
+  const extraToppingsQty = req.body.extraToppingsQty;
   const franchiseId = req.body.franchiseId;
-
 
   const client = new Client(dbConfig)
   client.connect(err => {
@@ -1874,25 +1878,29 @@ app.post('/createStoreOrder', function(req, res) {
                                                     console.log(err)
                                                      res.send("error");
                                                   } else {
-
-                    const clubUserId = resp.rows[0].id;
-                    //ToDo: Query to read user id based on club code & derive returning customer based on number of store orders for user id before current date
-                    let hasValidCode = true;
-                    const orderJson = "{\"pizzaQty\":"+pizzaQty+", \"wrapsQty\":"+wrapsQty+", \"breadQty\":"+breadQty+", \"takeAwayQty\":"+takeAwayQty+"}";
-                    const totalPrice = PricingService.getTotalPrice(pizzaQty, wrapsQty, breadQty, takeAwayQty, hasValidCode, hasReviewed);
-                    const discountedPrice = PricingService.getDiscountedPrice(pizzaQty, wrapsQty, breadQty, takeAwayQty, hasValidCode, hasReviewed);
-                    const returningCustomer = 'N'; 
                     
-                    client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id",
-                      [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', returningCustomer, clubUserId], (err, response) => {
-                            if (err) {
-                              console.log(err)
-                               res.send("error");
-                            } else {
-                              res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'", "storeId": '+storeId+'}');
-                            }
-                          });
-                        }
+                    let clubUserId = 0; 
+                    if (resp.rows[0] && resp.rows[0].id != null) {                            
+                        clubUserId = resp.rows[0].id;
+                      }
+                        //ToDo: Query to read user id based on club code & derive returning customer based on number of store orders for user id before current date
+                        let hasValidCode = clubUserId != 0;
+                        const orderJson = "{\"pizza1Qty\":"+pizza1Qty+",\"pizza2Qty\":"+pizza2Qty+",\"pizza3Qty\":"+pizza3Qty+",\"pizza4Qty\":"+pizza4Qty+",\"pizza5Qty\":"+pizza5Qty+",\"pizza6Qty\":"+pizza6Qty+",\"pizza7Qty\":"+pizza7Qty+",\"pizza8Qty\":"+pizza8Qty+", \"takeAwayQty\":"+takeAwayQty+", \"extraToppingsQty\":"+extraToppingsQty+"}";
+                        const totalPrice = PricingService.getTotalPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed);
+                        const discountedPrice = PricingService.getDiscountedPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed);
+                        const returningCustomer = 'N'; 
+                        
+                        client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id",
+                          [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', returningCustomer, clubUserId], (err, response) => {
+                                if (err) {
+                                  console.log(err)
+                                  res.send("error");
+                                } else {
+                                  res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'", "storeId": '+storeId+'}');
+                                }
+                              });
+                       
+                      }
                         
                   });
                         

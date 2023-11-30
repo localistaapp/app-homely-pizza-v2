@@ -96,7 +96,8 @@ class Dashboard extends Component {
             storeName: '',
             storeNotExists: false,
             accepting: false,
-            webOrderCount: 0
+            webOrderCount: 0,
+            role: 'USER'
         };
         this.handleToggle = this.handleToggle.bind(this);
         window.currSlotSelected = '';
@@ -125,6 +126,8 @@ class Dashboard extends Component {
     getStoreName() {
       if (sessionStorage.getItem('user-profile') != null) {
           var franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+          var userRole = JSON.parse(sessionStorage.getItem('user-profile'))[0].role;
+          this.setState({role: userRole});
           axios.get('/store/name/'+franchiseId)
                 .then(function (response) {
                   if(response.data.indexOf('error') == -1) {
@@ -181,16 +184,24 @@ class Dashboard extends Component {
             <br/>
           <span className="stage-desc" onClick={()=>{window.location.href='/dashboard';}}><span style={{marginTop:'-6px',position:'absolute',color:'#afafaf'}}>Dashboard > <span style={{color: '#666'}}>Store</span><span>&nbsp; {this.state.storeName}</span></span></span>
                 <hr className="line-light" style={{visibility: 'hidden',marginTop: '8px'}}/>
+
+                {this.state.role == 'SUPERUSER' && <div>
                 <span className="stage-desc">
                   <span class="stage-desc" style={{marginLeft: '0px'}} onClick={()=>{window.location.href='/store-location-planner';}}>Plan</span>{this.state.storeNotExists && <span class="stage-desc" style={{marginLeft: '18px'}} onClick={()=>{if (confirm("Please make sure you're accessing this page from your store's physical location. If not, your store won't be configured correctly. Do you want to proceed?")) {window.location.href = '/dashboard-create-store';}}}>Create Store</span>}
                 </span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
+                </div>}
+
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-store-order';}}>Create Order</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
+
+                {this.state.role == 'SUPERUSER' && <div>
                 <span className="stage-desc" onClick={()=>{window.location.href='/web-orders';}}> 
                 Web Orders <span className="notif"><span>{this.state.webOrderCount}</span></span> 
                 </span>
-                <div className='accepting'>
+                </div>}
+
+                {this.state.role == 'SUPERUSER' && <div className='accepting'>
                 <GreenSwitch
                   checked={this.state.accepting}
                   onChange={this.handleToggle}
@@ -199,7 +210,8 @@ class Dashboard extends Component {
                   inputProps={{ 'aria-label': 'primary checkbox' }}
                 />
                 <span>{this.state.accepting ? 'Accepting': 'Off'}</span>
-                </div>
+                </div>}
+
                 <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-inventory';}}>
                     Inventory</span>
@@ -207,8 +219,11 @@ class Dashboard extends Component {
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>
                     Checklist</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
+                
+                {this.state.role == 'SUPERUSER' && <div>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>
                     Stats</span>
+                    </div>}
                 <br/><br/><br/>
 
           </TabPanel>

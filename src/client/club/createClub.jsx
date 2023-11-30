@@ -805,7 +805,7 @@ class Dashboard extends Component {
         http.send(params);
     }
     checkDeliveryOptions() {
-        if (this.state.onlineOrdersPinCodes && this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>0) {
+        if (this.state.onlineOrdersPinCodes && this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>=0) {
             var curDay = weekdays[new Date().getDay()].toLowerCase();
             if (this.state.onlineOrdersTimings.hasOwnProperty(curDay) && this.state.onlineOrdersTimings[curDay].length > 0) {
                 console.log('--schedule--', this.state.onlineOrdersTimings[curDay]);

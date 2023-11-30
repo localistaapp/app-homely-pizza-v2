@@ -357,19 +357,20 @@ class Dashboard extends Component {
             redirect: false,
             statTotalSales: '',
             statTotalPizzas: '',
-            statMonthlySales: ''
+            statMonthlySales: '',
+            role: 'user'
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        if(sessionStorage.getItem('user') != null) {
+        /*if(sessionStorage.getItem('user') != null) {
             this.initializeStats(sessionStorage.getItem('user').replaceAll('"',''));
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
-        }
-        //this.initializeStats('sampath.oops@gmail.com');
+        }*/
+        this.initializeStats('slimcrustmathikere@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -390,6 +391,11 @@ class Dashboard extends Component {
             console.log('Frnachise data-----', response.data);
             if(response.data != 'error') {
                 sessionStorage.setItem('user-profile', JSON.stringify(response.data));
+                if (response.data[0].role == 'USER') {
+                    this.setState({role: 'user'});
+                } else {
+                    this.setState({role: 'super-user'});
+                }
             }
           }.bind(this));
     }
@@ -424,7 +430,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {statTotalSales, statTotalPizzas, statMonthlySales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {role, statTotalSales, statTotalPizzas, statMonthlySales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
@@ -441,12 +447,21 @@ class Dashboard extends Component {
                                                        <img className="dashboard-icon" src="../img/images/pizzaic1.png" style={{marginLeft: '72px', width: '24px'}}/><span className="stage-desc dash">{statTotalPizzas}</span>
                                                    </div>
                                                    <br/>
+                                                   {role == 'super-user' && <div>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-quote';}}><RequestQuoteIcon /> Get Quote</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   </div>}
+                                                   
+                                                   {role == 'super-user' && <div>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/orders';}}><OrdersIcon /> Orders</span><span class="stage-desc desc-btn" onClick={()=>{window.location.href='/dashboard-create-order';}}>+ Create</span><span class="stage-desc desc-btn blue" style={{marginLeft: '8px'}} onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>+ Sample</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   </div>}
+
+                                                   {role == 'super-user' && <div>
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-enquiries';}}><ChatBubbleIcon /> Enquiries</span><span class="stage-desc desc-btn" style={{background: '#808080'}} onClick={()=>{window.location.href='/dashboard-create-enquiry';}}>+ Create</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   </div>}
+
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/store';}}>
                                                         <InventoryIcon /> Store</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
