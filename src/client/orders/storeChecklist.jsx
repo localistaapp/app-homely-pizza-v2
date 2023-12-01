@@ -469,6 +469,7 @@ class Dashboard extends Component {
           }.bind(this));
     }
     componentDidMount() {
+        setInterval(()=> {window.location.reload();}, 1000*60*5);
         var winHeight = window.innerHeight;
         this.getInventory();
     }
