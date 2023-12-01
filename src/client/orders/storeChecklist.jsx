@@ -340,32 +340,32 @@ class Accordion extends React.Component {
           </dt>
           <dd className={expand ? 'content is-expanded' : 'content'} >
             {id==0 && <p>
-                <input type="checkbox" id="check1" defaultChecked={check1Checked}></input><label for="check1">Take cheese out for thawing</label><span className="divider"/>
-                <input type="checkbox" id="check2" defaultChecked={check2Checked}></input><label for="check2">Clean Dough box, Screen & Pizza Material </label>
+                <input type="checkbox" id="check1" checked={check1Checked} defaultChecked={check1Checked}></input><label for="check1">Take cheese out for thawing</label><span className="divider"/>
+                <input type="checkbox" id="check2" checked={check2Checked} defaultChecked={check2Checked}></input><label for="check2">Clean Dough box, Screen & Pizza Material </label>
             </p>}
             {id==1 && <p>
-                <input type="checkbox" id="check3" defaultChecked={check3Checked}></input><label for="check3">Wash hands & wear apron</label><span className="divider"/>
-                <input type="checkbox" id="check4" defaultChecked={check4Checked}></input><label for="check4">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
-                <input type="checkbox" id="check5" defaultChecked={check5Checked}></input><label for="check5">Chop vegetables, Pre-heat oven</label><span className="divider"/>
-                <input type="checkbox" id="check6" defaultChecked={check6Checked}></input><label for="check6">Update inventory & order ingredients</label>
+                <input type="checkbox" id="check3" checked={check3Checked} defaultChecked={check3Checked}></input><label for="check3">Wash hands & wear apron</label><span className="divider"/>
+                <input type="checkbox" id="check4" checked={check4Checked} defaultChecked={check4Checked}></input><label for="check4">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check5" checked={check5Checked} defaultChecked={check5Checked}></input><label for="check5">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check6" checked={check6Checked} defaultChecked={check6Checked}></input><label for="check6">Update inventory & order ingredients</label>
             </p>}
             {id==2 && <p>
-                <input type="checkbox" id="check7" defaultChecked={check7Checked}></input><label for="check7">Parbake & store base</label><span className="divider"/>
-                <input type="checkbox" id="check8" defaultChecked={check8Checked}></input><label for="check8">Store toppings in red topping container</label>
+                <input type="checkbox" id="check7" checked={check7Checked} defaultChecked={check7Checked}></input><label for="check7">Parbake & store base</label><span className="divider"/>
+                <input type="checkbox" id="check8" checked={check8Checked} defaultChecked={check8Checked}></input><label for="check8">Store toppings in red topping container</label>
             </p>}
             {id==3 && <p>
-                <input type="checkbox" id="check9" defaultChecked={check9Checked}></input><label for="check9">Ready to Serve - Service with a smile & greet customers!</label><span className="divider"/>
-                <input type="checkbox" id="check10" defaultChecked={check10Checked}></input><label for="check10">Provide a snappy experience!</label>
+                <input type="checkbox" id="check9" checked={check9Checked} defaultChecked={check9Checked}></input><label for="check9">Ready to Serve - Service with a smile & greet customers!</label><span className="divider"/>
+                <input type="checkbox" id="check10" checked={check10Checked} defaultChecked={check10Checked}></input><label for="check10">Provide a snappy experience!</label>
             </p>}
             {id==4 && <p>
-                <input type="checkbox" id="check11" defaultChecked={check11Checked}></input><label for="check11">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
-                <input type="checkbox" id="check12" defaultChecked={check12Checked}></input><label for="check12">Chop vegetables, Pre-heat oven</label><span className="divider"/>
-                <input type="checkbox" id="check13" defaultChecked={check13Checked}></input><label for="check13">Parbake bases & store toppings in red topping container</label>
+                <input type="checkbox" id="check11" checked={check11Checked} defaultChecked={check11Checked}></input><label for="check11">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check12" checked={check12Checked} defaultChecked={check12Checked}></input><label for="check12">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check13" checked={check13Checked} defaultChecked={check13Checked}></input><label for="check13">Parbake bases & store toppings in red topping container</label>
             </p>}
             {id==5 && <p>
-                <input type="checkbox" id="check14" defaultChecked={check14Checked}></input><label for="check14">Rinse all the containers & soak in cleaning liquid</label><span className="divider"/>
-                <input type="checkbox" id="check15" defaultChecked={check15Checked}></input><label for="check15">Rinse pizza screens in vinegar & cleaning liquid</label><span className="divider"/>
-                <input type="checkbox" id="check16" defaultChecked={check16Checked}></input><label for="check16">Done for the day!</label>
+                <input type="checkbox" id="check14" checked={check14Checked} defaultChecked={check14Checked}></input><label for="check14">Rinse all the containers & soak in cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check15" checked={check15Checked} defaultChecked={check15Checked}></input><label for="check15">Rinse pizza screens in vinegar & cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check16" checked={check16Checked} defaultChecked={check16Checked}></input><label for="check16">Done for the day!</label>
             </p>}
           </dd>
         </div>
@@ -445,27 +445,25 @@ class Dashboard extends Component {
         if (sessionStorage.getItem('user-profile') != null) {
             franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
         }
-        axios.get('/store/inventory/'+franchiseId)
+        axios.get('/store/checklist/'+franchiseId)
           .then(function (response) {
             console.log('--response.data--', response.data);
-            this.setState({basilQty: response.data.basil_qty});
-            this.setState({capsicumQty: response.data.capsicum_qty});
-            this.setState({cheeseQty: response.data.cheese_qty});
-            this.setState({handCoverQty: response.data.hand_cover_qty});
-            this.setState({jalapenosQty: response.data.jalapenos_qty});
-            this.setState({mushroomQty: response.data.mushroom_qty});
-            this.setState({olivesQty: response.data.olives_qty});
-            this.setState({onionQty: response.data.onion_qty});
-            this.setState({oreganoQty: response.data.oregano_qty});
-            this.setState({paneerQty: response.data.paneer_qty});
-            this.setState({periPeriQty: response.data.peri_peri_qty});
-            this.setState({pizzaMixQty: response.data.pizza_mix_qty});
-            this.setState({pSauceQty: response.data.pizza_sauce_qty});
-            this.setState({sweetCornQty: response.data.sweet_corn_qty});
-            this.setState({takeawayBoxQty: response.data.takeaway_box_qty});
-            this.setState({tomatoSauceQty: response.data.tomato_sauce_qty});
-            this.setState({wastebinCoverQty: response.data.wastebin_cover_qty});
-            this.setState({whiteSauceQty: response.data.white_sauce_qty});
+            this.setState({check1Checked: response.data.check1checked == 'y'});
+            this.setState({check2Checked: response.data.check2checked == 'y'});
+            this.setState({check3Checked: response.data.check3checked == 'y'});
+            this.setState({check4Checked: response.data.check4checked == 'y'});
+            this.setState({check5Checked: response.data.check5checked == 'y'});
+            this.setState({check6Checked: response.data.check6checked == 'y'});
+            this.setState({check7Checked: response.data.check7checked == 'y'});
+            this.setState({check8Checked: response.data.check8checked == 'y'});
+            this.setState({check9Checked: response.data.check9checked == 'y'});
+            this.setState({check10Checked: response.data.check10checked == 'y'});
+            this.setState({check11Checked: response.data.check11checked == 'y'});
+            this.setState({check12Checked: response.data.check12checked == 'y'});
+            this.setState({check13Checked: response.data.check13checked == 'y'});
+            this.setState({check14Checked: response.data.check14checked == 'y'});
+            this.setState({check15Checked: response.data.check15checked == 'y'});
+            this.setState({check16Checked: response.data.check16checked == 'y'});
           }.bind(this));
     }
     componentDidMount() {

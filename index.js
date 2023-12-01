@@ -1500,6 +1500,35 @@ app.get("/store/inventory/:franchiseId", function(req, res) {
 
 });
 
+app.get("/store/checklist/:franchiseId", function(req, res) {
+  let franchiseId = req.params.franchiseId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+        } else {
+            client.query("Select id,store_id,check1Checked,check2checked,check3checked,check4checked,check5checked,check6checked,check7checked,check8checked,check9checked,check10checked,check11checked,check12checked,check13checked,check14checked,check15checked,check16checked from store_checklist where franchise_id = "+franchiseId,
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                 } else {
+                                    res.send(response.rows[0]);
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
 app.post('/eventOrder', function(req, res) {
 
     const eDate = req.body.eDate;
