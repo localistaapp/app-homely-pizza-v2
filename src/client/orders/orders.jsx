@@ -13,6 +13,7 @@ import CreateStoreOrder from './createStoreOrder.jsx';
 import PayStoreOrder from './payStoreOrder.jsx';
 import StoreInventory from './storeInventory.jsx';
 import StoreChecklist from './storeChecklist.jsx';
+import StoreOnboarding from './storeOnboarding.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
@@ -39,6 +40,7 @@ var CreateStoreOrderWithRouter = withRouter(CreateStoreOrder);
 var PayStoreOrderWithRouter = withRouter(PayStoreOrder);
 var StoreInventoryWithRouter = withRouter(StoreInventory);
 var StoreChecklistWithRouter = withRouter(StoreChecklist);
+var StoreOnboardingWithRouter =  withRouter(StoreOnboarding);
 var WebOrdersWithRouter = withRouter(WebOrders);
 
 render(<Router>
@@ -128,6 +130,12 @@ render(<Router>
                 <Route exact path="/" component={StoreChecklistWithRouter} />
             <Route  path="/dashboard-store-checklist" component={StoreChecklistWithRouter} />
         </div>)} />
+        <Route path="/dashboard-store-onboarding" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreOnboardingWithRouter} />
+            <Route  path="/dashboard-store-onboarding" component={StoreOnboardingWithRouter} />
+        </div>)} />
+
         <Route path="/store" exact render={() => (
         <div className="results">
                 <Route exact path="/" component={StoreMenuWithRouter} />

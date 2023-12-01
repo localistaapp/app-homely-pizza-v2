@@ -224,6 +224,10 @@ class Dashboard extends Component {
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>
                     Stats</span>
                     </div>}
+
+                <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-onboarding';}}>Onboarding</span>
+                <hr className="line-light" style={{marginTop: '18px'}}/>
+
                 <br/><br/><br/>
 
           </TabPanel>
