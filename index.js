@@ -2039,6 +2039,48 @@ app.post('/updateStoreInventory', function(req, res) {
 
 })
 
+app.post('/updateStoreChecklist', function(req, res) {
+  const checkedColumn = req.body.checkedColumn;
+  const isChecked = req.body.isChecked;
+  const franchise_id = req.body.franchiseId;
+  const doneForTheDayColumn = 'check16checked';
+
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+          console.log('connected');
+          if (checkedColumn == doneForTheDayColumn) {
+            client.query("UPDATE \"public\".\"store_checklist\" SET check1checked='n',check2checked='n',check3checked='n',check4checked='n',check5checked='n',check6checked='n',check7checked='n',check8checked='n',check9checked='n',check10checked='n',check11checked='n',check12checked='n',check13checked='n',check14checked='n',check15checked='n',check16checked='n' where franchise_id = $1",
+            [franchise_id], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                    res.send("error");
+                  } else {
+                      res.send('{"franchiseId":"'+franchise_id+'"}');
+                  }
+
+                });
+          } else {
+            client.query("UPDATE \"public\".\"store_checklist\" SET "+checkedColumn+"=$1 where franchise_id = $2",
+            [isChecked, franchise_id], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                    res.send("error");
+                  } else {
+                      res.send('{"franchiseId":"'+franchise_id+'"}');
+                  }
+
+                });
+          }
+          
+          }
+          
+    });
+
+})
+
 app.get('/franchises', function(req, res) {
   
 

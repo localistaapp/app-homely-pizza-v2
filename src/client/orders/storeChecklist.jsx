@@ -331,6 +331,47 @@ class SummaryCard extends Component {
 }
 
 class Accordion extends React.Component {
+    updateChecklist(checkedColumn, isChecked) {
+        let franchiseId = -1;
+        const doneForTheDayColumn = 'check16checked';
+        if (sessionStorage.getItem('user-profile') != null) {
+            franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
+        }
+
+        //create store
+        var http = new XMLHttpRequest();
+        var url = '/updateStoreChecklist';
+        var params = 'checkedColumn='+checkedColumn+'&isChecked='+isChecked;
+        params += '&franchiseId='+franchiseId;
+        console.log('--params--', params);
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log('confirmed order creation post response:', http.responseText);
+                var res = http.responseText;
+                if(res.indexOf('error-not-in-vicinity') >= 0) {
+                    alert('There was an issue processing your order. Please contact the franchisor.');
+                } else if(res.indexOf('error') >= 0){
+                    alert('Sorry! Unable to process to your order.');
+                } else if(res != null){
+                    res = JSON.parse(res);
+                    if (checkedColumn == doneForTheDayColumn) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            }
+        }.bind(this);
+        http.send(params);
+    }
+    toggleCheck(elemId) {
+        console.log('--elemId--', elemId);
+        console.log('--checked--',  document.getElementById(elemId).checked);
+        this.updateChecklist(elemId, document.getElementById(elemId).checked ? 'y' : 'n');
+    }
     render() {
       const { id, title, expand, onClick, check1Checked, check2Checked, check3Checked, check4Checked, check5Checked, check6Checked, check7Checked, check8Checked, check9Checked, check10Checked, check11Checked, check12Checked, check13Checked, check14Checked, check15Checked, check16Checked } = this.props;
       
@@ -340,32 +381,32 @@ class Accordion extends React.Component {
           </dt>
           <dd className={expand ? 'content is-expanded' : 'content'} >
             {id==0 && <p>
-                <input type="checkbox" id="check1" checked={check1Checked} defaultChecked={check1Checked}></input><label for="check1">Take cheese out for thawing</label><span className="divider"/>
-                <input type="checkbox" id="check2" checked={check2Checked} defaultChecked={check2Checked}></input><label for="check2">Clean Dough box, Screen & Pizza Material </label>
+                <input type="checkbox" id="check1checked" checked={check1Checked} defaultChecked={check1Checked} onClick={()=>{this.toggleCheck('check1checked');}}></input><label for="check1">Take cheese out for thawing</label><span className="divider"/>
+                <input type="checkbox" id="check2checked" checked={check2Checked} defaultChecked={check2Checked} onClick={()=>{this.toggleCheck('check2checked');}}></input><label for="check2">Clean Dough box, Screen & Pizza Material </label>
             </p>}
             {id==1 && <p>
-                <input type="checkbox" id="check3" checked={check3Checked} defaultChecked={check3Checked}></input><label for="check3">Wash hands & wear apron</label><span className="divider"/>
-                <input type="checkbox" id="check4" checked={check4Checked} defaultChecked={check4Checked}></input><label for="check4">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
-                <input type="checkbox" id="check5" checked={check5Checked} defaultChecked={check5Checked}></input><label for="check5">Chop vegetables, Pre-heat oven</label><span className="divider"/>
-                <input type="checkbox" id="check6" checked={check6Checked} defaultChecked={check6Checked}></input><label for="check6">Update inventory & order ingredients</label>
+                <input type="checkbox" id="check3checked" checked={check3Checked} defaultChecked={check3Checked} onClick={()=>{this.toggleCheck('check3checked');}}></input><label for="check3">Wash hands & wear apron</label><span className="divider"/>
+                <input type="checkbox" id="check4checked" checked={check4Checked} defaultChecked={check4Checked} onClick={()=>{this.toggleCheck('check4checked');}}></input><label for="check4">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check5checked" checked={check5Checked} defaultChecked={check5Checked} onClick={()=>{this.toggleCheck('check5checked');}}></input><label for="check5">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check6checked" checked={check6Checked} defaultChecked={check6Checked} onClick={()=>{this.toggleCheck('check6checked');}}></input><label for="check6">Update inventory & order ingredients</label>
             </p>}
             {id==2 && <p>
-                <input type="checkbox" id="check7" checked={check7Checked} defaultChecked={check7Checked}></input><label for="check7">Parbake & store base</label><span className="divider"/>
-                <input type="checkbox" id="check8" checked={check8Checked} defaultChecked={check8Checked}></input><label for="check8">Store toppings in red topping container</label>
+                <input type="checkbox" id="check7checked" checked={check7Checked} defaultChecked={check7Checked} onClick={()=>{this.toggleCheck('check7checked');}}></input><label for="check7">Parbake & store base</label><span className="divider"/>
+                <input type="checkbox" id="check8checked" checked={check8Checked} defaultChecked={check8Checked} onClick={()=>{this.toggleCheck('check8checked');}}></input><label for="check8">Store toppings in red topping container</label>
             </p>}
             {id==3 && <p>
-                <input type="checkbox" id="check9" checked={check9Checked} defaultChecked={check9Checked}></input><label for="check9">Ready to Serve - Service with a smile & greet customers!</label><span className="divider"/>
-                <input type="checkbox" id="check10" checked={check10Checked} defaultChecked={check10Checked}></input><label for="check10">Provide a snappy experience!</label>
+                <input type="checkbox" id="check9checked" checked={check9Checked} defaultChecked={check9Checked} onClick={()=>{this.toggleCheck('check9checked');}}></input><label for="check9">Ready to Serve - Service with a smile & greet customers!</label><span className="divider"/>
+                <input type="checkbox" id="check10checked" checked={check10Checked} defaultChecked={check10Checked} onClick={()=>{this.toggleCheck('check10checked');}}></input><label for="check10">Provide a snappy experience!</label>
             </p>}
             {id==4 && <p>
-                <input type="checkbox" id="check11" checked={check11Checked} defaultChecked={check11Checked}></input><label for="check11">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
-                <input type="checkbox" id="check12" checked={check12Checked} defaultChecked={check12Checked}></input><label for="check12">Chop vegetables, Pre-heat oven</label><span className="divider"/>
-                <input type="checkbox" id="check13" checked={check13Checked} defaultChecked={check13Checked}></input><label for="check13">Parbake bases & store toppings in red topping container</label>
+                <input type="checkbox" id="check11checked" checked={check11Checked} defaultChecked={check11Checked} onClick={()=>{this.toggleCheck('check11checked');}}></input><label for="check11">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check12checked" checked={check12Checked} defaultChecked={check12Checked} onClick={()=>{this.toggleCheck('check12checked');}}></input><label for="check12">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check13checked" checked={check13Checked} defaultChecked={check13Checked} onClick={()=>{this.toggleCheck('check13checked');}}></input><label for="check13">Parbake bases & store toppings in red topping container</label>
             </p>}
             {id==5 && <p>
-                <input type="checkbox" id="check14" checked={check14Checked} defaultChecked={check14Checked}></input><label for="check14">Rinse all the containers & soak in cleaning liquid</label><span className="divider"/>
-                <input type="checkbox" id="check15" checked={check15Checked} defaultChecked={check15Checked}></input><label for="check15">Rinse pizza screens in vinegar & cleaning liquid</label><span className="divider"/>
-                <input type="checkbox" id="check16" checked={check16Checked} defaultChecked={check16Checked}></input><label for="check16">Done for the day!</label>
+                <input type="checkbox" id="check14checked" checked={check14Checked} defaultChecked={check14Checked} onClick={()=>{this.toggleCheck('check14checked');}}></input><label for="check14">Rinse all the containers & soak in cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check15checked" checked={check15Checked} defaultChecked={check15Checked} onClick={()=>{this.toggleCheck('check15checked');}}></input><label for="check15">Rinse pizza screens in vinegar & cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check16checked" checked={check16Checked} defaultChecked={check16Checked} onClick={()=>{this.toggleCheck('check16checked');}}></input><label for="check16">Done for the day!</label>
             </p>}
           </dd>
         </div>
@@ -475,61 +516,7 @@ class Dashboard extends Component {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
     }
-    updateInventory() {
-        var basil_qty = this.state.basilQty;
-        var capsicum_qty = this.state.capsicumQty;
-        var cheese_qty = this.state.cheeseQty;
-        var hand_cover_qty = this.state.handCoverQty;
-        var jalapenos_qty = this.state.jalapenosQty;
-        var mushroom_qty = this.state.mushroomQty;
-        var olives_qty = this.state.olivesQty;
-        var onion_qty = this.state.onionQty;
-        var oregano_qty = this.state.oreganoQty;
-        var paneer_qty = this.state.paneerQty;
-        var peri_peri_qty = this.state.periPeriQty;
-        var pizza_mix_qty = this.state.pizzaMixQty;
-        var pizza_sauce_qty = this.state.pSauceQty;
-        var sweet_corn_qty = this.state.sweetCornQty;
-        var takeaway_box_qty = this.state.takeawayBoxQty;
-        var tomato_sauce_qty = this.state.tomatoSauceQty;
-        var wastebin_cover_qty = this.state.wastebinCoverQty;
-        var white_sauce_qty = this.state.whiteSauceQty;
-
-        let franchiseId = -1;
-        if (sessionStorage.getItem('user-profile') != null) {
-            franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
-        }
-
-        //create store
-        var http = new XMLHttpRequest();
-        var url = '/updateStoreInventory';
-        var params = 'basil_qty='+basil_qty+'&capsicum_qty='+capsicum_qty+'&cheese_qty='+cheese_qty;
-        params += '&hand_cover_qty='+hand_cover_qty+'&jalapenos_qty='+jalapenos_qty+'&mushroom_qty='+mushroom_qty;
-        params += '&olives_qty='+olives_qty+'&onion_qty='+onion_qty+'&oregano_qty='+oregano_qty;
-        params += '&paneer_qty='+paneer_qty+'&peri_peri_qty='+peri_peri_qty+'&pizza_mix_qty='+pizza_mix_qty;
-        params += '&pizza_sauce_qty='+pizza_sauce_qty+'&sweet_corn_qty='+sweet_corn_qty+'&takeaway_box_qty='+takeaway_box_qty;
-        params += '&tomato_sauce_qty='+tomato_sauce_qty+'&wastebin_cover_qty='+wastebin_cover_qty+'&white_sauce_qty='+white_sauce_qty;
-        params += '&franchiseId='+franchiseId;
-        console.log('--params--', params);
-        http.open('POST', url, true);
-        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
-                console.log('confirmed order creation post response:', http.responseText);
-                var res = http.responseText;
-                if(res.indexOf('error-not-in-vicinity') >= 0) {
-                    alert('There was an issue processing your order. Please contact the franchisor.');
-                } else if(res.indexOf('error') >= 0){
-                    alert('Sorry! Unable to process to your order.');
-                } else if(res != null){
-                    res = JSON.parse(res);
-                    window.location.href='/dashboard-store-inventory?success=true';
-                }
-            }
-        }.bind(this);
-        http.send(params);
-    }
+    
     toggle(index) {
         this.setState({ [`block${index}`]: !this.state[`block${index}`] });
     }
