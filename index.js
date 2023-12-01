@@ -1480,7 +1480,7 @@ app.get("/store/inventory/:franchiseId", function(req, res) {
           console.error('error connecting', err.stack)
           res.send('{}');
         } else {
-            client.query("Select id,store_id,pizza_mix_qty,cheese_qty,pizza_sauce_qty,tomato_sauce_qty,white_sauce_qty,peri_peri_qty,oregano_qty,olives_qty,paneer_qty,capsicum_qty,onion_qty,jalapenos_qty,sweet_corn_qty,mushroom_qty,hand_cover_qty,takeaway_box_qty,last_updated,basil_qty,wastebin_cover_qty from store_inventory where franchise_id = "+franchiseId,
+            client.query("Select id,store_id,pizza_mix_qty,cheese_qty,pizza_sauce_qty,tomato_sauce_qty,white_sauce_qty,peri_peri_qty,oregano_qty,olives_qty,paneer_qty,capsicum_qty,onion_qty,jalapenos_qty,sweet_corn_qty,mushroom_qty,hand_cover_qty,takeaway_box_qty,last_updated,basil_qty,wastebin_cover_qty,tomato_qty,red_chilli_qty from store_inventory where franchise_id = "+franchiseId,
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
@@ -2000,6 +2000,8 @@ app.post('/updateStoreWebOrder/:status', function(req, res) {
 app.post('/updateStoreInventory', function(req, res) {
   const basil_qty = req.body.basil_qty;
   const capsicum_qty = req.body.capsicum_qty;
+  const tomato_qty = req.body.tomato_qty;
+  const red_chilli_qty = req.body.red_chilli_qty;
   const cheese_qty = req.body.cheese_qty;
   const hand_cover_qty = req.body.hand_cover_qty;
   const jalapenos_qty = req.body.jalapenos_qty;
@@ -2024,8 +2026,8 @@ app.post('/updateStoreInventory', function(req, res) {
       console.error('error connecting', err.stack)
     } else {
           console.log('connected');
-          client.query("UPDATE \"public\".\"store_inventory\" SET pizza_mix_qty=$1, cheese_qty=$2, pizza_sauce_qty=$3, tomato_sauce_qty=$4, white_sauce_qty=$5, peri_peri_qty=$6, oregano_qty=$7, olives_qty=$8, paneer_qty=$9, capsicum_qty=$10, onion_qty=$11, jalapenos_qty=$12, sweet_corn_qty=$13, mushroom_qty=$14, hand_cover_qty=$15, takeaway_box_qty=$16, basil_qty=$17, wastebin_cover_qty=$18 where franchise_id = $19",
-            [pizza_mix_qty, cheese_qty, pizza_sauce_qty, tomato_sauce_qty, white_sauce_qty, peri_peri_qty, oregano_qty, olives_qty, paneer_qty, capsicum_qty, onion_qty, jalapenos_qty, sweet_corn_qty, mushroom_qty, hand_cover_qty, takeaway_box_qty, basil_qty, wastebin_cover_qty, franchise_id], (err, response) => {
+          client.query("UPDATE \"public\".\"store_inventory\" SET pizza_mix_qty=$1, cheese_qty=$2, pizza_sauce_qty=$3, tomato_sauce_qty=$4, white_sauce_qty=$5, peri_peri_qty=$6, oregano_qty=$7, olives_qty=$8, paneer_qty=$9, capsicum_qty=$10, onion_qty=$11, jalapenos_qty=$12, sweet_corn_qty=$13, mushroom_qty=$14, hand_cover_qty=$15, takeaway_box_qty=$16, basil_qty=$17, wastebin_cover_qty=$18, tomato_qty=$19, red_chilli_qty=$20 where franchise_id = $21",
+            [pizza_mix_qty, cheese_qty, pizza_sauce_qty, tomato_sauce_qty, white_sauce_qty, peri_peri_qty, oregano_qty, olives_qty, paneer_qty, capsicum_qty, onion_qty, jalapenos_qty, sweet_corn_qty, mushroom_qty, hand_cover_qty, takeaway_box_qty, basil_qty, wastebin_cover_qty, tomato_qty, red_chilli_qty, franchise_id], (err, response) => {
                   if (err) {
                     console.log(err)
                     res.send("error");

@@ -362,6 +362,8 @@ class Dashboard extends Component {
             olivesQty: 0,
             paneerQty: 0,
             capsicumQty: 0,
+            tomatoQty: 0,
+            redChilliQty: 0,
             onionQty: 0,
             jalapenosQty: 0,
             sweetCornQty: 0,
@@ -384,6 +386,8 @@ class Dashboard extends Component {
             console.log('--response.data--', response.data);
             this.setState({basilQty: response.data.basil_qty});
             this.setState({capsicumQty: response.data.capsicum_qty});
+            this.setState({tomatoQty: response.data.tomato_qty});
+            this.setState({redChilliQty: response.data.red_chilli_qty});
             this.setState({cheeseQty: response.data.cheese_qty});
             this.setState({handCoverQty: response.data.hand_cover_qty});
             this.setState({jalapenosQty: response.data.jalapenos_qty});
@@ -413,6 +417,8 @@ class Dashboard extends Component {
     updateInventory() {
         var basil_qty = this.state.basilQty;
         var capsicum_qty = this.state.capsicumQty;
+        var tomato_qty = this.state.tomatoQty;
+        var red_chilli_qty = this.state.redChilliQty;
         var cheese_qty = this.state.cheeseQty;
         var hand_cover_qty = this.state.handCoverQty;
         var jalapenos_qty = this.state.jalapenosQty;
@@ -438,7 +444,7 @@ class Dashboard extends Component {
         //create store
         var http = new XMLHttpRequest();
         var url = '/updateStoreInventory';
-        var params = 'basil_qty='+basil_qty+'&capsicum_qty='+capsicum_qty+'&cheese_qty='+cheese_qty;
+        var params = 'basil_qty='+basil_qty+'&capsicum_qty='+capsicum_qty+'&cheese_qty='+cheese_qty+'&tomato_qty='+tomato_qty+'&red_chilli_qty='+red_chilli_qty;
         params += '&hand_cover_qty='+hand_cover_qty+'&jalapenos_qty='+jalapenos_qty+'&mushroom_qty='+mushroom_qty;
         params += '&olives_qty='+olives_qty+'&onion_qty='+onion_qty+'&oregano_qty='+oregano_qty;
         params += '&paneer_qty='+paneer_qty+'&peri_peri_qty='+peri_peri_qty+'&pizza_mix_qty='+pizza_mix_qty;
@@ -493,7 +499,7 @@ class Dashboard extends Component {
                                                         </div>
                                                    </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" >Pizza sauce (325g bot): 
+                                                   <span className="stage-desc" >Pizza sauce (bottle): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.pSauceQty>0){this.setState({pSauceQty: this.state.pSauceQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.pSauceQty} />
@@ -501,21 +507,21 @@ class Dashboard extends Component {
                                                         </div>
                                                    </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" >Tomato sauce (500g bot): 
+                                                   <span className="stage-desc" >Tomato sauce (bottle): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.tomatoSauceQty>0){this.setState({tomatoSauceQty: this.state.tomatoSauceQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.tomatoSauceQty} />
                                                             <a className="quantity__plus"><span onClick={()=>{this.setState({tomatoSauceQty: this.state.tomatoSauceQty + 0.5});}}>+</span></a>
                                                         </div>
                                                    </span>
-                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   {/*<hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" >White sauce (325g bot): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.whiteSauceQty>0){this.setState({whiteSauceQty: this.state.whiteSauceQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.whiteSauceQty} />
                                                             <a className="quantity__plus"><span onClick={()=>{this.setState({whiteSauceQty: this.state.whiteSauceQty + 0.5});}}>+</span></a>
                                                         </div>
-                                                   </span>
+                                                    </span>*/}
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" >Peri peri (box): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
@@ -533,7 +539,7 @@ class Dashboard extends Component {
                                                         </div>
                                                    </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
-                                                   <span className="stage-desc" >Olives (bot): 
+                                                   <span className="stage-desc" >Olives (bottle): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.olivesQty>0){this.setState({olivesQty: this.state.olivesQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.olivesQty} />
@@ -565,6 +571,22 @@ class Dashboard extends Component {
                                                         </div>
                                                    </span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Tomato (250g): 
+                                                        <div class="quantity inv" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.tomatoQty>0){this.setState({tomatoQty: this.state.tomatoQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.tomatoQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({tomatoQty: this.state.tomatoQty + 0.5});}}>+</span></a>
+                                                        </div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Red Chilli (pack): 
+                                                        <div class="quantity inv" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.redChilliQty>0){this.setState({redChilliQty: this.state.redChilliQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.redChilliQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({redChilliQty: this.state.redChilliQty + 0.5});}}>+</span></a>
+                                                        </div>
+                                                   </span>
+                                                   {/*<hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" >Jalapenos (bot): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.jalapenosQty>0){this.setState({jalapenosQty: this.state.jalapenosQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
@@ -603,7 +625,7 @@ class Dashboard extends Component {
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.handCoverQty} />
                                                             <a className="quantity__plus"><span onClick={()=>{this.setState({handCoverQty: this.state.handCoverQty + 0.5});}}>+</span></a>
                                                         </div>
-                                                   </span>
+                                                   </span>*/}
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    <span className="stage-desc" >Takeaway box (25): 
                                                         <div class="quantity inv" style={{marginTop: '-35px'}}>
@@ -623,6 +645,7 @@ class Dashboard extends Component {
                                                    
 
                                                    <br/><br/>
+                                                   <div class="bottom-bar"></div>
                                                    <a className="button" onClick={()=>{this.updateInventory();}} style={{position:'fixed', bottom: '12px'}}>Update Inventory →</a>
                                                    <br/><br/><br/><br/>
 
