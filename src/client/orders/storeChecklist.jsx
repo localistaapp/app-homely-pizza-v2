@@ -332,40 +332,40 @@ class SummaryCard extends Component {
 
 class Accordion extends React.Component {
     render() {
-      const { id, title, expand, onClick } = this.props;
+      const { id, title, expand, onClick, check1Checked, check2Checked, check3Checked, check4Checked, check5Checked, check6Checked, check7Checked, check8Checked, check9Checked, check10Checked, check11Checked, check12Checked, check13Checked, check14Checked, check15Checked, check16Checked } = this.props;
       
       return (
         <div>
           <dt className={expand ? 'title is-expanded' : 'title'} onClick={onClick} dangerouslySetInnerHTML={title}>
           </dt>
-          <dd className={expand ? 'content is-expanded' : 'content'} onClick={onClick}>
+          <dd className={expand ? 'content is-expanded' : 'content'} >
             {id==0 && <p>
-                <input type="checkbox"></input><label>Take cheese out for thawing</label><br/>
-                <input type="checkbox"></input><label>Clean Dough box, Screen & Pizza Material </label>
+                <input type="checkbox" id="check1" defaultChecked={check1Checked}></input><label for="check1">Take cheese out for thawing</label><span className="divider"/>
+                <input type="checkbox" id="check2" defaultChecked={check2Checked}></input><label for="check2">Clean Dough box, Screen & Pizza Material </label>
             </p>}
             {id==1 && <p>
-                <input type="checkbox"></input><label>Wash hands & wear apron</label><br/>
-                <input type="checkbox"></input><label>Prepare mix (warm water & mix) & Upload pic</label><br/>
-                <input type="checkbox"></input><label>Chop vegetables, Pre-heat oven</label><br/>
-                <input type="checkbox"></input><label>Update inventory & order ingredients</label>
+                <input type="checkbox" id="check3" defaultChecked={check3Checked}></input><label for="check3">Wash hands & wear apron</label><span className="divider"/>
+                <input type="checkbox" id="check4" defaultChecked={check4Checked}></input><label for="check4">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check5" defaultChecked={check5Checked}></input><label for="check5">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check6" defaultChecked={check6Checked}></input><label for="check6">Update inventory & order ingredients</label>
             </p>}
             {id==2 && <p>
-                <input type="checkbox"></input><label>Parbake & store base</label><br/>
-                <input type="checkbox"></input><label>Store toppings in red topping container</label>
+                <input type="checkbox" id="check7" defaultChecked={check7Checked}></input><label for="check7">Parbake & store base</label><span className="divider"/>
+                <input type="checkbox" id="check8" defaultChecked={check8Checked}></input><label for="check8">Store toppings in red topping container</label>
             </p>}
             {id==3 && <p>
-                <input type="checkbox"></input><label>Ready to Serve - Service with a smile & greet customers!</label><br/>
-                <input type="checkbox"></input><label>Provide a snappy experience!</label><br/>
+                <input type="checkbox" id="check9" defaultChecked={check9Checked}></input><label for="check9">Ready to Serve - Service with a smile & greet customers!</label><span className="divider"/>
+                <input type="checkbox" id="check10" defaultChecked={check10Checked}></input><label for="check10">Provide a snappy experience!</label>
             </p>}
             {id==4 && <p>
-                <input type="checkbox"></input><label>Prepare mix (warm water & mix) & Upload pic</label><br/>
-                <input type="checkbox"></input><label>Chop vegetables, Pre-heat oven</label><br/>
-                <input type="checkbox"></input><label>Parbake bases & store toppings in red topping container</label>
+                <input type="checkbox" id="check11" defaultChecked={check11Checked}></input><label for="check11">Prepare mix (warm water & mix) & Upload pic</label><span className="divider"/>
+                <input type="checkbox" id="check12" defaultChecked={check12Checked}></input><label for="check12">Chop vegetables, Pre-heat oven</label><span className="divider"/>
+                <input type="checkbox" id="check13" defaultChecked={check13Checked}></input><label for="check13">Parbake bases & store toppings in red topping container</label>
             </p>}
             {id==5 && <p>
-                <input type="checkbox"></input><label>Rinse all the containers & soak in cleaning liquid</label><br/>
-                <input type="checkbox"></input><label>Rinse pizza screens in vinegar & cleaning liquid</label><br/>
-                <input type="checkbox"></input><label>Done for the day!</label><br/>
+                <input type="checkbox" id="check14" defaultChecked={check14Checked}></input><label for="check14">Rinse all the containers & soak in cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check15" defaultChecked={check15Checked}></input><label for="check15">Rinse pizza screens in vinegar & cleaning liquid</label><span className="divider"/>
+                <input type="checkbox" id="check16" defaultChecked={check16Checked}></input><label for="check16">Done for the day!</label>
             </p>}
           </dd>
         </div>
@@ -414,12 +414,28 @@ class Dashboard extends Component {
             handCoverQty: 0,
             takeawayBoxQty: 0,
             wastebinCoverQty: 0,
-            block1: new Date().getHours()<12 && (new Date().getHours()==11 && new Date().getMinutes() < 31),  
+            block1: new Date().getHours()<11 || (new Date().getHours()==11 && (new Date().getMinutes() <= 31)) ,  
             block2: new Date().getHours()==11 && new Date().getMinutes() >= 31,
             block3: new Date().getHours()==12 && new Date().getMinutes() < 31,
             block4: (new Date().getHours()>=12 && new Date().getHours()<=16),
             block5: (new Date().getHours()>=16 && new Date().getMinutes() > 0)  && (new Date().getHours()<20),
             block6: (new Date().getHours()>=20),
+            check1Checked: false,
+            check2Checked: false,
+            check3Checked: false,
+            check4Checked: false,
+            check5Checked: false,
+            check6Checked: false,
+            check7Checked: false,
+            check8Checked: false,
+            check9Checked: false,
+            check10Checked: false,
+            check11Checked: false,
+            check12Checked: false,
+            check13Checked: false,
+            check14Checked: false,
+            check15Checked: false,
+            check16Checked: false
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
@@ -533,6 +549,7 @@ class Dashboard extends Component {
     render() {
         const accordionList = [{ title: {__html: 'First Up <span class="due">(due by 11.30am)</span>'} }, { title: {__html: 'Morning Prep <span class="due">(due by 12.10pm)</span>'} }, { title: {__html: 'Counter Setup <span class="due">(due by 12.30pm)</span>' }}, { title: {__html: 'Ready to Serve <span class="due">(due by 12.30pm)</span>' }}, { title: {__html: 'Evening Prep <span class="due">(due by 4pm)</span>' }}, { title: {__html: 'Winding up! <span class="due">(due by 8.30pm)</span>' }}];
         const {franchises, status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const { id, title, expand, onClick, check1Checked, check2Checked, check3Checked, check4Checked, check5Checked, check6Checked, check7Checked, check8Checked, check9Checked, check10Checked, check11Checked, check12Checked, check13Checked, check14Checked, check15Checked, check16Checked } = this.state;
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
@@ -547,7 +564,7 @@ class Dashboard extends Component {
 
                                                    <dl className="accordion">
                                                         {accordionList.map((item, index) => (
-                                                            <Accordion id={index} title={item.title} onClick={()=>{this.toggle(index + 1)}} expand={this.state[`block${index+1}`]} />
+                                                            <Accordion check1Checked={check1Checked} check2Checked={check2Checked} check3Checked={check3Checked} check4Checked={check4Checked} check5Checked={check5Checked} check6Checked={check6Checked} check7Checked={check7Checked} check8Checked={check8Checked} check9Checked={check9Checked} check10Checked={check10Checked} check11Checked={check11Checked} check12Checked={check12Checked} check13Checked={check13Checked} check14Checked={check14Checked} check15Checked={check15Checked} check16Checked={check16Checked} id={index} title={item.title} onClick={()=>{this.toggle(index + 1)}} expand={this.state[`block${index+1}`]} />
                                                         ))}
                                                     </dl>
 
