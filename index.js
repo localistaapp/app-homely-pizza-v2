@@ -1901,10 +1901,11 @@ app.post('/createStoreOrder', function(req, res) {
                   console.log(err)
                     res.send("error");
                 } else {
-                  const storeLat = response.rows[0].lat;
-                  const storeLong = response.rows[0].long;
+                  //const storeLat = response.rows[0].lat;
+                  //const storeLong = response.rows[0].long;
                   const storeId = response.rows[0].id;
-                  const isInVicinity = GeofencingService.isLocationInVicinity(lat, long, storeLat,storeLong);
+                  //const isInVicinity = GeofencingService.isLocationInVicinity(lat, long, storeLat,storeLong);
+                  const isInVicinity = true;
                   if (!isInVicinity) {
                     res.send("error-not-in-vicinity");
                   } else {
