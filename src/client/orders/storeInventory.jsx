@@ -485,7 +485,7 @@ class Dashboard extends Component {
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <span className="stage-desc" >Pizza Mix (kg): 
                                                         <div class="quantity inv">
-                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizzaMixQty>0){this.setState({pizzaQty: this.state.pizzaMixQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizzaMixQty>0){this.setState({pizzaMixQty: this.state.pizzaMixQty - 0.5});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
                                                             <input name="quantity" type="text" className="quantity__input" value={this.state.pizzaMixQty} />
                                                             <a className="quantity__plus"><span onClick={()=>{this.setState({pizzaMixQty: this.state.pizzaMixQty + 0.5});}}>+</span></a>
                                                         </div>
