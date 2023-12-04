@@ -31,7 +31,7 @@ class PricingService {
 
         let totalPrice = pizza1Price + pizza2Price + pizza3Price + pizza4Price + pizza5Price + pizza6Price + pizza7Price + pizza8Price + takeAwayPrice + extraToppingsPrice;
       if(hasValidCode && hasReviewed == 'y') {
-        totalPrice = totalPrice * 0.9;
+        totalPrice = totalPrice * 0.95;
       }
       else if(hasValidCode || hasReviewed == 'y') {
         totalPrice = totalPrice * 0.95;
