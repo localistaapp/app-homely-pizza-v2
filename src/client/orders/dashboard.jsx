@@ -370,7 +370,7 @@ class Dashboard extends Component {
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
         }
-        //this.initializeStats('slimcrustmathikere@gmail.com');
+        //this.initializeStats('slimcrustmathikereowner@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -390,12 +390,17 @@ class Dashboard extends Component {
           .then(function (response) {
             console.log('Frnachise data-----', response.data);
             if(response.data != 'error') {
-                sessionStorage.setItem('user-profile', JSON.stringify(response.data));
-                if (response.data[0].role == 'USER') {
+                let userData = response.data;
+                let userRole = 'user';
+                
+                if (response.data[0].role == 'USER' && email.indexOf('owner') == -1) {
                     this.setState({role: 'user'});
                 } else {
                     this.setState({role: 'super-user'});
+                    userRole = 'SUPERUSER';
                 }
+                userData[0].role = userRole;
+                sessionStorage.setItem('user-profile', JSON.stringify(userData));
             }
           }.bind(this));
     }
@@ -403,14 +408,13 @@ class Dashboard extends Component {
         let enquiriesArr = [];
         axios.get(`/stats/${email}`)
           .then(function (response) {
-            console.log('Order data-----', response.data);
             if(response.data != 'auth error') {
                 sessionStorage.setItem('user', JSON.stringify(email));
-                if (response.data && response.data.length > 1) {
+                if (response.data && response.data.length >= 1) {
                     this.setState({
-                      statTotalSales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales),
-                      statTotalPizzas: new Intl.NumberFormat('en-IN').format(response.data[0].sales),
-                      statMonthlySales: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales)
+                      statTotalSales: response.data.length>=3 ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales) : 0,
+                      statTotalPizzas: response.data.length>=1 ? new Intl.NumberFormat('en-IN').format(response.data[0].sales) : 0,
+                      statMonthlySales: response.data.length>=2 ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales) : 0
                     });
                 }
                 document.getElementById('dash-content').style.display='block';

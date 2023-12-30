@@ -1277,7 +1277,8 @@ app.get("/enquiry-orders/:location/:franchiseId", function(req, res) {
 
 app.get("/stats/:email", function(req, res) {
   let orderStatus = req.params.status;
-  let email = req.params.email;
+  let origEmail = req.params.email;
+  email = origEmail.replace('owner@','@');
   let franchiseWhereClause1 = '';
   let franchiseWhereClause2 = '';
   const client = new Client(dbConfig)
@@ -1305,17 +1306,51 @@ client.connect(err => {
                                         franchiseWhereClause1 = '';
                                         franchiseWhereClause2 = '';
                                       }
-                                    client.query("SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1,
-                                       [], (err, response) => {
-                                             if (err) {
-                                               console.log(err)
-                                                res.send("error");
-                                             } else {
-                                                res.send(response.rows);
-                                             }
 
-                                           });
-                                 }
+                                    
+                                      //if email contains owner, change query
+                                    let statsQuery = "SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1;
+                                    if (origEmail.indexOf('owner') >= 0) {
+                                      console.log('--franchiseId--', franchiseId);
+                                      client.query("Select id from store where franchise_id = "+franchiseId,
+                                      [], (errNested, responseNested) => {
+                                            if (errNested) {
+                                              console.log(errNested)
+                                              res.send("error");
+                                            } else {
+                                              console.log('--franchiseStoreId--', responseNested.rows[0]['id']);
+                                              let franchiseStoreId = responseNested.rows[0]['id'];
+                                              statsQuery = statsQuery + " UNION SELECT SUM(total_price) as sales from store_order where store_id = "+franchiseStoreId;
+                                              console.log('--statsQuery 1--', statsQuery);
+                                              
+                                              client.query(statsQuery,
+                                                [], (err, response) => {
+                                                      if (err) {
+                                                        console.log(err)
+                                                         res.send("error");
+                                                      } else {
+                                                         res.send(response.rows);
+                                                      }
+         
+                                                    });
+                                            }});
+                                     
+                                      } else {
+                                        statsQuery = statsQuery + "";
+                                        console.log('--statsQuery 2--', statsQuery);
+                                        client.query(statsQuery,
+                                          [], (err, response) => {
+                                                if (err) {
+                                                  console.log(err)
+                                                   res.send("error");
+                                                } else {
+                                                   res.send(response.rows);
+                                                }
+   
+                                              });
+                                      }
+                                    }
+                                    
 
                               }
 
@@ -1348,6 +1383,7 @@ app.get("/nearby/:loc", function(req, res) {
 app.get("/franchise-profile/:email", function(req, res) {
   let orderStatus = req.params.status;
   let email = req.params.email;
+  email = email.replace('owner@','@');
   const client = new Client(dbConfig)
 
     client.connect(err => {
