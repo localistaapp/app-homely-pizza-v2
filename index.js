@@ -93,6 +93,10 @@ var pages = [];
     pages.index = data;
   });
 
+  fs.readFile("public/franchise.html", "utf8", function(err, data) {
+    pages.franchise = data;
+  });
+
   fs.readFile("public/search.html", "utf8", function(err, data) {
       pages.search = data;
     });
@@ -780,6 +784,10 @@ app.get("/orders/", function(request, response) {
 
 app.get("/club/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'club.html'));
+});
+
+app.get("/franchise/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'franchise.html'));
 });
 
 app.get("/reset/", function(request, response) {
