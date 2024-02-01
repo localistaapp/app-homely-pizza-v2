@@ -1448,12 +1448,15 @@ app.get("/user-orders/:email", function(req, res) {
                               if (err) {
                                 console.log(err);
                                  res.send("error");
+                                 client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("auth error");
+                                    client.end();
                                  } else {
                                     res.send(response.rows);
+                                    client.end();
                                  }
 
                               }
@@ -1980,6 +1983,7 @@ app.post('/createStoreOrder', function(req, res) {
                   const isInVicinity = true;
                   if (!isInVicinity) {
                     res.send("error-not-in-vicinity");
+                    client.end();
                   } else {
 
                     client.query("select id from club_user where customer_code = '"+clubCode+"'",
@@ -2005,8 +2009,10 @@ app.post('/createStoreOrder', function(req, res) {
                                 if (err) {
                                   console.log(err)
                                   res.send("error");
+                                  client.end();
                                 } else {
                                   res.send('{"orderId": "'+response.rows[0].id+'", "price": "'+discountedPrice+'", "storeId": '+storeId+'}');
+                                  client.end();
                                 }
                               });
                        
@@ -2038,8 +2044,10 @@ app.post('/updateStoreOrder/status/:status', function(req, res) {
                   if (err) {
                     console.log(err)
                     res.send("error");
+                    client.end();
                   } else {
                       res.send('{"orderId":"'+orderId+'"}');
+                      client.end();
                   }
 
                 });
@@ -2064,8 +2072,10 @@ app.post('/updateStoreWebOrder/:status', function(req, res) {
                   if (err) {
                     console.log(err)
                     res.send("error");
+                    client.end();
                   } else {
                       res.send('{"storeId":"'+storeId+'"}');
+                      client.end();
                   }
 
                 });
@@ -2108,8 +2118,10 @@ app.post('/updateStoreInventory', function(req, res) {
                   if (err) {
                     console.log(err)
                     res.send("error");
+                    client.end();
                   } else {
                       res.send('{"franchiseId":"'+franchise_id+'"}');
+                      client.end();
                   }
 
                 });
@@ -2136,8 +2148,10 @@ app.post('/updateStoreChecklist', function(req, res) {
                   if (err) {
                     console.log(err)
                     res.send("error");
+                    client.end();
                   } else {
                       res.send('{"franchiseId":"'+franchise_id+'"}');
+                      client.end();
                   }
 
                 });
@@ -2147,8 +2161,10 @@ app.post('/updateStoreChecklist', function(req, res) {
                   if (err) {
                     console.log(err)
                     res.send("error");
+                    client.end();
                   } else {
                       res.send('{"franchiseId":"'+franchise_id+'"}');
+                      client.end();
                   }
 
                 });
@@ -2220,11 +2236,14 @@ app.get('/payQrByStore/:storeId', function(req, res) {
                         if (err) {
                           console.log(err)
                             res.send("error");
+                            client.end();
                         } else {
                           if(response.rows.length > 0) {
                             res.send(response.rows[0].payment_qr_base64);
+                            client.end();
                           } else {
                             res.send("error");
+                            client.end();
                           }
                         }
                   });
@@ -2275,14 +2294,17 @@ app.post('/createEnquiry/:franchiseId', function(req, res) {
                                                      //res.send(response.rows);
                                                      if (response.rows.length == 0) {
                                                         res.send("auth error");
+                                                        client.end();
                                                      } else {
                                                         let franchiseId = response.rows[0]['franchise_id'];
                                                         client.query("UPDATE \"public\".\"booking\" SET franchise_id = $1 WHERE ID IN (SELECT ID FROM BOOKING WHERE location = '"+city+"' ORDER BY ID DESC LIMIT 1)",
                                                                                 [franchiseId], (err, response) => {
                                                                                       if (err) {
                                                                                          res.send('{"status":"error","message":'+err+'}');
+                                                                                         client.end();
                                                                                       } else {
                                                                                             res.send('{"status":"success"}');
+                                                                                            client.end();
                                                                                       }
                                                                                   });
                                                      }
@@ -2321,14 +2343,17 @@ app.post('/createBooking', function(req, res) {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
+                                 client.end();
                               } else {
                                 console.log(response);
                                 axios.post('https://api.pushalert.co/rest/v1/send', 'title=Order%20Received&message=New%20Pizza%20Order&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
                                                                   .then(res => {
                                                                     console.log('Pushalert success: ', res);
+                                                                    client.end();
                                                                   })
                                                                   .catch(error => {
                                                                     console.log('Pushalert error: ', error);
+                                                                    client.end();
                                                                   });
                                 //res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
@@ -2355,9 +2380,11 @@ app.post('/completeConfirmedOrder', function(req, res) {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
+                                 client.end();
                               } else {
                                 console.log(response);
                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                client.end();
                               }
 
                             });
@@ -2383,9 +2410,11 @@ app.post('/updateEnquiry/:orderId/:status', function(req, res) {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
+                                 client.end();
                               } else {
                                 console.log(response);
                                 res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                client.end();
                               }
 
                             });
@@ -2413,8 +2442,10 @@ app.post('/updateEventOrder', function(req, res) {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
+                                 client.end();
                               } else {
                                  res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
+                                 client.end();
                               }
 
                             });
