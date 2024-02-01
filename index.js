@@ -1295,16 +1295,19 @@ client.connect(err => {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
   client.query("Select id from franchise where owner_email IN ('"+email+"') ",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err)
                                  res.send("error");
+                                 client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("auth error");
+                                    client.end();
                                  } else {
                                     let franchiseId = response.rows[0]['id'];
                                     if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
@@ -1325,6 +1328,7 @@ client.connect(err => {
                                             if (errNested) {
                                               console.log(errNested)
                                               res.send("error");
+                                              client.end();
                                             } else {
                                               console.log('--franchiseStoreId--', responseNested.rows[0]['id']);
                                               let franchiseStoreId = responseNested.rows[0]['id'];
@@ -1336,8 +1340,10 @@ client.connect(err => {
                                                       if (err) {
                                                         console.log(err)
                                                          res.send("error");
+                                                         client.end();
                                                       } else {
                                                          res.send(response.rows);
+                                                         client.end();
                                                       }
          
                                                     });
@@ -1351,8 +1357,10 @@ client.connect(err => {
                                                 if (err) {
                                                   console.log(err)
                                                    res.send("error");
+                                                   client.end();
                                                 } else {
                                                    res.send(response.rows);
+                                                   client.end();
                                                 }
    
                                               });
@@ -1398,18 +1406,22 @@ app.get("/franchise-profile/:email", function(req, res) {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
             client.query("Select id, owner_name, city, role from franchise where owner_email IN ('"+email+"') ",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
                                  res.send("error");
+                                 client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("auth error");
+                                    client.end();
                                  } else {
                                     res.send(response.rows);
+                                    client.end();
                                  }
 
                               }
@@ -1461,6 +1473,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
 
             client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
@@ -1468,6 +1481,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
                               if (err) {
                                 console.log(err);
                                 res.send("error");
+                                client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
@@ -1475,12 +1489,15 @@ app.get("/store/name/:franchiseId", function(req, res) {
                                       [], (er, r) => {
                                         if (r.rows.length == 0) {
                                           res.send("error");
+                                          client.end();
                                         } else {
                                           res.send(r.rows);
+                                          client.end();
                                         }
                                       });
                                  } else {
                                     res.send(response.rows);
+                                    client.end();
                                  }
                               }
                             });
@@ -1527,18 +1544,22 @@ app.get("/store/inventory/:franchiseId", function(req, res) {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
             client.query("Select id,store_id,pizza_mix_qty,cheese_qty,pizza_sauce_qty,tomato_sauce_qty,white_sauce_qty,peri_peri_qty,oregano_qty,olives_qty,paneer_qty,capsicum_qty,onion_qty,jalapenos_qty,sweet_corn_qty,mushroom_qty,hand_cover_qty,takeaway_box_qty,last_updated,basil_qty,wastebin_cover_qty,tomato_qty,red_chilli_qty from store_inventory where franchise_id = "+franchiseId,
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
                                 res.send("error");
+                                client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("error");
+                                    client.end();
                                  } else {
                                     res.send(response.rows[0]);
+                                    client.end();
                                  }
                               }
                             });
@@ -1556,18 +1577,22 @@ app.get("/store/checklist/:franchiseId", function(req, res) {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
             client.query("Select id,store_id,check1Checked,check2checked,check3checked,check4checked,check5checked,check6checked,check7checked,check8checked,check9checked,check10checked,check11checked,check12checked,check13checked,check14checked,check15checked,check16checked from store_checklist where franchise_id = "+franchiseId,
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
                                 res.send("error");
+                                client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("error");
+                                    client.end();
                                  } else {
                                     res.send(response.rows[0]);
+                                    client.end();
                                  }
                               }
                             });
@@ -1735,6 +1760,7 @@ app.post('/store/web-order', function(req, res) {
             if (err) {
               console.log(err)
                res.send("error");
+               client.end();
             } else {
               if(response.rows && response.rows.length > 0) {
                   userId = response.rows[0].id;
@@ -1745,8 +1771,10 @@ app.post('/store/web-order', function(req, res) {
                             if (err) {
                               console.log(err)
                                res.send("error");
+                               client.end();
                             } else {
                                 res.send("success");
+                                client.end();
                             }
 
                           });
@@ -2146,8 +2174,10 @@ app.get('/franchises', function(req, res) {
                         if (err) {
                           console.log(err)
                             res.send("error");
+                            client.end();
                         } else {
                           res.send(response.rows);
+                          client.end();
                         }
                   });
 
@@ -2167,8 +2197,10 @@ app.get('/store/get/:clubCode', function(req, res) {
                         if (err) {
                           console.log(err)
                             res.send("error");
+                            client.end();
                         } else {
                           res.send(response.rows);
+                          client.end();
                         }
                   });
 
