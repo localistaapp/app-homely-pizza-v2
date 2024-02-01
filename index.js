@@ -1746,7 +1746,7 @@ app.post('/store/web-order', function(req, res) {
   const schedule = req.body.schedule;
   const address = req.body.address;
   const clubCode = req.body.clubCode;
-  const storeId = 0;
+  let storeId = 0;
   let userId = 0;
 
   console.log('--items--', items);
