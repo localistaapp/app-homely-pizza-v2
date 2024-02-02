@@ -1778,7 +1778,7 @@ app.post('/store/web-order', function(req, res) {
                       client.end();
                     } else {
                       if(responseStore.rows && responseStore.rows.length > 0) {
-                          storeId = responseStore.rows[0].id;
+                          storeId = responseStore.rows[0].store_id;
 
                           client.query("INSERT INTO \"public\".\"online_order\"(name, mobile, address, delivery_pincode, delivery_schedule, delivery_timeslot, \"order\", price, user_id, store_id) VALUES('"+name+"', '"+mobile+"', '"+address+"', '"+pincode+"', '"+schedule+"', '"+slot+"', '"+items+"', '"+price+"', "+userId+", "+storeId+")",
                               [], (err, response) => {
