@@ -19,17 +19,17 @@
             },
             {
               "topic": "Medium",
-              "pricing": {"Slim":  295, "Thick":  305}
+              "pricing": {"Slim":  275, "Thick":  305}
             },
             {
               "topic": "Small",
-              "pricing": {"Slim":  275, "Thick":  295}
+              "pricing": {"Slim":  255, "Thick":  295}
             }
           ],
           "crust": [
             {
               "topic": "Slim",
-              "pricing": {"Large":  305, "Medium":  295, "Small":  275}
+              "pricing": {"Large":  305, "Medium":  275, "Small":  255}
             }
           ]
         }
@@ -121,45 +121,6 @@
       }
     },
     {
-      "title": "Pineapple Mist",
-      "type": "pizza",
-      "shortTitle": "Asense Interior",
-      "subTitle": "129, Siddapura",
-      "address": "129, Siddapura, Whitefield, Bengaluru, Karnataka, India, Varthur Main Road, Bengaluru",
-      "qna": [
-        {
-          "defaultPrice": 350,
-          "responses": [
-            {
-              "topic": "Large",
-              "pricing": {"Slim":  350, "Thick":  350}
-            },
-            {
-              "topic": "Medium",
-              "pricing": {"Slim":  330, "Thick":  340}
-            },
-            {
-              "topic": "Small",
-              "pricing": {"Slim":  310, "Thick":  330}
-            }
-          ],
-          "crust": [
-            {
-              "topic": "Slim",
-              "pricing": {"Large":  350, "Medium":  330, "Small":  310}
-            }
-          ]
-        }
-      ],
-      "usp": [
-        "Super creamy & cheesy mix of bell peppers, pineapple and onions"
-      ],
-      "images": {
-        "primary": "https://lh5.googleusercontent.com/p/AF1QipMfveOLCLmjGRfpfzooSICq5nskYbHGIdJVKtud=s870-k-no",
-        "secondary": []
-      }
-    },
-    {
       "title": "Classic Bell Pepper",
       "type": "pizza",
       "shortTitle": "Asense Interior",
@@ -238,38 +199,38 @@
       }
     },
     {
-      "title": "Classic Corn",
+      "title": "Paneer Paradiso",
       "type": "pizza",
       "shortTitle": "Asense Interior",
       "subTitle": "129, Siddapura",
       "address": "129, Siddapura, Whitefield, Bengaluru, Karnataka, India, Varthur Main Road, Bengaluru",
       "qna": [
         {
-          "defaultPrice": 330,
+          "defaultPrice": 400,
           "responses": [
             {
               "topic": "Large",
-              "pricing": {"Slim":  330, "Thick":  340}
+              "pricing": {"Slim":  400, "Thick":  370}
             },
             {
               "topic": "Medium",
-              "pricing": {"Slim":  320, "Thick":  330}
+              "pricing": {"Slim":  370, "Thick":  350}
             },
             {
               "topic": "Small",
-              "pricing": {"Slim":  300, "Thick":  320}
+              "pricing": {"Slim":  330, "Thick":  320}
             }
           ],
           "crust": [
             {
               "topic": "Slim",
-              "pricing": {"Large":  330, "Medium":  320, "Small":  300}
+              "pricing": {"Large":  400, "Medium":  350, "Small":  320}
             }
           ]
         }
       ],
       "usp": [
-        "A casual retreat of sweet corn and sun dried tomatoes"
+        "Creamy soft paneer with melting cheese & onions"
       ],
       "images": {
         "primary": "https://lh5.googleusercontent.com/p/AF1QipMfveOLCLmjGRfpfzooSICq5nskYbHGIdJVKtud=s870-k-no",
@@ -283,25 +244,25 @@
       "subTitle": "129, Siddapura",
       "address": "129, Siddapura, Whitefield, Bengaluru, Karnataka, India, Varthur Main Road, Bengaluru",
       "qna": [{
-        "defaultPrice": 330,
+        "defaultPrice": 370,
         "responses": [
           {
             "topic": "Large",
-            "pricing": {"Slim":  330, "Thick":  340}
+            "pricing": {"Slim":  370, "Thick":  380}
           },
           {
             "topic": "Medium",
-            "pricing": {"Slim":  320, "Thick":  330}
+            "pricing": {"Slim":  350, "Thick":  360}
           },
           {
             "topic": "Small",
-            "pricing": {"Slim":  300, "Thick":  320}
+            "pricing": {"Slim":  320, "Thick":  330}
           }
         ],
         "crust": [
           {
             "topic": "Slim",
-            "pricing": {"Large":  330, "Medium":  320, "Small":  300}
+            "pricing": {"Large":  370, "Medium":  350, "Small":  320}
           }
         ]
       }],

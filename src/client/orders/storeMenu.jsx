@@ -123,17 +123,43 @@ class Dashboard extends Component {
           }]
         }];
     }
-    getStoreName() {
+    getStoreName(suffix) {
       if (sessionStorage.getItem('user-profile') != null) {
           var franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
           var userRole = JSON.parse(sessionStorage.getItem('user-profile'))[0].role;
           this.setState({role: userRole});
-          axios.get('/store/name/'+franchiseId)
+          axios.get('/store'+suffix+'/name/'+franchiseId)
                 .then(function (response) {
                   if(response.data.indexOf('error') == -1) {
                     console.log('--store res--', response.data);
                     let res = response.data;
+                    sessionStorage.setItem('curr-order-count', res[0].count);
                     this.setState({storeId: res[0].id,storeName: '('+res[0].locality+')', accepting: res[0].accepting_online_orders == 'N' ? false : true, webOrderCount: res[0].count});
+                    let item = document.createElement('div');
+                    item.className = 'top-bar';
+                    item.onclick = function(){location.href='/web-orders';};
+                    const notifAudio = document.createElement('audio');
+                    notifAudio.src='./sc/n.mp3';
+                    notifAudio.autostart = 'false';
+                    
+                    const orderCount = res[0].count;
+
+                    if(window.currOrderCount != null && orderCount - sessionStorage.getItem('curr-order-count') > 0) {
+                        document.querySelector('.notif').style.display = 'inline';
+                       
+                        document.body.appendChild(notifAudio);
+
+                        sessionStorage.setItem('new-order-count', orderCount - window.currOrderCount);
+                        let countVal = orderCount - window.currOrderCount;
+                        let orderSuffix = 'order';
+                        if (orderCount - window.currOrderCount > 1) {
+                            orderSuffix = 'orders';
+                        }
+                        item.innerHTML = '<div class="top-bar" onclick="location.href=\'/web-orders\';"><div class="notif-container"><div class="notif-title">You have '+countVal+' new web '+orderSuffix+'!</div></div></div>';
+                        document.body.appendChild(item);
+                        notifAudio.play();
+                    }
+                    window.currOrderCount = orderCount;
                   } else {
                     this.setState({storeNotExists: true});
                   }
@@ -141,7 +167,8 @@ class Dashboard extends Component {
           }
     }
     componentDidMount() {
-        this.getStoreName();
+        this.getStoreName('-default');
+        this.getStoreName('');
     }
     handleToggle(event) {
       this.setState({accepting: event.target.checked });
@@ -195,11 +222,11 @@ class Dashboard extends Component {
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-store-order';}}>Create Order</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
 
-                {this.state.role == 'SUPERUSER' && <div>
+                <div>
                 <span className="stage-desc" onClick={()=>{window.location.href='/web-orders';}}> 
-                Web Orders <span className="notif"><span>{this.state.webOrderCount}</span></span> 
+                Web Orders <span className="notif"><span id="webOrderCount">{this.state.webOrderCount}</span></span> 
                 </span>
-                </div>}
+                </div>
 
                 {this.state.role == 'SUPERUSER' && <div className='accepting'>
                 <GreenSwitch
@@ -212,7 +239,7 @@ class Dashboard extends Component {
                 <span>{this.state.accepting ? 'Accepting': 'Off'}</span>
                 </div>}
 
-                {this.state.role == 'SUPERUSER' && <hr className="line-light" style={{marginTop: '18px'}}/>}
+                <hr className="line-light" style={{marginTop: '18px'}}/>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-inventory';}}>
                     Inventory</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>
@@ -223,7 +250,10 @@ class Dashboard extends Component {
                 {this.state.role == 'SUPERUSER' && <div>
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-sample-order';}}>
                     Stats</span>
+
+                <hr className="line-light" style={{marginTop: '18px'}}/>
                     </div>}
+                    
 
                 <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-store-onboarding';}}>Onboarding</span>
                 <hr className="line-light" style={{marginTop: '18px'}}/>

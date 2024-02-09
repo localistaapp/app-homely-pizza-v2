@@ -356,6 +356,7 @@ class Dashboard extends Component {
             enquiries: [],
             orders: [],
             orderCreatedAt: '',
+            orderId: 0,
             orderName: '',
             orderMobile: '',
             orderAddress: '',
@@ -363,12 +364,14 @@ class Dashboard extends Component {
             orderPrice: '',
             orderSchedule: '',
             orderSlot: '',
+            orderStatus: '',
             showOrderDetail: false
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.onOrderClicked = this.onOrderClicked.bind(this);
         this.onCloseClick = this.onCloseClick.bind(this);
+        this.onPaidClick = this.onPaidClick.bind(this);
         this.initializeEnquiries();
     }
     componentDidMount() {
@@ -415,28 +418,7 @@ class Dashboard extends Component {
             location = JSON.parse(sessionStorage.getItem('user-profile'))[0].city;
             franchiseId = JSON.parse(sessionStorage.getItem('user-profile'))[0].id;
         }
-        axios.get(`/enquiry-orders/${location}/${franchiseId}`)
-          .then(function (response) {
-            console.log('Order data-----', response.data);
-            //this.setState({results: response.data.results});
-            for (var i=0;i<response.data.length;i++) {
-
-                var eventDate = moment(response.data[i].event_date, 'YYYY-MM-DD');
-                var event = {
-                      mobile: response.data[i].event_contact_mobile,
-                      date: response.data[i].event_date,
-                      qty: response.data[i].quantity,
-                      orderId: response.data[i].order_id,
-                    };
-                if (response.data[i].event_contact_mobile != '') {
-                    enquiriesArr.push(event);
-                }
-            }
-            this.setState({
-              enquiries: enquiriesArr
-            });
-
-          }.bind(this));
+        
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
@@ -451,14 +433,32 @@ class Dashboard extends Component {
         window.location.href='/dashboard-quote-res';
     }
     onOrderClicked(order){
-        this.setState({showOrderDetail: true, orderName:order.name, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: order.created_at});
+        this.setState({showOrderDetail: true, orderId: order.id, orderName:order.name, orderStatus: order.status, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: order.created_at});
     }
     onCloseClick() {
         this.setState({showOrderDetail: false});
     }
+    onPaidClick(currWebOrderId) {
+        var http = new XMLHttpRequest();
+            var url = '/updateWebOrder/'+currWebOrderId+'/PAID';
+            http.open('POST', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    console.log('confirmed order creation post response:', http.responseText);
+                    var res = http.responseText;
+                    if(res != null){
+                        alert('Order marked as Paid!');
+                        location.reload();
+                    }
+                }
+            }.bind(this);
+            http.send();
+    }
     render() {
         const {orders, enquiries, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
-
+        
         const ordersRendered = orders.map((item, i) => {
              let details = JSON.parse(item.order);
              let orderString = '';
@@ -491,7 +491,7 @@ class Dashboard extends Component {
         });
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
@@ -511,6 +511,8 @@ class Dashboard extends Component {
                                                             <div>{this.state.orderAddress}</div>
                                                             <div>{this.state.orderPincode}</div>
                                                             <div className='price-lbl'>₹{this.state.orderPrice}</div>
+                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.Please%20make%20payment%20of%20₹${this.state.orderPrice}via%20UPI/GPay%20to9972908138.%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
+                                                            {this.state.orderStatus != 'PAID' && <div className='price-btn' onClick={()=>{this.onPaidClick(this.state.orderId)}}>Paid</div>}
                                                             <div>{this.state.orderSchedule == 'now' ? 'DELIVER NOW' : ''}</div>
                                                             {this.state.orderSlot != 'unknown' && <div>{this.state.orderSlot}</div>}
                                                         </div>

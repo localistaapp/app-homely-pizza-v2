@@ -538,7 +538,7 @@ class Dashboard extends Component {
         const { id, title, expand, onClick, check1Checked, check2Checked, check3Checked, check4Checked, check5Checked, check6Checked, check7Checked, check8Checked, check9Checked, check10Checked, check11Checked, check12Checked, check13Checked, check14Checked, check15Checked, check16Checked } = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
                     {status == 'success' && <span className="stage-heading status-success">Inventory updated successfully</span>}
                     
                     

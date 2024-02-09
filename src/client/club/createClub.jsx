@@ -446,9 +446,24 @@ class Dashboard extends Component {
         if(window.pushalertbyiw ) {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
-        if(localStorage.getItem('notification-dialog')!=null && localStorage.getItem('notification-dialog')=='true') {
-            this.setState({curStep: 1});
-        }
+        var signedInUser = false;
+        if(localStorage.getItem('clubCode') != null) {
+            axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
+          .then(function (response) {
+            console.log('user signed up-----', response.data);
+            signedInUser = response.data;
+            if(localStorage.getItem('notification-dialog')!=null && localStorage.getItem('notification-dialog')=='true' && !signedInUser) {
+                this.setState({curStep: 1});
+            } else {
+                this.setState({curStep: 3});
+            }
+          }.bind(this));
+        } else {
+            if(localStorage.getItem('notification-dialog')!=null && localStorage.getItem('notification-dialog')=='true' && !signedInUser) {
+                this.setState({curStep: 1});
+            } 
+        } 
+        
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
@@ -478,6 +493,19 @@ class Dashboard extends Component {
           }(window, document, 'script', 'trustmary-embed', 'https://embed.trustmary.com/embed.js'));
     }
     changeStep(stepNum) {
+        if (stepNum == 2){
+            var http = new XMLHttpRequest();
+            var url = '/signUpClubUser';
+            var params = 'email='+localStorage.getItem('club-user-email');
+            http.open('POST', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                }
+            }.bind(this);
+            http.send(params);
+        }
         this.setState({curStep: stepNum});
     }
     fetchJson() {
@@ -503,7 +531,7 @@ class Dashboard extends Component {
         let orderSummary = this.state.orderSummary;
         let total = 0;
         let discounted = 1;
-
+        
         if(isValidCoupon()) {
             discounted = 0.85;
         }
