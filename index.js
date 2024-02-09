@@ -1480,7 +1480,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
         } else {
               while(true){
                   await new Promise(resolve => setTimeout(resolve, 25000));
-                    client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
+                    client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.status != 'PAID' and o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
@@ -1523,7 +1523,7 @@ app.get("/store/name/:franchiseId", function(req, res) {
               res.send('{}');
               client.end();
             } else {
-                        client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
+                        client.query("Select s.id, s.locality, s.accepting_online_orders, count(o.id)  from store s, online_order o where o.status != 'PAID' and o.store_id = s.id and s.franchise_id = "+franchiseId +" group by s.id",
                             [], (err, response) => {
                                   if (err) {
                                     console.log(err);
