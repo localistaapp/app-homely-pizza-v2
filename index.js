@@ -1561,18 +1561,22 @@ app.get("/web-orders/:franchiseId", function(req, res) {
         if (err) {
           console.error('error connecting', err.stack)
           res.send('{}');
+          client.end();
         } else {
             client.query("Select o.id, o.name, o.mobile, o.status, o.address, o.delivery_pincode, o.delivery_schedule, o.delivery_timeslot, o.price, o.created_at, o.order from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId+" group by s.id, o.id order by o.created_at desc",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
                                 res.send("error");
+                                client.end();
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
                                     res.send("error");
+                                    client.end();
                                  } else {
                                     res.send(response.rows);
+                                    client.end();
                                  }
                               }
                             });
