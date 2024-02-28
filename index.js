@@ -2050,6 +2050,15 @@ app.post('/createStoreOrder', function(req, res) {
   const pizza7Qty = req.body.pizza7Qty;
   const pizza8Qty = req.body.pizza8Qty;
   const takeAwayQty = req.body.takeAwayQty;
+  const pizza1SliceQty = req.body.pizza1SliceQty;
+  const pizza2SliceQty = req.body.pizza2SliceQty;
+  const pizza3SliceQty = req.body.pizza3SliceQty;
+  const pizza4SliceQty = req.body.pizza4SliceQty;
+  const pizza5SliceQty = req.body.pizza5SliceQty;
+  const pizza6SliceQty = req.body.pizza6SliceQty;
+  const pizza7SliceQty = req.body.pizza7SliceQty;
+  const pizza8SliceQty = req.body.pizza8SliceQty;
+  const takeAwaySliceQty = req.body.takeAwaySliceQty;
   const extraToppingsQty = req.body.extraToppingsQty;
   const franchiseId = req.body.franchiseId;
 
@@ -2090,8 +2099,8 @@ app.post('/createStoreOrder', function(req, res) {
                         //ToDo: Query to read user id based on club code & derive returning customer based on number of store orders for user id before current date
                         let hasValidCode = clubUserId != 0;
                         const orderJson = "{\"pizza1Qty\":"+pizza1Qty+",\"pizza2Qty\":"+pizza2Qty+",\"pizza3Qty\":"+pizza3Qty+",\"pizza4Qty\":"+pizza4Qty+",\"pizza5Qty\":"+pizza5Qty+",\"pizza6Qty\":"+pizza6Qty+",\"pizza7Qty\":"+pizza7Qty+",\"pizza8Qty\":"+pizza8Qty+", \"takeAwayQty\":"+takeAwayQty+", \"extraToppingsQty\":"+extraToppingsQty+"}";
-                        const totalPrice = PricingService.getTotalPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed);
-                        const discountedPrice = PricingService.getDiscountedPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed);
+                        const totalPrice = PricingService.getTotalPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed, pizza1SliceQty, pizza2SliceQty, pizza3SliceQty, pizza4SliceQty, pizza5SliceQty, pizza6SliceQty, pizza7SliceQty, pizza8SliceQty, takeAwaySliceQty);
+                        const discountedPrice = PricingService.getDiscountedPrice(pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty, pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty, takeAwayQty, extraToppingsQty, hasValidCode, hasReviewed, pizza1SliceQty, pizza2SliceQty, pizza3SliceQty, pizza4SliceQty, pizza5SliceQty, pizza6SliceQty, pizza7SliceQty, pizza8SliceQty, takeAwaySliceQty);
                         const returningCustomer = 'N'; 
                         
                         client.query("INSERT INTO \"public\".\"store_order\"(store_id, order_json, total_price, discounted_price, status, returning_customer, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id",

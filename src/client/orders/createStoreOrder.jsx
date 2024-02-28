@@ -9,6 +9,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import LocalPizzaIcon from '@material-ui/icons/LocalPizza';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
 
 import StoreIcon from '@material-ui/icons/Store';
 import WarningIcon from '@material-ui/icons/Warning'
@@ -362,6 +364,15 @@ class Dashboard extends Component {
             pizza8Qty: 0,
             takeAwayQty: 0,
             extraToppingsQty: 0,
+            pizza1SliceQty: 0,
+            pizza2SliceQty: 0,
+            pizza3SliceQty: 0,
+            pizza4SliceQty: 0,
+            pizza5SliceQty: 0,
+            pizza6SliceQty: 0,
+            pizza7SliceQty: 0,
+            pizza8SliceQty: 0,
+            takeAwaySliceQty: 0,
         };
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
@@ -456,6 +467,15 @@ class Dashboard extends Component {
         var pizza8Qty = this.state.pizza8Qty;
         var takeAwayQty = this.state.takeAwayQty;
         var extraToppingsQty = this.state.extraToppingsQty;
+        var pizza1SliceQty = this.state.pizza1SliceQty;
+        var pizza2SliceQty = this.state.pizza2SliceQty;
+        var pizza3SliceQty = this.state.pizza3SliceQty;
+        var pizza4SliceQty = this.state.pizza4SliceQty;
+        var pizza5SliceQty = this.state.pizza5SliceQty;
+        var pizza6SliceQty = this.state.pizza6SliceQty;
+        var pizza7SliceQty = this.state.pizza7SliceQty;
+        var pizza8SliceQty = this.state.pizza8SliceQty;
+        var takeAwaySliceQty = this.state.takeAwaySliceQty;
         var storeLat = window.storeLat;
         var storeLong = window.storeLong;
 
@@ -468,6 +488,7 @@ class Dashboard extends Component {
         var http = new XMLHttpRequest();
         var url = '/createStoreOrder';
         var params = 'hasReviewed='+hasReviewed+'&clubCode='+clubCode+'&pizza1Qty='+pizza1Qty+'&pizza2Qty='+pizza2Qty+'&pizza3Qty='+pizza3Qty+'&pizza4Qty='+pizza4Qty+'&pizza5Qty='+pizza5Qty+'&pizza6Qty='+pizza6Qty+'&pizza7Qty='+pizza7Qty+'&pizza8Qty='+pizza8Qty;
+        params += '&pizza1SliceQty='+pizza1SliceQty+'&pizza2SliceQty='+pizza2SliceQty+'&pizza3SliceQty='+pizza3SliceQty+'&pizza4SliceQty='+pizza4SliceQty+'&pizza5SliceQty='+pizza5SliceQty+'&pizza6SliceQty='+pizza6SliceQty+'&pizza7SliceQty='+pizza7SliceQty+'&pizza8SliceQty='+pizza8SliceQty+'&takeAwaySliceQty='+takeAwaySliceQty;
         params += '&takeAwayQty='+takeAwayQty+'&extraToppingsQty='+extraToppingsQty;
         params += '&storeLat='+storeLat+'&storeLong='+storeLong+'&franchiseId='+franchiseId;
         http.open('POST', url, true);
@@ -499,10 +520,123 @@ class Dashboard extends Component {
                     <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
                     {status == 'success' && <span className="stage-heading status-success">Store created successfully</span>}
                     <Paper>
+                    <span className="stage-heading" style={{top: '76px'}}><StoreIcon />&nbsp;&nbsp;Create Store Order</span>
+                    <br/><br/>
+                    <Tabs
+                            value={this.state.value}
+                            onChange={this.handleTabChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            centered
+                          >
+                            <Tab icon={<LocalPizzaIcon />} label="&nbsp;&nbsp;&nbsp;Slices&nbsp;&nbsp;&nbsp;" />
+                            <Tab icon={<GroupWorkIcon />} label="&nbsp;&nbsp;&nbsp;Full Pizzas&nbsp;&nbsp;&nbsp;" />
+                          </Tabs>
 
                                               <TabPanel value={this.state.value} index={0}>
-                                                   <span className="stage-heading" style={{top: '12px'}}><StoreIcon />&nbsp;&nbsp;Create Store Order</span>
-                                                   <hr className="line-light" style={{visibility: 'hidden'}}/>
+
+                                              <hr className="line-light" style={{visibility: 'hidden', marginTop: '0px'}}/>
+                                                   <span className="stage-desc" >Mediterranean Feast:
+                                                        <div class="quantity  menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza1SliceQty>0){this.setState({pizza1Qty: this.state.pizza1SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza1SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza1SliceQty: this.state.pizza1SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Cheese)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Bell Pepper Blast:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza2SliceQty>0){this.setState({pizza2SliceQty: this.state.pizza2SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza2SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza2SliceQty: this.state.pizza2SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Capsicum, Onion)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Virgin Tomato:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza3SliceQty>0){this.setState({pizza3SliceQty: this.state.pizza3SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza3SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza3SliceQty: this.state.pizza3SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Tomaoto, Onion, Mint)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Classic Bell Pepper: 
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza4SliceQty>0){this.setState({pizza4SliceQty: this.state.pizza4SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza4SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza4SliceQty: this.state.pizza4SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Capsicum (more), Onion)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Red Hot Celebration: 
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza5SliceQty>0){this.setState({pizza5SliceQty: this.state.pizza5SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza5SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza5SliceQty: this.state.pizza5SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Tomato, Onion, Red Chilli)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Pineapple Mist:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza6SliceQty>0){this.setState({pizza6SliceQty: this.state.pizza6SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza6SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza6SliceQty: this.state.pizza6SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Pineapple, Capsicum, Onion)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Tinge of Tomato:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza7SliceQty>0){this.setState({pizza7SliceQty: this.state.pizza7SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza7SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza7SliceQty: this.state.pizza7SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Tomato, Red chilli, Olives)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Paneer Paradiso:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza8SliceQty>0){this.setState({pizza8SliceQty: this.state.pizza8SliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.pizza8SliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({pizza8SliceQty: this.state.pizza8SliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                        <div className="ingred" >(Paneer, Onion)</div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Takeaway:
+                                                        <div class="quantity menu" style={{marginTop: '-35px'}}>
+                                                            <a className="quantity__minus"><span onClick={()=>{if(this.state.takeAwaySliceQty>0){this.setState({takeAwaySliceQty: this.state.takeAwaySliceQty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
+                                                            <input name="quantity" type="text" className="quantity__input" value={this.state.takeAwaySliceQty} />
+                                                            <a className="quantity__plus"><span onClick={()=>{this.setState({takeAwaySliceQty: this.state.takeAwaySliceQty + 1});}}>+</span></a>
+                                                        </div>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Club code: 
+                                                        <input id="clubCode" type="text" className="txt-field right" style={{left: '143px',textTransform: 'uppercase'}}/>
+                                                   </span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   <span className="stage-desc" >Reviewed: 
+                                                        <input id="hasReviewed" type="checkbox" className="txt-field right" style={{left: '143px', width: '30px'}}/>
+                                                   </span>
+                                                   
+
+                                                   <br/><br/><br/><br/>
+                                                   <div className="bottom-bar"></div>
+                                                   <a className="button" onClick={()=>{this.createStoreOrder();}} style={{position:'fixed', bottom: '12px'}}>Create Order →</a>
+                                                   <br/><br/><br/><br/>
+
+
+                                                   
+                                                   
+
+                                              </TabPanel>
+                                              <TabPanel value={this.state.value} index={1}>
+                                              <hr className="line-light" style={{visibility: 'hidden', marginTop: '0px'}}/>
                                                    <span className="stage-desc" >Mediterranean Feast:
                                                         <div class="quantity  menu" style={{marginTop: '-35px'}}>
                                                             <a className="quantity__minus"><span onClick={()=>{if(this.state.pizza1Qty>0){this.setState({pizza1Qty: this.state.pizza1Qty - 1});}}} style={{fontSize: '25px', lineHeight: '0px', marginLeft: '2px'}}>-</span></a>
@@ -604,12 +738,6 @@ class Dashboard extends Component {
                                                    <div className="bottom-bar"></div>
                                                    <a className="button" onClick={()=>{this.createStoreOrder();}} style={{position:'fixed', bottom: '12px'}}>Create Order →</a>
                                                    <br/><br/><br/><br/>
-
-                                              </TabPanel>
-                                              <TabPanel value={this.state.value} index={1}>
-
-
-
                                               </TabPanel>
                                             </Paper>
                 </div>)
