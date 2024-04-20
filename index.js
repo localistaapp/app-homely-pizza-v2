@@ -770,6 +770,10 @@ app.get("/order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });
 
+app.get("/events/v1", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'v1cred.html'));
+});
+
 app.get("/booking-success/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'shortlists.html'));
 });
