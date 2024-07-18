@@ -378,7 +378,6 @@ ul.wstep li.active {
     padding-right: 10px;
     padding-left: 36px;
     padding-right: 36px;
-    background: #f6f6f6;
     padding: 5px;
     width: 220px;
     margin: 0 auto;
@@ -1210,7 +1209,7 @@ button.banner:after{
     display: inline-block;
     width: 100%;
     height: 88px;
-    border-bottom: 1px solid #a4a4a4;
+    border: 1px solid #ff0205;
     background: white;
     border-radius: 16px;
     overflow: visible;
@@ -1549,12 +1548,12 @@ if(location.href.indexOf('amrit15') != -1
                     <p style="background: #f9f4ef;border-radius: 6px;padding: 9px;visibility:hidden"><b style="text-decoration:underline">Special price</b> starting
                         <b style="text-decoration:underline">₹199</b> per large pizza!</p><br><br>
                 </div>
-                <div class="Panel" style="margin-top: -220px;margin-bottom:60px;">
+                <div class="Panel" style="margin-top: -150px;margin-bottom:60px;">
                     <div class="corner-ribbon">
                         <span class="cr-inner">
                           <span class="cr-text"><strong>Offer</strong></span>
                         </span>
-                    </div><div class="ribbon-outer">Special price starting <strong>₹199</strong> per large pizza!</div>
+                    </div><div class="ribbon-outer" style="font-weight: bold">Special veg combos starting <strong>₹199</strong> per person!</div>
                 </div>
         </div>
 
@@ -1568,23 +1567,23 @@ if(location.href.indexOf('amrit15') != -1
         <img class="curve small" src="./img/images/curve.png"/>
         <hr class="line thin"/>
         <div class="para" style="margin-top: 0px">
-        <div class="title" style="background: #fff;">Veg catering menu</div>
+        <div class="title" style="background: #fff;width: 290px;">Make your own combo!</div>
             <div class="menu-container" id="mcon">
                 <div class="title plate" onclick="showMenuTab1('menuTab1');">
                     <img src="./img/images/panim.gif" style="width: 107px;top: 15px;position: absolute;left: 16px;" />
-                    <div class="menu-title">11" Large Pizza</div>
+                    <div class="menu-title">Veg Pizza</div>
                 </div>
                 <div class="title plate" style="margin-left: 178px !important;margin-top: -127px !important;" onclick="document.getElementById('mcon').scrollLeft = 0;showMenuTab1('menuTab2');">
+                    <img src="./img/images/pasta1.png" style="width: 112px;top: 1px;position: absolute;left: 8px;" />
+                    <div class="menu-title">Veg Pasta</div>
+                </div>
+                <div class="title plate" style="margin-left: 327px !important;margin-top: -127px !important;" onclick="document.getElementById('mcon').scrollLeft = 0;showMenuTab1('menuTab3');">
                     <img src="./img/images/wraps.png" style="width: 179px;top: 13px;position: absolute;left: -25px;" />
                     <div class="menu-title">Veg wraps</div>
                 </div>
-                <div class="title plate" style="margin-left: 327px !important;margin-top: -127px !important;">
-                    <img src="./img/images/garlic.png" style="width: 98px;top: 13px;position: absolute;left: 11px;" onclick="document.getElementById('mcon').scrollLeft = 160;showMenuTab1('menuTab3');" />
-                    <div class="menu-title">Garlic bread</div>
-                </div>
                 <div class="title plate" style="margin-left: 476px !important;margin-top: -127px !important;margin-right:27px" onclick="document.getElementById('mcon').scrollLeft = 360;showMenuTab1('menuTab4');">
-                    <img src="./img/images/mojito.png" style="width: 66px;top: -12px;position: absolute;left: 22px;" />
-                    <div class="menu-title">Virgin mojito</div>
+                    <img src="./img/images/drink.png" style="width: 66px;top: -12px;position: absolute;left: 22px;" />
+                    <div class="menu-title">Welcome Drink</div>
                 </div>
                 <br/><br/><br/><br/>
 
@@ -1633,6 +1632,22 @@ if(location.href.indexOf('amrit15') != -1
             </div>
             <div id="menuTab2" class="tab-container" style="display:none" onclick="hideMe('menuTab2')">
                 <div class="two">
+                    <div class="head">Veg Pasta</div>
+                    <div class="close-btn" onclick="hideMe('menuTab2')">
+                        <img src="./img/images/ic_close.png" />
+                    </div>
+
+                    <div class="detail">Veg penne pasta with capsicum, onion & olives served in white or red sauce of your choice.</div>
+
+                    <div class="minor-head" style="margin-top:16px">
+                        <div style="margin-top:20px">
+                            <img src="./img/images/pasta1.png" style="width: 135px;margin: 0 auto;left: 0;right: 0;position: absolute;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="menuTab3" class="tab-container" style="display:none" onclick="hideMe('menuTab3')">
+                <div class="two">
                     <div class="head">Veg Wraps</div>
                     <div class="close-btn" onclick="hideMe('menuTab2')">
                         <img src="./img/images/ic_close.png" />
@@ -1647,25 +1662,9 @@ if(location.href.indexOf('amrit15') != -1
                     </div>
                 </div>
             </div>
-            <div id="menuTab3" class="tab-container" style="display:none" onclick="hideMe('menuTab3')">
-                <div class="two">
-                    <div class="head">Garlic Bread</div>
-                    <div class="close-btn" onclick="hideMe('menuTab2')">
-                        <img src="./img/images/ic_close.png" />
-                    </div>
-
-                    <div class="detail">This mild, yet memorable delicacy offers delectable taste of garlic and a soft baked bread</div>
-
-                    <div class="minor-head" style="margin-top:16px">
-                        <div style="margin-top:20px">
-                            <img src="./img/images/garlic.png" style="width: 135px;margin: 0 auto;left: 0;right: 0;position: absolute;" />
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="menuTab4" class="tab-container" style="display:none" onclick="hideMe('menuTab4')">
                 <div class="two">
-                    <div class="head">Virgin mojito</div>
+                    <div class="head">Pacific Blue</div>
                     <div class="close-btn" onclick="hideMe('menuTab2')">
                         <img src="./img/images/ic_close.png" />
                     </div>
@@ -1674,7 +1673,7 @@ if(location.href.indexOf('amrit15') != -1
 
                     <div class="minor-head" style="margin-top:16px">
                         <div style="margin-top:20px">
-                            <img src="./img/images/mojito.png" style="width: 76px;margin: 0 auto;left: 0;right: 0;position: absolute;margin-top: 14px;left: -19px;" />
+                            <img src="./img/images/drink.png" style="width: 76px;margin: 0 auto;left: 0;right: 0;position: absolute;margin-top: 14px;left: -19px;" />
                         </div>
                     </div>
                 </div>

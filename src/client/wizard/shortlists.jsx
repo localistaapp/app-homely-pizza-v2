@@ -816,13 +816,13 @@ class Shortlists extends Component {
                      2: {
                        "selectPkgActualPrice": "249",
                        "selectPkgPrice": "299",
-                       "selectedPkgDescription": "A starter mini veg wrap (4 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgDescription": "A starter mini veg wrap (4 inch long) or veg pasta, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
                        "selectedPkgTitle": " Pizza Mini Combo Meal"
                      },
                      3: {
                        "selectPkgActualPrice": "299",
                        "selectPkgPrice": "359",
-                       "selectedPkgDescription": "A starter full veg wrap (8 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgDescription": "A starter full veg wrap (8 inch long) or veg pasta, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)",
                        "selectedPkgTitle": " Pizza Large Combo Meal"
                      },
                      4: {
@@ -834,7 +834,7 @@ class Shortlists extends Component {
                      5: {
                        "selectPkgActualPrice": "399",
                        "selectPkgPrice": "479",
-                       "selectedPkgDescription": "A starter garlic bread, 1 veg wrap (8 inch long) & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)",
+                       "selectedPkgDescription": "A starter garlic bread, 1 veg wrap (8 inch long) or veg pasta & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)",
                        "selectedPkgTitle": " Pizza Mega Combo Meal"
                      }
                    };
@@ -921,7 +921,7 @@ class Shortlists extends Component {
                                                 <span className="phead">{this.state.numGuests} Pizza Mini Combo Meal</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 299}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 249}</span></label></div>
                                                 <div className="pdetail">
-                                                    A starter mini veg wrap (4 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
+                                                    A starter mini veg wrap (4 inch long) or veg pasta, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
                                                 </div>
                                                 <br/><br/><br/>
                                                 <span className="phead" style={{marginTop: '220px',left: '22px'}}>Inclusions</span>
@@ -947,7 +947,7 @@ class Shortlists extends Component {
                                                 <span className="phead">{this.state.numGuests} Pizza Large Combo Meal</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 359}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 299}</span></label></div>
                                                 <div className="pdetail">
-                                                    A starter full veg wrap  (8 inch long), 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
+                                                    A starter full veg wrap  (8 inch long) or veg pasta, 3 slices of pizza and a choice of drink (Virgin mojito or Pacific blue)
                                                 </div>
                                                 <br/><br/><br/>
                                                 <span className="phead" style={{marginTop: '214px',left: '22px'}}>Inclusions</span>
@@ -999,7 +999,7 @@ class Shortlists extends Component {
                                                 <span className="phead">{this.state.numGuests} Italian Meal Combo</span>
                                                 <div className="pricing"><label className="price"><span className="slashed">{this.state.numGuests * 479}</span><span className="rupee" style={{marginLeft: '6px'}}>₹</span><span className="orig" style={{marginRight: '12px'}}>{this.state.numGuests * 399}</span></label></div>
                                                 <div className="pdetail">
-                                                    A starter garlic bread, 1 veg wrap (8 inch long) & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)
+                                                    A starter garlic bread, 1 veg wrap (8 inch long) or veg pasta & 3 slices pizza and 1 choice of drink (Virgin mojito or Pacific blue)
                                                 </div>
                                                 <br/><br/><br/>
                                                 <span className="phead" style={{marginTop: '214px',left: '22px'}}>Inclusions</span>
