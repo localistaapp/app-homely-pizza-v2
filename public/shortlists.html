@@ -1822,6 +1822,12 @@ text-size-adjust:none;
   margin-left: 1rem;
 }
 
+@media (min-width: 754px){
+    .step-detail {
+        width: 500px;
+    }
+}
+
 @media only screen and (max-width: 768px) {
   .main .glider-contain .glider-prev,
 .main .glider-contain .glider-next {
@@ -2348,13 +2354,14 @@ ul li{
     margin: 0 auto;
     left: 0;
     right: 0;
-    width: 320px;
     text-align: center;
     margin-top: 200px;
     font-size: 20px;
     font-family: Quicksand;
     color: #000;
     line-height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .bottom-bar {
     background: linear-gradient(0deg, rgb(255 255 255) 0%, rgb(255 255 255) 35%, rgb(255 255 255 / 0%) 100%);
@@ -2526,11 +2533,7 @@ input#dMobile:focus {
   background-color: white;
   margin-bottom: 100px;
 }
-@media (min-width: 768px) {
-  .dropdown {
-    width: 600px;
-  }
-}
+
 .dropdown__switch:checked + .dropdown__options-filter .dropdown__select {
   transform: scaleY(1);
   background: #fff;
@@ -2649,7 +2652,6 @@ input#dMobile:focus {
     margin-left: 39px;
 }
 .menu-container-ls {
-    width:83vw;
     height:700px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     padding: 20px;
