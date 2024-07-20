@@ -23,7 +23,7 @@ textarea:focus {
 }
 a.main-button,
 input[type="submit"] {
-      background: linear-gradient(180deg,  #fd6e5b 0%, #fe4737 80%, #fe4737 100%);
+      background: linear-gradient(180deg, #fa5c5f 0%, #f92c30 80%, #ff0005 100%);
       border: 0;
       letter-spacing: 1px;
       text-transform: none;
@@ -47,7 +47,7 @@ input[type="submit"] {
 .navbar-default .navbar-nav > li:hover > a,
 .navbar-default .navbar-nav > li > a.active {
   color: #fff;
-  background-color: #0abc9a;
+  background-color: #fa5c5f;
 }
 .dropdown > li:hover > a,
 .sup-dropdown li:hover > a {

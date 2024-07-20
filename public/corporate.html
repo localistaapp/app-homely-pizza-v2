@@ -13,14 +13,126 @@
 }
 
 .mob-main {
-    width: 320px;position: absolute;top: 120px;
+    width: 320px;position: absolute;top: 120px;left:0px;
 }
 
 .logo-text {
     margin-left: 320px;
 }
 
+.desc {
+    padding-right: 40px;
+    font-family: Quicksand;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 24px;
+    color: #363636;
+    text-align: center;
+    font-size: 14px;
+    padding-right: 12px;
+    position: absolute;
+    top: 2200px;
+    background: none;
+}
+
+.menu-container {
+    max-width: 100vw;
+    overflow-x: scroll;
+}
+.menu-container-ls {
+    width:300px;
+    height:220px;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 0px 40px 0px;
+    padding: 20px;
+    text-align: left;
+    position: relative;
+    border-radius: 6px;
+}
+.menu-container-ls img {
+    width:48px;
+}
+.info-container-3 .menu-container-ls img {
+    width: 100%;
+}
+.info-container-3 .menu-container-ls {
+    width: 100%;
+    height: 220px;
+    box-shadow: none;
+    padding: 0px;
+    text-align: left;
+    position: relative;
+    border-radius: 6px;
+    margin-bottom: 40px;
+}
+.ls-food-menu {
+    box-shadow: none;
+}
+.ls-food-menu  img {
+    width: 128px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    border-radius: 430px;
+    box-shadow: rgb(0 0 0 / 20%) 0px 30px 40px 0px;
+}
+.ls-food-menu .detail {
+    position: absolute;
+    top: 173px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    background: #f4f0f0;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 42px;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 0px 40px 0px;
+}
+.menu-title {
+    margin-top: 136px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #000;
+    box-shadow: rgb(50 50 93 / 0%) 0px 30px 60px -12px inset, rgb(0 0 0 / 7%) 0px 18px 36px -18px inset;
+}
+.feature-info {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+}
+.info-container {
+    margin-top: 62px;
+    position: absolute;
+    width: 1160px;
+}
+.info-container-2 {
+    margin-top: 402px;
+    position: absolute;
+    width: 1160px;
+}
+.info-container-3 {
+    margin-top: 752px;
+    position: absolute;
+    width: 1160px;
+}
+.info-container-4 {
+    margin-top: 1102px;
+    position: absolute;
+    width: 1160px;
+}
+.title-container {
+    margin-top: 96px !important;
+}
+br.mobile-only { display: none; }
+
 @media (max-width: 599px){
+br.mobile-only { display: block; }
 .marquee {
     margin-left: -20px !important;
     margin-top: 24px !important;
@@ -34,8 +146,50 @@
   margin-left: 10px;
   width: 142px;
 }
-.mob-main {
+.desc {
+    position: absolute;
+    top: 5032px;
+    background: none;
+}
+.classic-title {
+    display: none;
+}
+.menu-container-ls {
+    width: inherit;
+}
+.feature-info {
+    display: block;
+    margin-top: 12px;
+}
+.info-container {
+    width: inherit;
+    margin-left: -21px;
+    margin-top: 24px;
+    padding: 21px;
+}
+.info-container-2 {
+    width: inherit;
+    margin-left: -21px;
+    margin-top: 1094px;
+    padding: 21px;
+}
+.info-container-3 {
+    width: inherit;
+    margin-left: -21px;
+    margin-top: 2154px;
+    padding: 21px;
+}
+.info-container-4 {
+    width: inherit;
+    margin-left: -21px;
+    margin-top: 3394px;
+    padding: 21px;
+}
+.mob-main-container {
     position: relative;
+}
+.mob-main {
+    position: absolute;
     top: 0px;
     margin: 0 auto;
     left: 0;
@@ -51,10 +205,11 @@
     position: relative;
     background: #fff;
     margin-top: -46px;
-    width: 88%;
     }
 .theme-label {
     margin-left: 0px !important;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 24px;
 }
 }
 
@@ -148,7 +303,6 @@ text-size-adjust:none;
         display: none;
       }
       .hero-text {
-        padding: 8px 16px 14px;
         border-radius: 6px;
         z-index: 9999999999;
         position: relative;
@@ -185,7 +339,7 @@ text-size-adjust:none;
             font-size: 20px;
             line-height: 28px;
             color: #666;
-            margin-top: 16px;
+            margin-top: 36px;
         }
 
         .panel-center {
@@ -247,9 +401,9 @@ text-size-adjust:none;
                 padding-right: 20px;
                }
                .img-table {
-                    margin-top: 38px;
+                    margin-top: 468px;
                     width: 100%;
-                    padding: 8px 16px 14px;
+                    padding: 0;
                 }
                 .theme-label{
                     margin-left: -8px;
@@ -272,6 +426,9 @@ text-size-adjust:none;
                 }
                .desktop {
                 display: inline-block;
+                position: fixed;
+                width: 360px;
+                z-index: 1;
                }
                .mob-only {
                 display: none;
@@ -544,20 +701,6 @@ text-size-adjust:none;
                 box-sizing: border-box;
                 }
 
-                body {
-                display: grid;
-                align-content: center;
-                overflow: hidden;
-                gap: var(--gap);
-                width: 100%;
-                min-height: 100vh;
-                font-family: system-ui, sans-serif;
-                font-size: 1rem;
-                line-height: 1.5;
-                color: var(--color-text);
-                background-color: var(--color-bg);
-                }
-
                 .marquee {
                 display: flex;
                 overflow: hidden;
@@ -760,13 +903,13 @@ text-size-adjust:none;
                 <li><a class=" menu_home_link" style="cursor:pointer;padding-top: 10px; padding-bottom: 10px;">Home</a></li>
                 
                 <li>
-                    <a style="cursor:pointer;padding-right: 20px; padding-top: 10px; padding-bottom: 10px;" onClick="navTo('whyUs')">Why us&nbsp;&nbsp;</a>
+                    <a style="cursor:pointer;padding-right: 20px; padding-top: 10px; padding-bottom: 10px;" onClick="navTo('whyUs')">Popular Menu&nbsp;&nbsp;</a>
                 </li>
                 <li>
                 </li>
                 
                 
-                    <li><a class=" menu_login_link" style="cursor:pointer; padding-top: 10px; padding-bottom: 10px;" onClick="navTo('menu')">Popular Menu</a></li>
+                    <li><a class=" menu_login_link" style="cursor:pointer; padding-top: 10px; padding-bottom: 10px;" onClick="navTo('menu')">Why us</a></li>
 
                 
             </ul>
@@ -786,22 +929,22 @@ text-size-adjust:none;
     <div id="content" class="background">
         <div class="container">
             <div class="row" style="min-height: 308px;">
-                <div class="col-sm-6 col-md-8" style="padding-left: 13px;padding-right: 13px; ">
+                <div class="col-sm-6 col-md-8">
                     <div class="hero-text">
                         <h1 class="big_title" style="background: none;font-weight: normal;">Your <span class="highlight-container">on-demand</span> cloud cafeteria!</h1>
                         <h3 id="desc" class="small_title" style="font-weight: normal;font-family: quicksand;margin-left:0px;">
-                            Healthy and delectable meals served on-demand through white label cafeteria solution & a custom ordering app.
+                            Healthy and delectable lunch served on-demand through white label cafeteria solution & a custom ordering app.
                         </h3>
 
 
 
                     </div>
-                    <div><img class="desktop-only" style="border-radius:10px;margin-top: 16px;" src="./img/images/cafe.jpeg"/></div>
-                    <div><img class="mob-main" src="./img/images/cafesample1.png"/></div>
+                    <div><img class="desktop-only" style="border-radius:10px;margin-top: 36px;" src="./img/images/cafe.jpeg"/></div>
+                    <div class="mob-main-container"><img class="mob-main" src="./img/images/cafesample1.png"/></div>
                 </div>
 
                 <div class="col-sm-6 col-md-4">
-                     <div class="panel-center desktop">
+                     <div class="panel-center desktop" id="desktopForm">
                         <h1 class="form_title" style="display: none"></h1>
                         <form onSubmit="checkFields();" action="/search" method="get" class="landing_page" >
     
@@ -821,7 +964,7 @@ text-size-adjust:none;
 
     
         <input type="text" id="q" name="q" class="form-control" id="id_location" placeholder="Your company name" autocomplete="off" required="required">
-        <input type="text" id="c" name="c" class="form-control" id="id_location" placeholder="Number of employees" autocomplete="off" required="required">
+        <input type="text" id="c" name="c" class="form-control" id="id_location" placeholder="Number of employees interested" autocomplete="off" required="required">
 
         
     
@@ -884,8 +1027,149 @@ text-size-adjust:none;
 
     </div>
 
+    <div class="info info-container">
+        <div class="theme-label" style="margin-left: 0px">Popular Menu</div>
+        <br/>
+        <div class="para feature-info">
+            <div class="menu-container-ls ls-food-menu">
+                <img src="./img/images/mexican.png">
+                <div class="detail">Mexican Rice Bowl @₹125/-</div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls ls-food-menu">
+                <img src="./img/images/desi.png">
+                <div class="detail">Desi Tadka @₹115/-</div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls ls-food-menu">
+                <img src="./img/images/spagetti.png">
+                <div class="detail">Spaghetti @₹135/-</div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls ls-food-menu">
+                <img src="./img/images/pasta01.png">
+                <div class="detail">Penne Pasta @₹125/-</div>
+                <br><br><br><br>
+
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        </div>
+       
+
+    </div>
+
+
+
+    <div class="info info-container-2">
+        <div class="theme-label" style="margin-left: 0px">Why Us</div>
+        <h3 class="classic-title" style="margin-top: 18px;"><span></span></h3>
+        <br class="mobile-only" />
+        <div class="para feature-info">
+            <div class="menu-container-ls">
+                <img src="./img/images/ihot.png">
+                <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Hot food @ desk!</span>
+                <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                    We serve hot &amp; fresh food, super fast with our fully complient electric live counter.
+                </div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/ikiosk.png">
+                <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Anywhere kiosk</span>
+                <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                    Our portable setup ensures we can easily setup a live counter even in a small 2ft x 3ft space.
+                </div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/ishield.png">
+                <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Safety Compliant</span>
+                <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                    With our fully electric equipment, you can be rest assured of smoke-free &amp; fire-free environment at your workplace.
+                </div>
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/ibank.png">
+                <span class="head" style="position:absolute;top:34px;left:78px;font-size:20px">Trusted &amp; affordable</span>
+                <div class="detail" style="position:absolute;top: 64px;left: 0px;font-size:20px;padding: 20px;font-size:16px;">
+                    Our menu is reasonably priced to cater to the wider community. Our service is trusted &amp; rated the best for fast and timely service.
+                </div>
+                <br><br><br><br>
+
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        </div>
+        
+
+    </div>
+
+
+
+    <div class="info info-container-3">
+        <div class="theme-label" style="margin-left: 0px">Top Rated</div>
+        <h3 class="classic-title" style="margin-top: 18px;"><span></span></h3>
+        <br class="mobile-only" />
+        <div class="para feature-info">
+            <div class="menu-container-ls">
+                <img src="./img/images/testi1.png">
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/testi2.png">
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/testi3.png">
+                <br><br><br><br>
+
+            </div>
+            <br>
+            <div class="menu-container-ls">
+                <img src="./img/images/testi4.png">
+                <br><br><br><br>
+
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        </div>
+        
+
+    </div>
+
+
+    <div class="info info-container-4">
+        <div class="theme-label" style="margin-left: 0px">White-label Solution</div>
+        <h3 class="classic-title" style="margin-top: 18px;"><span></span></h3>
+        <br class="mobile-only" />
+        <div>A white-label cafeteria solution integrated with an ordering app presents a modern, streamlined approach to managing employee meal services. This innovative solution allows businesses to offer a branded, seamless dining experience within their premises. Employees can pre-order meals through the app, reducing wait times and ensuring their food is ready when they need it. 
+            <br/><br/>The app also features a user-friendly interface, offering menu browsing, nutritional information, and customization options. Additionally, it supports various payment methods, making transactions quick and convenient.</div>
+        
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+    </div>
+    <div class="desc" style="text-align: center;font-size: 15px;padding-right: 12px;"><p style="font-size:15px">Copyright © 2024 Slimcrust   |   <a href="/terms" style="display:inline;font-size:15px;color:#666;text-decoration:underline">Terms & Conditions</a></p></div>
     
 </div>
+
 
 
  </p>
@@ -910,8 +1194,8 @@ text-size-adjust:none;
 
 
 
-
-                            <input type="text" style="border: 1px solid #949494;border-radius: 6px;font-size: 16px;height: 40px;" id="q" name="q" class="form-control" placeholder="Enter the number of employees" autocomplete="off" required="required">
+                        <input type="text" id="q" name="q" class="form-control" id="id_location" placeholder="Your company name" autocomplete="off" required="required" style="border: 1px solid #949494;border-radius: 6px;font-size: 16px;height: 40px;">
+                        <input type="text" style="border: 1px solid #949494;border-radius: 6px;font-size: 16px;height: 40px;" id="q" name="q" class="form-control" placeholder="Number of employees interested" autocomplete="off" required="required">
 
 
 
@@ -945,32 +1229,7 @@ text-size-adjust:none;
 <div class="clear"></div>
 
 <div class="row">
-    <div class="project">
-        <style type="text/css">
-        .testimonials2 .item td.col1 {
-            vertical-align: top;
-            text-align: center;
-            width: 106px;
-            padding: 5px;
-        }
-
-        .testimonials2 .item td.col1 img {
-            width: 96px;
-        }
-
-        .testimonials2 .item td.col2 {
-            background: #f1f1f1;
-            padding: 5px;
-            text-align: justify;
-            text-justify: inter-word;
-            height: 120px;
-            font-size: 10px;
-        }
-
-
-
-
-        </style>
+    <div class="project title-container">
 
         <div class="latest-posts testimonials2">
             <h3 class="classic-title"><span></span></h3>
@@ -1038,6 +1297,14 @@ text-size-adjust:none;
     
 
 <script>
+    window.addEventListener("scroll", function() {
+        if (window.scrollY < 20) {
+            document.getElementById('desktopForm').style.top = '142px';
+        } else {
+            document.getElementById('desktopForm').style.top = '24px';
+        }
+    });
+
     function navTo(item) {
       var scrollVal = 584;
       switch(item) {
@@ -1136,7 +1403,6 @@ control.addEventListener("click", () => {
     marquee.classList.toggle("marquee--vertical")
   );
 });
-
 
 </script>
 
