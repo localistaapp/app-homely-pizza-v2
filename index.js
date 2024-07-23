@@ -2627,8 +2627,29 @@ app.post('/submitGetQuote', function(req, res) {
 });
 
 app.get("/search", function(request, response) {
-  response.sendFile(path.resolve(__dirname, 'public', 'guide.html'));
+  let q = request.query.q;
+  let c = request.query.c;
+  console.log('--q--', q);
+  console.log('--c--', c);
+
+const client = new Client(dbConfig)
+client.connect(err => {
+  if (err) {
+    console.error('error connecting', err.stack)
+  } else {
+    console.log('connected')
+
+    client.query("INSERT INTO \"public\".\"corporate_enquiry\"(company_name, num_employees) VALUES($1, $2)",
+                      [q, c], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                            } 
+                          });
+  }
 });
+  response.sendFile(path.resolve(__dirname, 'public', 'confirmation.html'));
+});
+
 
 app.get("/recommended-picks", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'picks.html'));
