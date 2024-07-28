@@ -663,7 +663,7 @@ class Stages extends Component {
 
 
         return (<div>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
                     <span className="stage-heading">Getting Ready.. Stage 1/3</span>
                     <div id="checkoutHeader">
                         <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-20px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→

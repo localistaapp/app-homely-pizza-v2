@@ -356,8 +356,8 @@ class Dashboard extends Component {
             curStep: 1,
             redirect: false,
             statTotalSales: '',
-            statTotalPizzas: '',
-            statMonthlySales: '',
+            statEventSales: '',
+            statStoreSales: '',
             role: 'user'
         };
         window.currSlotSelected = '';
@@ -365,12 +365,12 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        if(sessionStorage.getItem('user') != null) {
+        /*if(sessionStorage.getItem('user') != null) {
             this.initializeStats(sessionStorage.getItem('user').replaceAll('"',''));
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
-        }
-        //this.initializeStats('slimcrustmathikereowner@gmail.com');
+        }*/
+        this.initializeStats('slimcrustbskowner@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -410,11 +410,11 @@ class Dashboard extends Component {
           .then(function (response) {
             if(response.data != 'auth error') {
                 sessionStorage.setItem('user', JSON.stringify(email));
-                if (response.data && response.data.length >= 1) {
+                if (response.data) {
                     this.setState({
-                      statTotalSales: response.data.length>=3 ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data[2].sales) : 0,
-                      statTotalPizzas: response.data.length>=1 ? new Intl.NumberFormat('en-IN').format(response.data[0].sales) : 0,
-                      statMonthlySales: response.data.length>=2 ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0  }).format(response.data[1].sales) : 0
+                      statTotalSales: response.data.eventSales && response.data.storeSales?  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.eventSales + response.data.storeSales): 0,
+                      statEventSales: response.data.eventSales? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.eventSales) : 0,
+                      statStoreSales: response.data.storeSales? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.storeSales) : 0,
                     });
                 }
                 document.getElementById('dash-content').style.display='block';
@@ -434,12 +434,12 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {role, statTotalSales, statTotalPizzas, statMonthlySales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {role, statTotalSales, statEventSales, statStoreSales, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
                     <span id="logout" className="logout" onClick={this.logout}>Logout</span>
-                    {sessionStorage.getItem('user') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                    {<GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                     <Paper id="dash-content" style={{display:'none'}}>
 
                                               <TabPanel value={this.state.value} index={0}>
@@ -447,8 +447,8 @@ class Dashboard extends Component {
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <div className="sales-dashlet">
                                                        <img className="dashboard-icon" src="../img/images/increase.png"/><span className="stage-desc dash">{statTotalSales}</span>
-                                                       <img className="dashboard-icon" src="../img/images/monthly.png" style={{marginLeft: '80px'}}/><span className="stage-desc dash">{statMonthlySales}</span>
-                                                       <img className="dashboard-icon" src="../img/images/pizzaic1.png" style={{marginLeft: '72px', width: '24px'}}/><span className="stage-desc dash">{statTotalPizzas}</span>
+                                                       <img className="dashboard-icon" src="../img/images/event.png" style={{marginLeft: '86px',width:'26px'}}/><span className="stage-desc dash">{statEventSales}</span>
+                                                       <img className="dashboard-icon" src="../img/images/food-cart.png" style={{marginLeft: '86px', width: '24px'}}/><span className="stage-desc dash">{statStoreSales}</span>
                                                    </div>
                                                    <br/>
                                                    {role == 'super-user' && <div>

@@ -1233,6 +1233,7 @@ app.post('/homelyOrder', function(req, res) {
 
 app.get("/event-orders/:email", function(req, res) {
   let email = req.params.email;
+  email = email.replace('owner@','@');
   const client = new Client(dbConfig)
 
   client.connect(err => {
@@ -1329,7 +1330,7 @@ client.connect(err => {
 
                                     
                                       //if email contains owner, change query
-                                    let statsQuery = "SELECT SUM (quote_amt) as sales FROM confirmed_order "+franchiseWhereClause1+" UNION SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2+" UNION SELECT SUM (pizza_quantity) as sales FROM confirmed_order "+franchiseWhereClause1;
+                                    let statsQuery ="SELECT SUM (quote_amt) as sales FROM confirmed_order where event_date >= to_char(current_date, 'YYYY-MM-01') and event_date <= to_char(current_date, 'YYYY-MM-31') "+franchiseWhereClause2;
                                     if (origEmail.indexOf('owner') >= 0) {
                                       console.log('--franchiseId--', franchiseId);
                                       client.query("Select id from store where franchise_id = "+franchiseId,
@@ -1341,7 +1342,6 @@ client.connect(err => {
                                             } else {
                                               console.log('--franchiseStoreId--', responseNested.rows[0]['id']);
                                               let franchiseStoreId = responseNested.rows[0]['id'];
-                                              statsQuery = statsQuery + " UNION SELECT SUM(total_price) as sales from store_order where store_id = "+franchiseStoreId;
                                               console.log('--statsQuery 1--', statsQuery);
                                               
                                               client.query(statsQuery,
@@ -1351,8 +1351,29 @@ client.connect(err => {
                                                          res.send("error");
                                                          client.end();
                                                       } else {
-                                                         res.send(response.rows);
-                                                         client.end();
+                                                        let eventOrders = response.rows[0].sales;
+                                                        
+                                                        let storeStatsQuery ="select sum(discounted_price) as sales from store_order where store_id IN (select id from store "+franchiseWhereClause1+") and status = 'PAID' and created_at >= date_trunc('month', current_date) AND created_at < date_trunc('month', current_date) + interval '1 month'";
+                                                        console.log('-storeStatsQuery-', storeStatsQuery);    
+                                                          client.query(storeStatsQuery,
+                                                              [], (storeErr, storeResponse) => {
+                                                                    if (storeErr) {
+                                                                      console.log(storeErr)
+                                                                      res.send("error");
+                                                                      client.end();
+                                                                    } else {
+                                                                      let storeOrders = storeResponse.rows[0].sales;
+                                                                      console.log('--event orders--', eventOrders);
+                                                                      console.log('--storeOrders orders--', storeOrders);                                                  
+              
+                                                                      
+                                                                      res.send('{"eventSales":'+eventOrders+',"storeSales":'+storeOrders+'}');
+                                                                      client.end();
+                                                                    }
+                      
+                                                                  });
+                                                         //res.send(response.rows);
+                                                         //client.end();
                                                       }
          
                                                     });

@@ -395,9 +395,8 @@ class Stages extends Component {
         var totalFlourQty = pizzaQty * 120 + garlicQty * 110;
 
         var maidaQty = (totalFlourQty * 0.8) + (wrapsQty * 35) + dryFlourQty;
-        ingredients.push({name: 'Refined flour', qty: maidaQty, unit:'g', nos: '1'});
+        
         var attaQty = (totalFlourQty * 0.2) + (wrapsQty * 35);
-        ingredients.push({name: 'Wheat flour', qty: attaQty, unit:'g', nos: '1'});
         ingredients.push({name: 'Pizza sauce', qty: 325, unit:'g', nos: Math.ceil((4 * pizzaQty)/30 + (1 * wrapsQty)/20)});
         ingredients.push({name: 'Tomato sauce', qty: 500, unit:'g', nos: Math.round((1 * pizzaQty)/30)});
         ingredients.push({name: 'White sauce', qty: 325, unit:'g', nos: Math.ceil((1 * pizzaQty)/50 + (1 * wrapsQty)/30)});
@@ -685,7 +684,7 @@ class Stages extends Component {
 
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/orders';}} />
                     <Paper>
                                               <Tabs
                                                 value={this.state.value}

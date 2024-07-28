@@ -491,7 +491,7 @@ class Dashboard extends Component {
         });
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>

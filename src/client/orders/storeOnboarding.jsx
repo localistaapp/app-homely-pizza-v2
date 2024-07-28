@@ -439,7 +439,7 @@ class Dashboard extends Component {
         const { id, title, expand, onClick } = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/store';}} />
                     {status == 'success' && <span className="stage-heading status-success">Inventory updated successfully</span>}
                     
                     

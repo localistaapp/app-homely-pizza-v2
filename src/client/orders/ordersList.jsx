@@ -1172,7 +1172,7 @@ class Stages extends Component {
 
 
         return (<div>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     {status == 'success' && <span className="stage-heading status-success">Order updated successfully</span>}
                     <span className="stage-heading" style={{top: '100px',background: '#f6f6f6'}}>Upcoming Event Orders</span>
 

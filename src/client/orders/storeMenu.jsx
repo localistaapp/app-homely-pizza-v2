@@ -204,7 +204,7 @@ class Dashboard extends Component {
     render() {
 
         return (<div style={{marginTop: '84px'}}>
-        <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} />
+        <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
         <span id="logout" className="logout" onClick={this.logout}>Logout</span>
         <Paper id="dash-content">
           <TabPanel value={this.state.value} index={0}>

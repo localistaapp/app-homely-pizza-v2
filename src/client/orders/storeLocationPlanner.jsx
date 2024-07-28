@@ -255,7 +255,7 @@ class Dashboard extends Component {
         const {localities, status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/logo_sc.png" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <span className="stage-heading" style={{marginTop: '-12px',background: '#f6f6f6'}}><OrdersIcon />&nbsp;&nbsp;Store Location Planner</span>
                                                    
