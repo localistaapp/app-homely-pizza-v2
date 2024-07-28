@@ -365,12 +365,12 @@ class Dashboard extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-        /*if(sessionStorage.getItem('user') != null) {
+        if(sessionStorage.getItem('user') != null) {
             this.initializeStats(sessionStorage.getItem('user').replaceAll('"',''));
             document.getElementById('dash-content').style.display='block';
             document.getElementById('logout').style.display='block';
-        }*/
-        this.initializeStats('slimcrustbskowner@gmail.com');
+        }
+        //this.initializeStats('slimcrustbskowner@gmail.com');
     }
     fmt(s){
         var formatted = "";
@@ -439,7 +439,7 @@ class Dashboard extends Component {
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} />
                     <span id="logout" className="logout" onClick={this.logout}>Logout</span>
-                    {<GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                    {sessionStorage.getItem('user') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log(response);this.initializeStats(response.email);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                     <Paper id="dash-content" style={{display:'none'}}>
 
                                               <TabPanel value={this.state.value} index={0}>
