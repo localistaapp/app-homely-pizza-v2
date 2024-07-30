@@ -14,5 +14,10 @@ render(<Router>
                             <Route exact path="/" component={CreateClubWithRouter} />
                         <Route  path="/club" component={CreateClubWithRouter} />
                     </div>)} />
+        <Route path="/cafe/:id" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={CreateClubWithRouter} />
+            <Route  path="/cafe/:id" component={CreateClubWithRouter} />
+        </div>)} />
     </div>
 </Router>, document.getElementById('containerWiz'));

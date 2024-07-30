@@ -790,6 +790,11 @@ app.get("/club/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'club.html'));
 });
 
+app.get("/cafe/:cafeId", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'corporatepwa.html'));
+});
+
+
 app.get("/franchise/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'franchise.html'));
 });
@@ -949,6 +954,12 @@ app.get("/credits/", function(request, response) {
 app.get("/data/:task/:loc/:zone", function(request, response) {
   const fs = require('fs');
   let rawdata = fs.readFileSync('./src/data-source/'+request.params.task+'/'+request.params.loc+'/'+request.params.zone+'/mockDataQnA.json');
+  response.send(rawdata);
+});
+
+app.get("/cafe/data/:id", function(request, response) {
+  const fs = require('fs');
+  let rawdata = fs.readFileSync('./src/data-source/cafe/'+request.params.id+'/mockDataQnA.json');
   response.send(rawdata);
 });
 
