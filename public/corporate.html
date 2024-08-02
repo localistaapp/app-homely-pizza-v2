@@ -894,7 +894,12 @@ text-size-adjust:none;
 
 </head>
 <body>
-
+    <form action="/create-pg-payment" method="GET">
+    <input type="hidden" name="amount" value="155"> <!-- Amount in INR -->
+    <input type="hidden" name="orderId" value="ORDER12345"> <!-- Unique Order ID -->
+    <input type="hidden" name="redirectUrl" value="https://your-website.com/payment-success">
+    <button type="submit">Pay with PhonePe</button>
+  </form>
 <!-- Full Body Container -->
 <div id="container">
     <!-- Start Header Section -->
@@ -965,6 +970,7 @@ text-size-adjust:none;
                 <div class="col-sm-6 col-md-4">
                      <div class="panel-center desktop" id="desktopForm">
                         <h1 class="form_title" style="display: none"></h1>
+                        
                         <form onSubmit="checkFields();" action="/search" method="get" class="landing_page" >
     
         
@@ -984,6 +990,7 @@ text-size-adjust:none;
     
         <input type="text" id="q" name="q" class="form-control" id="id_location" placeholder="Your company name" autocomplete="off" required="required">
         <input type="text" id="c" name="c" class="form-control" id="id_location" placeholder="Number of employees interested" autocomplete="off" required="required">
+        
 
         
     

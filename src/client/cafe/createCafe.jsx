@@ -97,7 +97,7 @@ class ReviewContainer extends Component {
             localStorage.setItem("basket",basketStr)
         });
 
-        if (location.href.indexOf('/redirect') >= 0) {
+        if (location.href.indexOf('?qr=') >= 0) {
             this.setState({redirect: true});
         }
         const label = document.querySelector('.dropdown__filter-selected')
@@ -219,20 +219,6 @@ class ReviewContainer extends Component {
                     );
                 })}
                 </div>
-
-
-                {type != 'starters' && <div className="topic-container" style={{height: '76px'}}>
-                    <div className="card-mini-title">Select your crust:</div>
-                    {crustOptions && crustOptions.map((crust, indexCrust) => {
-                        return (
-                            <React.Fragment>
-                                <div className={activeCrustIndex===indexCrust ? 'review-topic active-crust': 'review-topic'} onClick={()=>{this.setActiveCrust(crust, indexCrust); this.setCrustPrice(indexCrust); }}>
-                                    {crust.topic}
-                                </div>
-                            </React.Fragment>
-                        );
-                    })}
-                </div>}
 
                 {type == 'starters' && <div>
                     <div class="title starter-title">Freshly baked on arrival of your order</div>
@@ -377,11 +363,11 @@ class SummaryCard extends Component {
                 <div className="section-one">
                     <div className="top">
                         <div className="top-left-mini">
-                                <img id={`primaryImg${index}`} className="primary-img rotatable" src={`../../../img/images/${prefix}${summaryId}.png`} style={{width: '72px',paddingTop: '0px'}} />
+                                <img id={`primaryImg${index}`} className="primary-img rotatable" src={`../../../img/images/cafe${prefix}${summaryId}.png`} style={{width: '86px',paddingTop: '0px'}} />
                         </div>
                         <div className="top-right-mini">
                             <div className="usp-title"><div className="title" style={{marginTop: '-10px'}}>{data.name}</div></div>
-                            {data.type == 'starter' ? <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} single starter(s)</div> : <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} {data.size} pizza(s)</div>}
+                            {data.type == 'starter' ? <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} single starter(s)</div> : <div className="usp-desc" style={{color:'#656565', marginTop: '48px'}}>{data.qty} {data.size} portion</div>}
                         </div>
                     </div>
                 </div>
@@ -538,7 +524,7 @@ class Dashboard extends Component {
             }
         });
 
-        total = total + (0.04*total) + 75;
+        total = total + (0.04*total) + 5;
         if(!this.state.couponApplied) {
             localStorage.setItem('dPrice', Math.round(total));
         }
@@ -829,22 +815,14 @@ class Dashboard extends Component {
         http.send(params);
     }
     checkDeliveryOptions() {
-        if (this.state.onlineOrdersPinCodes && this.state.onlineOrdersPinCodes.indexOf(document.getElementById('dPincode').value)>=0) {
-            var curDay = weekdays[new Date().getDay()].toLowerCase();
-            if (this.state.onlineOrdersTimings.hasOwnProperty(curDay) && this.state.onlineOrdersTimings[curDay].length > 0) {
-                console.log('--schedule--', this.state.onlineOrdersTimings[curDay]);
-                this.setState({currDayTimings: this.state.onlineOrdersTimings[curDay]});
-
-                this.setState({showDeliveryOptions: true, deliveryNotSupported: false});
-                document.getElementById('checkoutBtnStep2').style.display = 'block';
-            } else {
-                this.setState({showDeliveryOptions: false, deliveryNotSupported: true});
-                document.getElementById('checkoutBtnStep2').style.display = 'none';
-            }
-        } else {
-            this.setState({showDeliveryOptions: false, deliveryNotSupported: true});
-            document.getElementById('checkoutBtnStep2').style.display = 'none';
-        }
+        this.setState({activeStep: 3, showCoupon: false, showSlot: false, couponApplied: false});
+    }
+    payRedirect() {
+        let amount = Math.round(this.getTotal());
+        let orderId = '123789';
+        setTimeout(()=>{
+            window.location.href='/create-pg-payment?amount='+amount+'&orderId='+orderId;
+        }, 2000);
     }
 
     render() {
@@ -946,13 +924,13 @@ class Dashboard extends Component {
                                 </div>
                                 <div id="step2" className="md-step">
                                   <div className="md-step-circle" id="step2Circle"><span>2</span></div>
-                                  <div className="md-step-title">Delivery Schedule</div>
+                                  <div className="md-step-title">Payment</div>
                                   <div className="md-step-bar-left"></div>
                                   <div className="md-step-bar-right"></div>
                                 </div>
                                 <div id="step3" className="md-step">
                                   <div className="md-step-circle" id="step3Circle"><span>3</span></div>
-                                  <div className="md-step-title">Delivery Details</div>
+                                  <div className="md-step-title">Food Pick-up</div>
                                   <div className="md-step-bar-left"></div>
                                   <div className="md-step-bar-right"></div>
                                 </div>
@@ -968,9 +946,9 @@ class Dashboard extends Component {
                                     }
                                 })}
                                 <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
-                                    <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl GST + delivery apprx.)</div>
+                                    <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl convenience charges.)</div>
                                 </div>
-                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 2});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
+                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 3});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
@@ -1009,9 +987,9 @@ class Dashboard extends Component {
                                             <div className="section-one">
                                                 <div className="top">
                                                     <div className="top-right">
-                                                    <img src="../img/images/delivery.png" className="delivery-icon" style={{marginTop: '12px'}}/>
+                                                    <img src="../img/images/money.png" className="delivery-icon" style={{marginTop: '12px'}}/>
 
-                                                    <span className="title-ff" style={{top:'6px', padding: '10px', lineHeight: '22px', width: '260px'}}>Share your pincode to check delivery options:</span>
+                                                    <span className="title-ff" style={{top:'18px', padding: '10px', lineHeight: '22px', width: '260px'}}>Select a payment mode:</span>
 
                                                     </div>
                                                 </div>
@@ -1019,8 +997,7 @@ class Dashboard extends Component {
                                               
                                               <div className="usp-title" style={{left: '0',right: '0',margin: '0 auto'}}>
                                                   <div className="usp-title">
-                                                            <input id="dPincode" type="text" className="step-input" placeholder="Your pincode" style={{left: '20px',top: '0px'}}/>
-                                                            <input type="button" class="pincode-btn" value="Check Options" onClick={this.checkDeliveryOptions} />
+                                                            <input type="button" class="pincode-btn" value="Next" onClick={this.checkDeliveryOptions} />
                                                         </div>
                                                   <div className="delivery-section" style={{top:'50px', display: `${this.state.showDeliveryOptions == true ? 'block' : 'none'}`}}>
                                                     {this.state.storeAcceptingOrders == true && <div class="radios">
@@ -1109,10 +1086,9 @@ class Dashboard extends Component {
                                                   <div className="top">
                                                       <div className="top-right">
                                                           <div className="label-redirect">
-                                                            Redirecting to payment partner... Please wait...
+                                                            Redirecting to payment partner. Please wait...
                                                           </div>
                                                           <div className="pizza">
-                                                           {loaderElems}
                                                           </div>
                                                       </div>
                                                   </div>
@@ -1120,7 +1096,7 @@ class Dashboard extends Component {
 
 
                                           </div>
-
+                                    {this.payRedirect()}
 
                                 </div>}
                         </div></div>
@@ -1129,7 +1105,7 @@ class Dashboard extends Component {
                                                        
                                                        
                                                        
-                                                        {results && window.location.href.indexOf('/redirect/')==-1 && window.location.href.indexOf('/credits/')==-1 && results.map((resultItem, index) => {
+                                                        {results && window.location.href.indexOf('?qr=')==-1 && window.location.href.indexOf('/credits/')==-1 && results.map((resultItem, index) => {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
@@ -1148,15 +1124,18 @@ class Dashboard extends Component {
 
                                </div>}
 
-                               {window.location.href.indexOf('/redirect/')!=-1 && window.location.href.indexOf('&payment_status=Credit') == -1 && <div className="card-container">
+                               {window.location.href.indexOf('?qr=')!=-1 && <div className="card-container">
                                        <div className="status-title" style={{paddingTop: '38px'}}>
-                                           <span>Your order is still pending</span>
+                                           <span>Your order is complete</span>
                                            <br/><br/>
-                                           <span className="small-title">Payment failed. Please retry by clicking the button below.</span>
+                                           <span className="small-title">Please collect your meal.</span>
                                            <br/>
-                                           <div className="card-btn checkout small" onClick={()=>{window.location.href=localStorage.getItem('paymentLink');}}>Retry Payment
+                                           <div className="card-btn checkout small" onClick={()=>{window.location.href=localStorage.getItem('paymentLink');}} style={{display: 'none'}}>Retry Payment
                                                                                <div className=""></div>
                                                                            </div>
+                                            <div className="card-btn checkout small" onClick={()=>{window.location.href=location.pathname;}}>Meal Collected
+                                                <div className=""></div>
+                                            </div>
                                            <br/>
                                            <span className="small-title" style={{marginTop: '92px', fontSize: '16px'}}>If you continue to face issues, please call us at <a style={{color: '#ffd355'}} href="tel:+91-7619514999">+91-7619514999</a></span>
                                         </div>

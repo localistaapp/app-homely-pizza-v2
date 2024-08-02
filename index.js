@@ -11,6 +11,7 @@ var request= require('request');
 var { Client } = require('pg');
 var { Pool } = require('pg');
 var axios = require('axios');
+var crypto = require('crypto');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -141,6 +142,152 @@ app.use(express.static(__dirname + '/public'));
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+const MERCHANT_ID = 'PGTESTPAYUAT77';
+const MERCHANT_KEY = '14fa5465-f8a7-443f-8477-f986b8fcfde9';
+
+function generateTokenUrl(merchantId, merchantSecret, callbackUrl) {
+  const timestamp = Date.now().toString();
+  const data = `${merchantId}|${timestamp}|${callbackUrl}`;
+  
+  const hmac = crypto.createHmac('sha256', merchantSecret);
+  hmac.update(data);
+  const signature = hmac.digest('hex');
+  
+  const tokenUrl = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay/initialize?merchantId=${merchantId}&timestamp=${timestamp}&signature=${signature}`;
+  return tokenUrl;
+}
+
+app.get('/pp-token', function(request, response) {
+  const merchantId = MERCHANT_ID;
+const merchantSecret = MERCHANT_KEY;
+const callbackUrl = '/pp-success';
+
+const tokenUrl = generateTokenUrl(merchantId, merchantSecret, callbackUrl);
+console.log('--Token URL:--', tokenUrl);
+
+});
+
+app.post('/payment-pg-success', (req, res) => {
+  console.log('Webhook received:', req.body);
+
+  // Do something with the webhook data
+  // ...
+
+  // Redirect to another URL
+  res.redirect(301, '/cafe/acceldata?qr=35353513535');
+});
+
+app.get('/create-pg-payment', (req, res) => {
+  const { amount, orderId, redirectUrl } = req.query;
+  console.log('--amount--', amount);
+
+  const payload = {
+    "merchantId": "PGTESTPAYUAT77",
+    "merchantTransactionId": "ORDER12345",
+    "merchantUserId": '123',
+    "amount": amount * 100,
+    "redirectUrl": "http://localhost:5000/payment-pg-success",
+    "redirectMode": "POST",
+    "callbackUrl": "http://localhost:5000/payment-pg",
+    "mobileNumber": "1234567890",
+    "paymentInstrument": {
+      "type": "PAY_PAGE"
+    }
+  }
+
+  const payloadStr = JSON.stringify(payload);
+  let base64EncodeStr = new Buffer.from(payloadStr).toString('base64');
+
+  const checksum = crypto.createHash('sha256').update(base64EncodeStr+'/pg/v1/pay'+MERCHANT_KEY)
+                         .digest('hex');
+
+  console.log('--checksum--', checksum + '###' + '1');
+
+  const options = {
+    url: 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-VERIFY': checksum + '###' + '1',
+    },
+    body: '{"request":"'+base64EncodeStr+'"}'
+  };
+
+  request.post(options, (error, response, body) => {
+
+    //console.log('--res--', response);
+    if (error) {
+      console.log('--err--', error);
+      res.status(500).send('Error creating payment request');
+    } else {
+      console.log('--body--', body);
+      const responseBody = JSON.parse(body);
+      if (responseBody.success) {
+        //res.status(200).send(responseBody.data.instrumentResponse.redirectInfo.url);
+        res.redirect(responseBody.data.instrumentResponse.redirectInfo.url);
+      } else {
+        res.status(500).send(responseBody.message);
+      }
+    }
+  });
+});
+
+app.post('/create-payment', (req, res) => {
+  const { amount, orderId, redirectUrl } = req.body;
+
+  const payload = {
+    "merchantId": "PGTESTPAYUAT77",
+    "merchantTransactionId": "ORDER12345",
+    "merchantUserId": MERCHANT_KEY,
+    "amount": 10000,
+    "redirectUrl": "https://your-website.com/payment-success",
+    "redirectMode": "POST",
+    "callbackUrl": "https://webhook.site/85dc0642-586a-4d96-9d5a-e827b7170070",
+    "mobileNumber": "1234567890",
+    "paymentInstrument": {
+      "type": "PAY_PAGE"
+    }
+  }
+
+  const data = JSON.stringify(payload);
+
+  const checksum = crypto.createHmac('sha256', MERCHANT_KEY)
+                         .update(data)
+                         .digest('hex');
+
+  console.log('--checksum--', checksum + '###' + '1');
+
+  const options = {
+    url: 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-VERIFY': '3cadfcc71275f846d27bca8aef01c838f04665884e1f7fb7c436f61e9d7473ed' + '###' + '1',
+    },
+    body: '{"request":"ewogICAgIm1lcmNoYW50SWQiOiAiUEdURVNUUEFZVUFUNzciLAogICAgIm1lcmNoYW50VHJhbnNhY3Rpb25JZCI6ICJPUkRFUjEyMzQ1IiwKICAgICJtZXJjaGFudFVzZXJJZCI6ICIxMjMiLAogICAgImFtb3VudCI6IDEwMDAwLAogICAgInJlZGlyZWN0VXJsIjogImh0dHBzOi8veW91ci13ZWJzaXRlLmNvbS9wYXltZW50LXN1Y2Nlc3MiLAogICAgInJlZGlyZWN0TW9kZSI6ICJQT1NUIiwKICAgICJjYWxsYmFja1VybCI6ICJodHRwczovL3dlYmhvb2suc2l0ZS84NWRjMDY0Mi01ODZhLTRkOTYtOWQ1YS1lODI3YjcxNzAwNzAiLAogICAgIm1vYmlsZU51bWJlciI6ICIxMjM0NTY3ODkwIiwKICAgICJwYXltZW50SW5zdHJ1bWVudCI6IHsKICAgICAgInR5cGUiOiAiUEFZX1BBR0UiCiAgICB9CiAgfQ=="}'
+  };
+
+  console.log('--data--', data);
+
+  request.post(options, (error, response, body) => {
+
+    //console.log('--res--', response);
+    if (error) {
+      console.log('--err--', error);
+      res.status(500).send('Error creating payment request');
+    } else {
+      console.log('--body--', body);
+      const responseBody = JSON.parse(body);
+      if (responseBody.success) {
+        res.status(200).send(responseBody.data.instrumentResponse.redirectInfo.url);
+      } else {
+        res.status(500).send(responseBody.message);
+      }
+    }
+  });
+});
+
 
 
 app.get('/courses', function(request, response) {
