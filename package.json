@@ -47,7 +47,7 @@
     "update-json-file": "^1.1.1",
     "uuid-v4": "^0.1.0",
     "web-push": "^3.0.0",
-    "qrcode": "1.5.3"
+    "qrcode": "^1.5.3"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -69,6 +69,7 @@
     "update-json-file": "^1.1.1",
     "webpack": "4.40.2",
     "webpack-cli": "^3.3.12",
-    "x-ray": "^2.3.3"
+    "x-ray": "^2.3.3",
+    "qrcode": "^1.5.3"
   }
 }
