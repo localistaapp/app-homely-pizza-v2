@@ -434,7 +434,7 @@ class Dashboard extends Component {
         }
         var signedInUser = false;
         if(localStorage.getItem('clubCode') != null) {
-            axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
+            axios.get(`/corporateUser/get/${localStorage.getItem('clubCode')}`)
           .then(function (response) {
             console.log('user signed up-----', response.data);
             signedInUser = response.data;
@@ -504,10 +504,6 @@ class Dashboard extends Component {
             console.log('response data-----', response.data);
             this.setState({results: response.data.results});
           }.bind(this));
-        
-        if (localStorage.getItem('club-user-email') != null) {
-            this.isStoreAcceptingOrders();
-        }
     }
     getTotal() {
         let orderSummary = this.state.orderSummary;
@@ -745,7 +741,7 @@ class Dashboard extends Component {
         
         //create order
         var http = new XMLHttpRequest();
-        var url = '/createClubUser';
+        var url = '/createCorporateUser';
         var params = 'email='+email+'&name='+name;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -771,17 +767,9 @@ class Dashboard extends Component {
         }.bind(this);
         http.send(params);
     }
-    isStoreAcceptingOrders() {
-        axios.get(`/store/get/${localStorage.getItem('clubCode')}`)
-          .then(function (response) {
-            console.log('storeAcceptingOrders-----', response.data);
-            this.setState({onlineOrdersTimings:response.data[0].online_orders_timings, storeAcceptingOrders: response.data[0].accepting_online_orders == 'Y' ? true: false, onlineOrdersPinCodes: response.data[0].online_orders_pincodes});
-          }.bind(this));
-        return true;
-    }
     onboardClubUser() {
         var http = new XMLHttpRequest();
-        var url = '/onboardClubUser';
+        var url = '/onboardCorporateUser';
         var params = 'email='+localStorage.getItem('club-user-email');
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -833,7 +821,7 @@ class Dashboard extends Component {
                     <img className='club-logo' src="../img/images/logo_scr.jpg" style={{zIndex:'-1'}} />
                     <span className='club' style={{zIndex:'-1'}}>Cafe</span>
                     <div id="checkoutHeader">
-                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-40px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
+                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-40px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Pre-order&nbsp;→
                             <div className=""></div>
                             <div id="checkoutCount" class="c-count">0</div>
                         </div>
@@ -844,11 +832,11 @@ class Dashboard extends Component {
 
                                               <TabPanel value={this.state.value} index={0}>
                                                 {!this.state.loggedIn && <div className="club-main" >
-                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the club!</span>
+                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the Cafe!</span>
                                                    <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                   <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
+                                                   <span className="club-desc" >Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
-                                                   <img className='club-banner' src="../img/images/club-banner.png" />
+                                                   <img className='club-banner' src="../img/images/online-order.png" />
                                                    {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
@@ -861,15 +849,9 @@ class Dashboard extends Component {
                                                         <div className="md-step-bar-left"></div>
                                                         <div className="md-step-bar-right"></div>
                                                         </div>
-                                                        <div id="step2" className="md-step">
-                                                        <div className={`md-step-circle ${this.state.curStep == 2 ? 'active' : ''}`}><span>2</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 2 ? 'active' : ''}`}>Review</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
                                                         <div id="step3" className="md-step">
-                                                        <div className={`md-step-circle ${this.state.curStep == 3 ? 'active' : ''}`}><span>3</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 3 ? 'active' : ''}`}>Avail</div>
+                                                        <div className={`md-step-circle ${this.state.curStep == 3 ? 'active' : ''}`}><span>2</span></div>
+                                                        <div className={`md-step-title ${this.state.curStep == 3 ? 'active' : ''}`}>Menu</div>
                                                         <div className="md-step-bar-left"></div>
                                                         <div className="md-step-bar-right"></div>
                                                         </div>
@@ -877,12 +859,12 @@ class Dashboard extends Component {
                                                 {curStep == 1 && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '22px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
+                                                        <span className="club-desc-1" >Subscribe to notifications to continue. You will receive your order notifications.</span>
                                                         <br/><br/><br/>
-                                                        <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
+                                                        <img className='club-banner' src="../img/images/online-order.png" style={{marginTop: '26px'}}/>
                                                         {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
+                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();this.loadSurvey();}}>Next</a>
                                                         <br/>
                                                    </div>}
                                                    {curStep == 2 && <div>
@@ -915,11 +897,11 @@ class Dashboard extends Component {
                                     <img src="../../../img/images/ic_close.png" />
                                 </div>
                             </div>
-                            <div className="md-stepper-horizontal orange" style={{marginTop:'56px'}}>
+                            <div className="md-stepper-horizontal orange" style={{marginTop:'56px',marginLeft:'-10px'}}>
+                                <div class="pre-order-msg">Meal pre-ordered successfully!</div>
                                 <div id="step1" className="md-step">
                                   <div className="md-step-circle active"><span>1</span></div>
-                                  <div className="md-step-title">Order Summary</div>
-                                  <div className="md-step-bar-left"></div>
+                                  <div className="md-step-title">Pre-Order Summary</div>
                                   <div className="md-step-bar-right"></div>
                                 </div>
                                 <div id="step2" className="md-step">
@@ -948,7 +930,7 @@ class Dashboard extends Component {
                                 <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
                                     <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl convenience charges.)</div>
                                 </div>
-                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 3});document.getElementById('step2Circle').classList.add('active');}}>Next&nbsp;→
+                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 3});document.getElementById('step2Circle').classList.add('active');}}>Pay at kiosk&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
@@ -1125,19 +1107,20 @@ class Dashboard extends Component {
                                </div>}
 
                                {window.location.href.indexOf('?qr=')!=-1 && <div className="card-container">
-                                       <div className="status-title" style={{paddingTop: '38px'}}>
-                                           <span>Your order is complete</span>
+                                       <div className="status-title" style={{padding:'2px',paddingTop: '38px'}}>
+                                           <span>Your order is complete! Show this QR code at the kiosk to collect your meal.</span>
                                            <br/><br/>
-                                           <span className="small-title">Please collect your meal.</span>
-                                           <br/>
+                                           <div className="qrcode" style={{marginTop: '-12px'}}>
+                                            <img src={new URL(window.location.href).searchParams.get('qr')} />
+                                           </div>
                                            <div className="card-btn checkout small" onClick={()=>{window.location.href=localStorage.getItem('paymentLink');}} style={{display: 'none'}}>Retry Payment
                                                                                <div className=""></div>
                                                                            </div>
-                                            <div className="card-btn checkout small" onClick={()=>{window.location.href=location.pathname;}}>Meal Collected
+                                            <div className="card-btn checkout small" onClick={()=>{window.location.href=window.location.pathname;}}>Meal Collected
                                                 <div className=""></div>
                                             </div>
                                            <br/>
-                                           <span className="small-title" style={{marginTop: '92px', fontSize: '16px'}}>If you continue to face issues, please call us at <a style={{color: '#ffd355'}} href="tel:+91-7619514999">+91-7619514999</a></span>
+                                           <span className="small-title" style={{marginTop: '92px', fontSize: '16px', display: 'none'}}>If you continue to face issues, please call us at <a style={{color: '#ffd355'}} href="tel:+91-7619514999">+91-7619514999</a></span>
                                         </div>
 
                                </div>}

@@ -12,6 +12,7 @@ var { Client } = require('pg');
 var { Pool } = require('pg');
 var axios = require('axios');
 var crypto = require('crypto');
+var QRCode = require('qrcode');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -170,12 +171,26 @@ console.log('--Token URL:--', tokenUrl);
 
 app.post('/payment-pg-success', (req, res) => {
   console.log('Webhook received:', req.body);
+  let providerRefId = req.body.providerReferenceId;
 
   // Do something with the webhook data
   // ...
 
-  // Redirect to another URL
-  res.redirect(301, '/cafe/acceldata?qr=35353513535');
+  // Generate a QR code from the UUID
+  QRCode.toDataURL(providerRefId, function (err, url) {
+    if (err) {
+      console.error('Error generating QR code:', err);
+      return;
+    }
+    console.log('Generated QR code:', url);
+    const base64Data = url.replace(/^data:image\/png;base64,/, '');
+    const urlSafeBase64Data = encodeURIComponent(url);
+    console.log('QR code base64:', base64Data);
+    // Redirect to another URL
+    res.redirect(301, '/cafe/acceldata?qr='+urlSafeBase64Data);
+  });
+
+  
 });
 
 app.get('/create-pg-payment', (req, res) => {
@@ -2104,6 +2119,92 @@ app.post('/createClubUser', function(req, res) {
  })
 });
 
+app.post('/createCorporateUser', function(req, res) {
+  
+  const email = req.body.email;
+  const name = req.body.name;
+  const loggedIn = 'Y';
+  
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected')
+
+      client.query("select id, customer_code from corporate_user where email = '"+email+"'",
+      [], (err, response) => {
+            if (err) {
+              console.log(err)
+               res.send("error");
+            } else {
+              if(response.rows && response.rows.length > 0) {
+                  let userId = response.rows[0].id;
+                  let customerCode = response.rows[0].customer_code;
+                  client.query("UPDATE \"public\".\"corporate_user\" SET logged_in = $1, last_active_on = now() where id = $2",
+                      ['Y', userId], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                //res.send(response);
+                                res.send('{"code":"'+customerCode+'","registered":"true"}');
+                            }
+
+                          });
+                } else {
+                  //Generate unique code
+                  let code = '';
+                  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                  const charactersLength = characters.length;
+                  let counter = 0;
+                  while (counter < 6) {
+                    code += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    counter += 1;
+                  }
+                  client.query("INSERT INTO \"public\".\"corporate_user\"(customer_code, email, name, logged_in) VALUES($1, $2, $3, $4)",
+                      [code, email, name, loggedIn], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                //res.send(response);
+                                res.send('{"code":"'+code+'","registered":"false"}');
+                            }
+
+                          });
+
+                }
+            }
+    })
+  }
+ })
+});
+
+app.post('/onboardCorporateUser', function(req, res) {
+  
+  const email = req.body.email;
+  
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      client.query("UPDATE \"public\".\"corporate_user\" SET onboarded = $1, last_active_on = now() where email = $2",
+          ['Y', email], (err, response) => {
+                if (err) {
+                  console.log(err)
+                    res.send("error");
+                } else {
+                    //res.send(response);
+                    res.send('{"registered":"true"}');
+                }
+
+              });
+  }
+ })
+});
+
 app.post('/onboardClubUser', function(req, res) {
   
   const email = req.body.email;
@@ -2519,6 +2620,31 @@ app.get('/user/get/:clubCode', function(req, res) {
     } else {
       console.log('connected');
       client.query("select signed_up from club_user where customer_code='"+clubCode+"'",
+                  [], (err, response) => {
+                        if (err) {
+                          console.log(err)
+                            res.send("error");
+                            client.end();
+                        } else {
+                          if (response.rows.length > 0) {
+                            res.send(response.rows[0].signed_up);
+                          }
+                          client.end();
+                        }
+                  });
+
+      }});
+});
+
+app.get('/corporateUser/get/:clubCode', function(req, res) {
+  let clubCode = req.params.clubCode;
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      client.query("select signed_up from corporate_user where customer_code='"+clubCode+"'",
                   [], (err, response) => {
                         if (err) {
                           console.log(err)
