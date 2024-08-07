@@ -12,7 +12,7 @@ var { Client } = require('pg');
 var { Pool } = require('pg');
 var axios = require('axios');
 var crypto = require('crypto');
-var toDataURL = require('qrcode');
+var QRCode = require('qrcode');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -177,7 +177,7 @@ app.post('/payment-pg-success', (req, res) => {
   // ...
 
   // Generate a QR code from the UUID
-  toDataURL(providerRefId, function (err, url) {
+  QRCode.toDataURL(providerRefId, function (err, url) {
     if (err) {
       console.error('Error generating QR code:', err);
       return;
