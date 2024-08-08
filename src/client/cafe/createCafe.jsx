@@ -403,7 +403,7 @@ class Dashboard extends Component {
             curStep: 0,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
-            clubUserSrc: '',
+            corporateUserSrc: '',
             orderSavings: 0,
             qty: 0,
             storeAcceptingOrders: false,
@@ -412,7 +412,7 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
-            loggedIn: localStorage.getItem('club-user-email') != null
+            loggedIn: localStorage.getItem('corporate-user-email') != null
         };
         window.weekdays = new Array(7);
         window.weekdays[0] = "Sunday";
@@ -433,8 +433,8 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
-        if(localStorage.getItem('clubCode') != null) {
-            axios.get(`/corporateUser/get/${localStorage.getItem('clubCode')}`)
+        if(localStorage.getItem('corporateCode') != null) {
+            axios.get(`/corporateUser/get/${localStorage.getItem('corporateCode')}`)
           .then(function (response) {
             console.log('user signed up-----', response.data);
             signedInUser = response.data;
@@ -482,7 +482,7 @@ class Dashboard extends Component {
         if (stepNum == 2){
             var http = new XMLHttpRequest();
             var url = '/signUpClubUser';
-            var params = 'email='+localStorage.getItem('club-user-email');
+            var params = 'email='+localStorage.getItem('corporate-user-email');
             http.open('POST', url, true);
             http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -566,7 +566,7 @@ class Dashboard extends Component {
         let deliveryMobile = document.getElementById('dMobile').value;
         let deliveryName = document.getElementById('dName').value;
         let storeId = localStorage.getItem('storeId');
-        let clubCode = localStorage.getItem('clubCode');
+        let corporateCode = localStorage.getItem('corporateCode');
         
         sessionStorage.setItem('dAddress',deliveryAddress);
         sessionStorage.setItem('dMobile',deliveryMobile);
@@ -582,7 +582,7 @@ class Dashboard extends Component {
         //create order
         var http = new XMLHttpRequest();
         var url = '/store/web-order';
-        var params = 'storeId='+storeId+'&clubCode='+clubCode+'&price='+price+'&mobile='+deliveryMobile+'&name='+deliveryName+'&slot='+deliveryTimeslot+'&items='+summary+'&pincode='+deliveryPincode+'&schedule='+deliverySchedule+'&address='+deliveryAddress;
+        var params = 'storeId='+storeId+'&corporateCode='+corporateCode+'&price='+price+'&mobile='+deliveryMobile+'&name='+deliveryName+'&slot='+deliveryTimeslot+'&items='+summary+'&pincode='+deliveryPincode+'&schedule='+deliverySchedule+'&address='+deliveryAddress;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         document.getElementById('step3Circle').classList.add('active');this.setState({showSlot: true, activeStep: 3});
@@ -715,12 +715,12 @@ class Dashboard extends Component {
         var email = '';
         var name = '';
         var picture = '';
-        if (localStorage.getItem('club-user-name') != null) {
-            email = localStorage.getItem('club-user-email');
-            name = localStorage.getItem('club-user-name');
-            picture = localStorage.getItem('club-user-pic');
+        if (localStorage.getItem('corporate-user-name') != null) {
+            email = localStorage.getItem('corporate-user-email');
+            name = localStorage.getItem('corporate-user-name');
+            picture = localStorage.getItem('corporate-user-pic');
             this.setState({loggedIn: true});
-            this.setState({clubUserSrc: picture});
+            this.setState({corporateUserSrc: picture});
             if (localStorage.getItem('notification-dialog') == 'false' && localStorage.getItem('onboarded')!=null && localStorage.getItem('onboarded')=='true') {
                 this.setState({curStep: 3});
                 this.fetchJson();
@@ -734,8 +734,8 @@ class Dashboard extends Component {
                 email = user.email;
                 name = user.name;
                 picture = user.picture;
-                localStorage.setItem('club-user-pic',user.picture);
-                this.setState({clubUserSrc: picture});
+                localStorage.setItem('corporate-user-pic',user.picture);
+                this.setState({corporateUserSrc: picture});
             }
         }
         
@@ -757,9 +757,9 @@ class Dashboard extends Component {
                         this.setState({curStep: 3});
                         this.fetchJson();
                     }
-                    localStorage.setItem('clubCode', res.code);
-                    localStorage.setItem('club-user-email',email);
-                    localStorage.setItem('club-user-name',name);
+                    localStorage.setItem('corporateCode', res.code);
+                    localStorage.setItem('corporate-user-email',email);
+                    localStorage.setItem('corporate-user-name',name);
                     this.setState({loggedIn: true});
                     this.showNotificationDialog();
                 }
@@ -770,7 +770,7 @@ class Dashboard extends Component {
     onboardClubUser() {
         var http = new XMLHttpRequest();
         var url = '/onboardCorporateUser';
-        var params = 'email='+localStorage.getItem('club-user-email');
+        var params = 'email='+localStorage.getItem('corporate-user-email');
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -782,7 +782,7 @@ class Dashboard extends Component {
                     res = JSON.parse(res);
                     if(res.registered != null && res.registered == 'true') {
                         localStorage.setItem('onboarded', 'true');
-                        window.userOrdersInterval = setInterval(function(){axios.get(`/user-orders/${localStorage.getItem('club-user-email')}`)
+                        window.userOrdersInterval = setInterval(function(){axios.get(`/user-orders/${localStorage.getItem('corporate-user-email')}`)
                               .then(function (response) {
                                 console.log('User orders-----', response.data);
                                 if(response.data != 'error') {
@@ -826,7 +826,7 @@ class Dashboard extends Component {
                             <div id="checkoutCount" class="c-count">0</div>
                         </div>
                     </div>
-                    {this.state.clubUserSrc != '' || localStorage.getItem('club-user-pic') != null && <img className='club-user-avatar' src={localStorage.getItem('club-user-pic')} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
+                    {this.state.corporateUserSrc != '' || localStorage.getItem('corporate-user-pic') != null && <img className='corporate-user-avatar' src={localStorage.getItem('corporate-user-pic')} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <Paper>
 
@@ -837,7 +837,7 @@ class Dashboard extends Component {
                                                    <span className="club-desc" >Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
                                                    <img className='club-banner' src="../img/images/online-order.png" />
-                                                   {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                   {localStorage.getItem('corporate-user') == null && this.state.corporateUserSrc == '' && localStorage.getItem('corporate-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
                                                 </div>}
@@ -862,7 +862,7 @@ class Dashboard extends Component {
                                                         <span className="club-desc-1" >Subscribe to notifications to continue. You will receive your order notifications.</span>
                                                         <br/><br/><br/>
                                                         <img className='club-banner' src="../img/images/online-order.png" style={{marginTop: '26px'}}/>
-                                                        {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
+                                                        {localStorage.getItem('corporate-user') == null && this.state.corporateUserSrc == '' && localStorage.getItem('corporate-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                         <br/>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();this.loadSurvey();}}>Next</a>
                                                         <br/>
@@ -870,7 +870,7 @@ class Dashboard extends Component {
                                                    {curStep == 2 && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-2" >Your club code:<span className="club-code">{localStorage.getItem('clubCode')}</span></span>
+                                                        <span className="club-desc-2" >Your club code:<span className="club-code">{localStorage.getItem('corporateCode')}</span></span>
                                                         <br/>
                                                         <span className='club-desc-1' style={{marginTop: '64px'}}>
                                                         🎉 You're now a CLUB member! Share your experience to get more loyalty benefits.
@@ -1164,7 +1164,7 @@ class Dashboard extends Component {
                                                         <dialog id="dialog" className="bg-white   rounded-lg border-t-8 border-orange p-0   font-sans">
                                                         <form  id="form" method="dialog">
                                                             <header className="text-2xl text-center py-4 text-black bg-grey-lighter border-b border-grey-light" style={{marginTop: '6px'}}>
-                                                                <span>Your club code: {localStorage.getItem('clubCode')}</span>
+                                                                <span>Your club code: {localStorage.getItem('corporateCode')}</span>
                                                             </header>
                                                             <button type="submit" className="bg-orange flex-1 text-white p-2 yes-button" value="yes">Close</button>
                                                             
