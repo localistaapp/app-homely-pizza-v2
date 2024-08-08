@@ -3214,6 +3214,15 @@ fbq('track', 'PageView');
     <noscript><img height="1" width="1" style="display:none"
                    src="https://www.facebook.com/tr?id=322116655625727&ev=PageView&noscript=1"
     /></noscript>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const parsedUrl = new URL(window.location);
+        // searchParams.get() will properly handle decoding the values.
+        alert('Title shared: ' + parsedUrl.searchParams.get('title'));
+        alert('Text shared: ' + parsedUrl.searchParams.get('text'));
+        alert('URL shared: ' + parsedUrl.searchParams.get('url'));
+    });    
+</script>
 
 </head>
 <body>
