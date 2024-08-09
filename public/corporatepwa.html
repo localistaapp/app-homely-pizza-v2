@@ -3215,7 +3215,7 @@ fbq('track', 'PageView');
                    src="https://www.facebook.com/tr?id=322116655625727&ev=PageView&noscript=1"
     /></noscript>
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
         const parsedUrl = new URL(window.location);
         // searchParams.get() will properly handle decoding the values.
         alert('Title shared: ' + parsedUrl.searchParams.get('title'));
