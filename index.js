@@ -169,27 +169,6 @@ console.log('--Token URL:--', tokenUrl);
 
 });
 
-app.get('/cyber-leaks/:email', async function(request, response) {
-  let email = request.params.email;
-  console.log('--Loading cyber leaks for--', email);
-
-  const cyberLeaksResponse = await axios.get('https://api.dehashed.com/search?query=email:'+email+'&size=10000', {
-          headers: {
-             'Accept': 'application/json'
-          },
-          auth: {
-             username: 'sampath.oops@gmail.com',
-             password: '6hmmriun21gzwi5gs0e4zro1g4vbu4vq'
-          }
-       });
-      //console.log('--Response from cyber leaks--', cyberLeaksResponse.data);
-  if (cyberLeaksResponse != null && cyberLeaksResponse.hasOwnProperty('data')) {
-      response.send(cyberLeaksResponse.data);
-  } else {
-      response.send('not found');
-  }
-});
-
 app.post('/payment-pg-success', (req, res) => {
   console.log('Webhook received:', req.body);
   let providerRefId = req.body.providerReferenceId;
