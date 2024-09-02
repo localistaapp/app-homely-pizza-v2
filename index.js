@@ -13,6 +13,7 @@ var { Pool } = require('pg');
 var axios = require('axios');
 var crypto = require('crypto');
 var QRCode = require('qrcode');
+const cors = require("cors"); 
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -41,6 +42,7 @@ var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai8
 redisURL = url.parse(redisURLVal);
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(cors({ origin: true })); // enable origin cors
 var client = require('flipkart-api-affiliate-client');
 var uuid = require('uuid-v4');
 var http = require("https");
@@ -167,6 +169,27 @@ const callbackUrl = '/pp-success';
 const tokenUrl = generateTokenUrl(merchantId, merchantSecret, callbackUrl);
 console.log('--Token URL:--', tokenUrl);
 
+});
+
+app.get('/cyber-leaks/:email', async function(request, response) {
+  let email = request.params.email;
+  console.log('--Loading cyber leaks for--', email);
+
+  const cyberLeaksResponse = await axios.get('https://api.dehashed.com/search?query=email:'+email+'&size=10000', {
+          headers: {
+             'Accept': 'application/json'
+          },
+          auth: {
+             username: 'sampath.oops@gmail.com',
+             password: '6hmmriun21gzwi5gs0e4zro1g4vbu4vq'
+          }
+       });
+      //console.log('--Response from cyber leaks--', cyberLeaksResponse.data);
+  if (cyberLeaksResponse != null && cyberLeaksResponse.hasOwnProperty('data')) {
+      response.send(cyberLeaksResponse.data);
+  } else {
+      response.send('not found');
+  }
 });
 
 app.post('/payment-pg-success', (req, res) => {
