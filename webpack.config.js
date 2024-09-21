@@ -29,7 +29,7 @@ var config = {
     target: 'empty'
   },
   module : {
-    rules : [
+    ruleoptionss : [
       {
         test : /\.jsx?/,
         include : [WIZ_DIR, PROC_DIR, ORD_DIR, CLUB_DIR, CAFE_DIR],

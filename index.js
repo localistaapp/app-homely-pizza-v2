@@ -13,7 +13,6 @@ var { Pool } = require('pg');
 var axios = require('axios');
 var crypto = require('crypto');
 var QRCode = require('qrcode');
-const cors = require("cors"); 
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -42,7 +41,7 @@ var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai8
 redisURL = url.parse(redisURLVal);
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(cors({ origin: true })); // enable origin cors
+
 var client = require('flipkart-api-affiliate-client');
 var uuid = require('uuid-v4');
 var http = require("https");
@@ -1214,9 +1213,48 @@ app.get('/getIngredients', function(request, response) {
 
 app.post('/franchiseEnquiry', function(req, res) {
  //response.send(pages.startYourOwn);
- var email = req.body.email,
-        members = req.body.members
-        client.set(members, email);
+ const client = new Client(dbConfig)
+ var email = req.body.email;
+ var members = req.body.members;
+//res.send(pages.getQuote);*/
+ client.connect(err => {
+  if (err) {
+    console.error('error connecting', err.stack)
+  } else {
+    console.log('connected')
+
+    client.query("INSERT INTO \"public\".\"corporate_enquiry\"(company_name, num_employees) VALUES($1, $2)",
+                      [members, email], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                            } 
+                          });
+  }
+    res.redirect('/franchise');
+});
+});
+
+app.get("/search", function(request, response) {
+  let q = request.query.q;
+  let c = request.query.c;
+  console.log('--q--', q);
+  console.log('--c--', c);
+
+const client = new Client(dbConfig)
+client.connect(err => {
+  if (err) {
+    console.error('error connecting', err.stack)
+  } else {
+    console.log('connected')
+
+    client.query("INSERT INTO \"public\".\"corporate_enquiry\"(company_name, num_employees) VALUES($1, $2)",
+                      [q, c], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                            } 
+                          });
+  }
+});
  res.sendFile(path.resolve(__dirname, 'public', 'franchiseEnquiry.html'));
 });
 
