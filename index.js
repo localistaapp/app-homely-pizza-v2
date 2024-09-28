@@ -228,9 +228,9 @@ app.get('/create-pg-payment', (req, res) => {
     "merchantTransactionId": "ORDER12345",
     "merchantUserId": '123',
     "amount": amount * 100,
-    "redirectUrl": "http://localhost:5000/payment-pg-success",
+    "redirectUrl": "/payment-pg-success",
     "redirectMode": "POST",
-    "callbackUrl": "http://localhost:5000/payment-pg",
+    "callbackUrl": "/payment-pg",
     "mobileNumber": "1234567890",
     "paymentInstrument": {
       "type": "PAY_PAGE"
