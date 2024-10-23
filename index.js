@@ -96,6 +96,10 @@ var pages = [];
     pages.index = data;
   });
 
+  fs.readFile("public/index.main", "utf8", function(err, data) {
+    pages.main = data;
+  });
+
   fs.readFile("public/franchise.html", "utf8", function(err, data) {
     pages.franchise = data;
   });
@@ -948,6 +952,10 @@ app.get("/index", function(request, response) {
 
 app.get("/home", function(request, response) {
   response.redirect('/');
+});
+
+app.get("/main", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'main.html'));
 });
 
 app.get("/mytasks", function(request, response) {
