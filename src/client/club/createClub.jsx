@@ -869,7 +869,7 @@ class Dashboard extends Component {
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
-                                              {this.state.loggedIn && curStep != 3 &&
+                                              {this.state.loggedIn && curStep != 3 && curStep != 1 && curStep != 2 && 
                                                     <div>
                                                         <br/><br/>
                                                         <span class="club-desc-2" style={{fontSize: '15px', marginTop: '-34px'}}>🎉  Place your order with best of savings!</span>
