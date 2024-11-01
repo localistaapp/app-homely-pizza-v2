@@ -869,6 +869,34 @@ class Dashboard extends Component {
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
+                                              {this.state.loggedIn && curStep != 3 &&
+                                                    <div>
+                                                        <br/><br/>
+                                                        <span class="club-desc-2" style={{fontSize: '15px', marginTop: '-34px'}}>🎉  Place your order with best of savings!</span>
+                                                        <div class="shimmer-card">
+                                                        <div class="loader-shimmer-banner shimmer-animation"></div>
+                                                        <div class="loader-shimmer-content">
+                                                            <div class="loader-shimmer-header">
+                                                            <div class="loader-shimmer-title shimmer-animation"></div>
+                                                            <div class="loader-shimmer-rating shimmer-animation"></div>
+                                                            </div>
+                                                            <div class="loader-shimmer-list shimmer-animation"></div>
+                                                            <div class="loader-shimmer-info shimmer-animation"></div>
+                                                        </div>
+                                                        </div>
+                                                        <div class="shimmer-card">
+                                                        <div class="loader-shimmer-banner shimmer-animation"></div>
+                                                        <div class="loader-shimmer-content">
+                                                            <div class="loader-shimmer-header">
+                                                            <div class="loader-shimmer-title shimmer-animation"></div>
+                                                            <div class="loader-shimmer-rating shimmer-animation"></div>
+                                                            </div>
+                                                            <div class="loader-shimmer-list shimmer-animation"></div>
+                                                            <div class="loader-shimmer-info shimmer-animation"></div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                                 {!this.state.loggedIn && <div className="club-main" >
                                                    <span className="club-heading" style={{top: '12px'}}>Welcome to the club!</span>
                                                    <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
@@ -917,7 +945,10 @@ class Dashboard extends Component {
                                                         <span className="club-desc-2" >Your club code:<span className="club-code">{localStorage.getItem('clubCode')}</span></span>
                                                         <br/>
                                                         <span className='club-desc-1' style={{marginTop: '64px'}}>
-                                                        🎉 You're now a CLUB member! Share your experience to get more loyalty benefits.
+                                                        🎉 Congratulations! You're now a CLUB member!
+                                                        </span>
+                                                        <span className='club-desc-1' style={{marginTop: '128px'}}>
+                                                        Enjoy savings with every order.
                                                         </span>
                                                         <br/>
                                                         <button type="button" className="login-with-google-btn" onClick={()=>{window.open('https://g.page/r/CQwiiF6lQrvREBM/review');}}>Share via Google</button>
