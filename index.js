@@ -2669,7 +2669,9 @@ app.get('/store/get/:clubCode', function(req, res) {
       console.error('error connecting', err.stack)
     } else {
       console.log('connected');
-      client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id in (select store_id from store_order where user_id in (select id from club_user where customer_code='"+clubCode+"'))",
+      //client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id in (select store_id from store_order where user_id in (select id from club_user where customer_code='"+clubCode+"'))",
+      //ToDo: uncomment above and check if existing rows, then use above - else below query with default BSK store
+      client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id = 77",
                   [], (err, response) => {
                         if (err) {
                           console.log(err)

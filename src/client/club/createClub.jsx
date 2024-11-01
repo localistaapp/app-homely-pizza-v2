@@ -951,7 +951,6 @@ class Dashboard extends Component {
                                                         Enjoy savings with every order.
                                                         </span>
                                                         <br/>
-                                                        <button type="button" className="login-with-google-btn" onClick={()=>{window.open('https://g.page/r/CQwiiF6lQrvREBM/review');}}>Share via Google</button>
                                                         <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();}}>Next</a>
                                                         <br/>
                                                    </div>}
