@@ -958,6 +958,10 @@ app.get("/main", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'main.html'));
 });
 
+app.get("/events", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'events.html'));
+});
+
 app.get("/club-intro", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'clubintro.html'));
 });
