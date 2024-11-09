@@ -17,6 +17,46 @@
           .break-words p {
             color: #8e8e8e;
           }
+          .bottom-bar {
+            display: none;
+            width: 100%;
+            height: 150px;
+            opacity: 1;
+            position: fixed;
+            bottom: 0px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        #bottomBar1, #bottomBar2, #bottomBar3 {
+            display: none;
+        }
+        .show-enabled {
+            display: block !important;
+        }
+        .button {
+            position: fixed;
+            bottom: 10px;
+            width: 90%;
+            z-index: 1;
+            text-align: center;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            background: var(--float-sem-color-surface-emphasis);
+            font-family: Quicksand;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            padding: 24px;
+            color: #fff;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-weight: normal;
+            box-shadow: 0px 0px 14px 6px rgb(156 156 156 / 30%);
+            text-decoration: none;
+        }
           .offer {
             padding: 12px;
             font-family: 'Quicksand';
@@ -5864,6 +5904,8 @@ font-size: 150%;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 0px;
           }
           .glass-bg-light {
             background: rgba(255, 255, 255, 0.5);
@@ -5906,12 +5948,19 @@ font-size: 150%;
       <script data-savepage-type="" type="text/plain" async="" data-savepage-src="https://gtag.data-prod.aws.air-up.com/gtm.js?id=GTM-WGB3B4Z"></script>
       <script>
         function handleScroll() {
+            console.log('-scroll-', window.scrollY);
           if(window.scrollY >= 530) {
             document.querySelector('#header').classList.add('glass-bg');
             document.querySelector('#logo').src = './img/images/logo_sc.png';
+            document.querySelector('#bottomBar1').classList.add('show-enabled');
+            document.querySelector('#bottomBar2').classList.add('show-enabled');
+            document.querySelector('#bottomBar3').classList.add('show-enabled');
           } else {
             document.querySelector('#header').classList.remove('glass-bg');
             document.querySelector('#logo').src = './img/images/logo_scw.png';
+            document.querySelector('#bottomBar1').classList.remove('show-enabled');
+            document.querySelector('#bottomBar2').classList.remove('show-enabled');
+            document.querySelector('#bottomBar3').classList.remove('show-enabled');
           }
         }
         window.addEventListener("scroll", handleScroll);
@@ -7386,7 +7435,7 @@ rect._pericles_section_highlight_style_border {
               <div class="theme-pink-base w-full">
                   <div class="offer">Claim Offer! Free welcome drink with any package</div><header id="header" class="absolute z-20 flex h-fit w-full items-center justify-between p-6 py-6 transition-all duration-200 xl:px-18 xl:py-4 bg-transparent fill-on-media text-on-media" style="
 ">
-                      <button id="main-navigation-toggle" style="color:#fff" aria-label="Toggle the main navigation" aria-controls="main-navigation" aria-expanded="false" aria-haspopup="true">
+                      <button id="main-navigation-toggle" style="color:#fff;display: none;" aria-label="Toggle the main navigation" aria-controls="main-navigation" aria-expanded="false" aria-haspopup="true">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-7 xl:size-9">
                               <title>hamburger icon</title>
                               <rect width="24" height="24" fill="transparent"></rect>
@@ -7472,7 +7521,7 @@ rect._pericles_section_highlight_style_border {
           <main id="main-content" class="space-y-8 xl:space-y-28 [&amp;>div:last-of-type:not(.sticky)]:pb-8 xl:[&amp;>div:last-of-type:not(.sticky)]:pb-18">
               <div class="relative flex h-svh w-full flex-col items-end justify-end xl:h-[calc(100vh/1.4)] xl:min-h-[720px]">
                   <div class="absolute size-full opacity-100 duration-200 " style="width: 93%;height: 100%;border-radius: 0px;margin: 0 auto;left: 0;right: 0;height: 200px;overflow: hidden;top: 92px;padding: 2px;">
-                      <video aria-label="Video Player - Bottles " data-video-index="0" class="absolute inset-0 size-full object-center" height="100%" title="Bottles " width="100%" autoplay="" playsinline="" muted="" controls="" loop="" poster="./img/images/posterdef.png" style="
+                      <video aria-label="Video Player - Bottles " data-video-index="0" class="absolute inset-0 size-full object-center" height="100%" title="Bottles " width="100%" autoplay="" playsinline="" muted=""  loop="" poster="./img/images/posterdef.png" style="
                         z-index: 1;
                         top: -146px;
                         border-radius: 18px;
@@ -7487,7 +7536,7 @@ rect._pericles_section_highlight_style_border {
                       </video>
                   </div>
                   <img src="./img/images/starts1.png" class="starts">
-                  <div class="starts serving"><span>&#x2713; Serving in Bangalore</span></div>
+                  <div class="starts serving"><span>📍 Serving in Bangalore</span></div>
                   <div id="vidSlide2" class="absolute size-full opacity-0 duration-200 opacity-100 hidden">
                       <video aria-label="Video Player - Everyday pizza" data-video-index="1" class="absolute inset-0 size-full object-cover object-center" height="100%" title="Flavor pods" width="100%" autoplay="" playsinline="" muted="" loop="" poster="./img/images/pospasta.png">
                           <source src="./img/images/pastamore.mp4" type="video/mp4">
@@ -7505,8 +7554,8 @@ rect._pericles_section_highlight_style_border {
                       <div class="!flex flex-col gap-4 xl:gap-8" style="top: 16px;position: relative;">
                           <h1 class="font-attitude font-extrabold text-heading-xs md:text-heading-md max-w-2xl text-balance text-on-media drop-shadow transition-opacity" style="line-height: 1.25;color:#fff;z-index: 1;font-size:1.8rem">Live <span id="rotated" class="underline">pizza</span> catering for your party!</h1>
                           <div class="flex">
-                            <a class="relative inline-block rounded border-2 px-4 py-2 transition-colors xl:px-6 xl:py-4 disabled:pointer-events-none disabled:cursor-not-allowed focus-within:ring focus-within:ring-default focus:outline-none focus:ring focus:ring-default focus-visible:outline-none focus-visible:ring focus-visible:ring-default active:text-active active:border-none active:bg-active active:ring-0 font-functional font-semibold text-label-sm lg:text-label-md uppercase border-none bg-emphasis text-emphasis disabled:bg-mute disabled:text-mute" data-savepage-href="/us/en/flavors" href="/club" style="margin: 0 auto;left: 0;right: 0;padding: 6px;width: 100%;">
-                              <div class="font-functional font-semibold text-label-md text-emphasis" style="text-transform: none;font-weight: bold;padding: 6px;font-size: 1.1rem;margin: 0 auto;width: 100%;text-align: center;margin: 0 auto;left: 0;right: 0;">Order Now</div>
+                            <a class="relative inline-block rounded border-2 px-4 py-2 transition-colors xl:px-6 xl:py-4 disabled:pointer-events-none disabled:cursor-not-allowed focus-within:ring focus-within:ring-default focus:outline-none focus:ring focus:ring-default focus-visible:outline-none focus-visible:ring focus-visible:ring-default active:text-active active:border-none active:bg-active active:ring-0 font-functional font-semibold text-label-sm lg:text-label-md uppercase border-none bg-emphasis text-emphasis disabled:bg-mute disabled:text-mute" data-savepage-href="/us/en/flavors" href="/order" style="margin: 0 auto;left: 0;right: 0;padding: 6px;width: 100%;">
+                              <div class="font-functional font-semibold text-label-md text-emphasis" style="text-transform: none;font-weight: bold;padding: 6px;font-size: 1.1rem;margin: 0 auto;width: 100%;text-align: center;margin: 0 auto;left: 0;right: 0;">Browse Packages</div>
                           </a>
                          
                           </div>
@@ -7575,65 +7624,49 @@ rect._pericles_section_highlight_style_border {
                       </div>
                   </div>
               </div>
-              <div role="region" id="theres-more-to-flavor-than-meets-the-tongue" title="There’s more to flavor than meets the tongue" class="mx-auto max-w-7xl px-6 xl:px-18 grid grid-cols-1 xl:grid-cols-2 xl:gap-x-28 transition-colors duration-700">
-                  <div class="">
-                      <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 hyphens-auto" style="margin-bottom: 20px;">Love at first crust!</h2>
-                      <div class="peer max-w-full break-words prose xl:prose-xl">
-                          <p style="color: #000 !important;">
-                            Immerse yourself with a bite of <u>flavourful</u>, yet <u>healthier</u> crust.
-                          </p>
-                      </div>
-                  </div>
-                  <div class="relative size-full flex-1 overflow-hidden mt-6 xl:mt-0 xl:flex xl:flex-col xl:justify-center">
-                      <img alt="Home - Rich text section - Scentaste" width="1145" height="916" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" src="./img/images/e01.jpg" style="color: transparent;" data-savepage-loading="lazy">
-                  </div>
-              </div>
-              <div role="region" id="whats-in-it-for-you" title="What’s in it for you?" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
-                  
-                  <h2 style="margin-top: 12px;" class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 xl:text-center">Unbelievably slim! </h2>
-                  <ol class="-mt-4 list-none overflow-clip xl:grid xl:grid-cols-3 xl:gap-5 xl:overflow-hidden">
-                      
-                      <li class="group contents xl:list-item">
-                          <span class="flex items-start gap-2 xl:min-h-20 py-4 xl:py-0">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-default">
-                                  <title>bottle icon</title>
-                                  <path d="M18.6638 6.55144C18.3138 5.45144 17.1138 4.78144 15.8738 5.01144C15.2138 5.13144 14.6638 5.51144 14.3238 6.07144C14.2638 6.16144 14.2338 6.27144 14.1838 6.37144L13.3338 2.58144C13.2838 2.37144 13.1538 2.19144 12.9638 2.09144C12.7738 1.99144 12.5538 1.97144 12.3438 2.04144L5.85376 4.41144C5.51376 4.53144 5.31376 4.89144 5.37376 5.24144L6.11376 9.49144L5.23376 20.3514C5.20376 20.8114 5.35376 21.2514 5.67376 21.5914C6.00376 21.9514 6.48376 22.1514 6.98376 22.1514H14.8138C15.3038 22.1514 15.7838 21.9514 16.1138 21.6014C16.4338 21.2614 16.5938 20.8314 16.5638 20.3714L16.0838 12.4414C16.2638 11.8314 16.7738 11.1414 17.2638 10.4714C18.1338 9.30144 19.1238 7.96144 18.6638 6.54144V6.55144ZM12.0538 3.75144L12.7038 6.65144C12.6138 6.67144 12.5238 6.67144 12.4438 6.70144L7.43376 8.38144L6.95376 5.61144L12.0538 3.75144ZM15.0138 20.5814C14.9638 20.6314 14.8938 20.6614 14.8038 20.6614H6.97376C6.85376 20.6614 6.79376 20.6014 6.76376 20.5814C6.73376 20.5514 6.71376 20.5114 6.72376 20.4714L7.57376 9.92144L12.9038 8.13144C13.2238 8.03144 13.5638 8.09144 13.8638 8.29144C14.1638 8.50144 14.3538 8.81144 14.3738 9.14144L15.0638 20.4714C15.0638 20.4714 15.0538 20.5514 15.0238 20.5814H15.0138ZM15.9338 10.0914L15.8738 9.05144C15.8438 8.53144 15.6338 8.04144 15.3038 7.62144C15.2438 7.30144 15.2838 6.98144 15.4338 6.74144C15.5838 6.49144 15.8138 6.34144 16.1038 6.28144C16.6938 6.17144 17.2638 6.46144 17.4238 6.94144C17.6738 7.73144 16.9638 8.68144 16.2138 9.70144C16.1238 9.83144 16.0238 9.95144 15.9338 10.0814V10.0914Z" fill="currentColor"></path>
-                              </svg>
-                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Nutritious, yet elevated taste</span>
-                          </span>
-                      </li>
-                      <li class="group contents xl:list-item">
-                        <span class="flex items-start gap-2 xl:min-h-20 py-4 xl:py-0">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-default">
-                                <title>scentaste icon</title>
-                                <path d="M17.7962 3.36367C15.2162 1.71367 12.0362 1.55367 9.0662 2.92367C6.2862 4.21367 4.5762 7.07367 4.4962 10.5937C4.4562 12.2337 2.9562 14.8137 2.3762 15.6637C2.2262 15.8937 2.2062 16.1937 2.3362 16.4337C2.4662 16.6737 2.7162 16.8337 2.9962 16.8337H5.2462V19.4137C5.2462 21.0537 6.5962 22.3837 8.2462 22.3837H11.9962V20.8837H8.2462C7.4162 20.8837 6.7462 20.2237 6.7462 19.4137V16.0837C6.7462 15.6737 6.4062 15.3337 5.9962 15.3337H4.3362C5.0262 14.1137 5.9662 12.1837 5.9962 10.6237C6.0662 7.69367 7.4462 5.32367 9.6962 4.28367C12.1862 3.13367 14.8462 3.25367 16.9862 4.62367C19.0262 5.92367 20.2462 8.13367 20.2462 10.5237C20.2462 12.6437 19.7162 14.4837 19.1462 16.4237C18.5762 18.3837 17.9962 20.4137 17.9962 22.7437H19.4962C19.4962 20.6237 20.0262 18.7837 20.5962 16.8437C21.1662 14.8837 21.7462 12.8537 21.7462 10.5237C21.7462 7.61367 20.2662 4.93367 17.7962 3.35367V3.36367Z" fill="currentColor"></path>
-                                <path d="M16.4861 8.42391C16.5061 8.27391 16.5261 8.12391 16.5261 7.97391C16.5261 6.33391 15.1961 5.00391 13.5561 5.00391C12.1861 5.00391 11.0361 5.93391 10.6961 7.22391C8.7861 7.27391 7.2561 8.83391 7.2561 10.7539C7.2561 12.6739 8.1161 13.8839 9.5161 14.2039C9.7661 16.4739 11.2761 16.5039 11.3461 16.5039C11.7561 16.5039 12.0861 16.1739 12.0961 15.7639C12.0961 15.4139 12.2261 14.2839 13.5661 14.2839H15.7861C17.4261 14.2839 18.7561 12.9539 18.7561 11.3139C18.7561 9.92391 17.7961 8.75391 16.4961 8.42391H16.4861ZM15.7761 12.7839H13.5561C12.2561 12.7839 11.4561 13.4139 11.0161 14.1739C10.9861 13.9939 10.9761 13.7839 10.9761 13.5339C10.9761 13.1239 10.6361 12.7839 10.2261 12.7839C8.9461 12.7839 8.7561 11.5139 8.7561 10.7539C8.7561 9.63391 9.6661 8.72391 10.7861 8.72391C10.9261 8.72391 11.0661 8.73391 11.1961 8.76391C11.4161 8.80391 11.6461 8.72391 11.8161 8.58391C11.9861 8.44391 12.0861 8.20391 12.0861 7.97391C12.0861 7.16391 12.7461 6.50391 13.5561 6.50391C14.3661 6.50391 15.0261 7.16391 15.0261 7.97391C15.0261 8.23391 14.9561 8.49391 14.8061 8.73391C14.6561 8.98391 14.6661 9.29391 14.8261 9.53391C14.9861 9.77391 15.2761 9.90391 15.5661 9.86391C16.4061 9.73391 17.2461 10.4339 17.2461 11.3139C17.2461 12.1239 16.5861 12.7839 15.7761 12.7839Z" fill="currentColor"></path>
-                            </svg>
-                            <span class="font-functional font-normal lg:text-body-lg self-center text-default">Pizza with lowest blood sugar spike</span>
-                        </span>
+              <div role="region" id="explore-deeper" title="Explore Deeper" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
+                <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12">Make your own combo!</h2>
+                <ul class="grid grid-cols-2 gap-4">
+                    <li class="relative">
+                        <div>
+                            <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
+                                <img alt="Homepage Category Link-1 1 (1)" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/p3.png" style="color: transparent;object-fit: contain;" data-savepage-loading="lazy">
+                            </div>
+                            <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Veg Pizzas</div></div>
+                          </div>
                     </li>
-                      <li class="group contents xl:list-item">
-                          <span class="flex items-start gap-2 xl:min-h-20 py-4 xl:py-0">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-default">
-                                  <title>save icon</title>
-                                  <g clip-path="url(#clip0_2648_896)">
-                                      <path d="M12.4542 15.83C14.7407 15.83 16.5942 14.0772 16.5942 11.915C16.5942 9.7528 14.7407 8 12.4542 8C10.1678 8 8.31421 9.7528 8.31421 11.915C8.31421 14.0772 10.1678 15.83 12.4542 15.83Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
-                                      <mask id="path-2-inside-1_2648_896" fill="white">
-                                          <path d="M13.7227 12.5715C13.7227 12.7499 13.6712 12.912 13.5769 13.066C13.4827 13.2119 13.3369 13.3335 13.1569 13.4307C13.0627 13.4794 12.9598 13.5118 12.8398 13.5361V14.1521H12.0855V13.528C11.9998 13.5118 11.9141 13.4875 11.8369 13.4551C11.6484 13.374 11.4855 13.2605 11.3741 13.1146C11.2627 12.9687 11.2027 12.7904 11.2027 12.5878H11.9484C11.9569 12.7174 12.0084 12.8228 12.0855 12.8958L12.1027 12.912C12.1969 12.993 12.3169 13.0336 12.4798 13.0336C12.6255 13.0336 12.7541 13.0011 12.8398 12.9363C12.8398 12.9363 12.8484 12.9363 12.8569 12.9282C12.9512 12.8552 12.9941 12.758 12.9941 12.6364C12.9941 12.5391 12.9598 12.4581 12.8998 12.3932C12.8827 12.377 12.8569 12.3527 12.8312 12.3365C12.7798 12.296 12.7284 12.2635 12.6598 12.2392C12.5655 12.2068 12.4369 12.1663 12.2655 12.1176C12.1969 12.1014 12.1369 12.0852 12.0684 12.0609C11.9312 12.0204 11.8112 11.9717 11.7084 11.9312C11.5712 11.8664 11.4427 11.7772 11.3398 11.6556C11.2369 11.534 11.1941 11.3638 11.1941 11.1612C11.1941 10.9585 11.2455 10.7964 11.3484 10.6505C11.4512 10.5046 11.5969 10.3993 11.7769 10.3182C11.8712 10.2858 11.9655 10.2534 12.0598 10.2371V9.71838H12.8141V10.2534C12.9941 10.2858 13.1569 10.3587 13.2855 10.456C13.5084 10.6181 13.6284 10.8532 13.6541 11.145H12.8827C12.8827 11.0639 12.8569 10.9991 12.8055 10.9423C12.7884 10.918 12.7627 10.8856 12.7284 10.8613C12.6341 10.7883 12.5055 10.7478 12.3512 10.7478C12.2227 10.7478 12.1284 10.7721 12.0512 10.837C12.0512 10.837 12.0341 10.837 12.0255 10.8532C11.9484 10.918 11.9055 11.0153 11.9055 11.1369C11.9055 11.226 11.9312 11.299 11.9998 11.3557C12.0169 11.3719 12.0341 11.3881 12.0512 11.3962C12.1027 11.4368 12.1627 11.4692 12.2227 11.4935C12.3169 11.534 12.4455 11.5746 12.6084 11.6151C12.6769 11.6313 12.7369 11.6556 12.8055 11.6718C12.9427 11.7124 13.0712 11.761 13.1655 11.8015C13.3027 11.8664 13.4312 11.9555 13.5341 12.0852C13.6369 12.2068 13.6884 12.377 13.6884 12.5797L13.7227 12.5715Z"></path>
-                                      </mask>
-                                      <path d="M13.7227 12.5715H14.7227V11.3076L13.4926 11.5984L13.7227 12.5715ZM13.5769 13.066L14.4168 13.6087L14.4234 13.5985L14.4298 13.5881L13.5769 13.066ZM13.1569 13.4307L13.6154 14.3195L13.6239 14.3151L13.6324 14.3105L13.1569 13.4307ZM12.8398 13.5361L12.6412 12.556L11.8398 12.7184V13.5361H12.8398ZM12.8398 14.1521V15.1521H13.8398V14.1521H12.8398ZM12.0855 14.1521H11.0855V15.1521H12.0855V14.1521ZM12.0855 13.528H13.0855V12.6994L12.2714 12.5454L12.0855 13.528ZM11.8369 13.4551L11.442 14.3738L11.4495 14.3769L11.8369 13.4551ZM11.2027 12.5878V11.5878H10.2027V12.5878H11.2027ZM11.9484 12.5878L12.9462 12.5218L12.8845 11.5878H11.9484V12.5878ZM12.1027 12.912L11.4156 13.6386L11.4328 13.6548L11.4508 13.6703L12.1027 12.912ZM12.8398 12.9363L12.8398 11.9363L12.5041 11.9363L12.2365 12.1388L12.8398 12.9363ZM12.8569 12.9282L12.245 12.1373L12.2058 12.1676L12.1699 12.2016L12.8569 12.9282ZM12.8998 12.3932L13.6338 11.7141L13.6111 11.6896L13.5869 11.6666L12.8998 12.3932ZM12.8312 12.3365L12.2123 13.1219L12.2535 13.1544L12.2979 13.1824L12.8312 12.3365ZM12.6598 12.2392L12.994 11.2967L12.985 11.2936L12.6598 12.2392ZM12.2655 12.1176L12.5384 11.1556L12.5171 11.1496L12.4956 11.1445L12.2655 12.1176ZM12.0684 12.0609L12.4026 11.1184L12.3774 11.1095L12.3518 11.1019L12.0684 12.0609ZM11.7084 11.9312L11.2809 12.8352L11.3109 12.8494L11.3418 12.8616L11.7084 11.9312ZM11.7769 10.3182L11.4518 9.37255L11.4083 9.3875L11.3663 9.40638L11.7769 10.3182ZM12.0598 10.2371L12.2293 11.2227L13.0598 11.0799V10.2371H12.0598ZM12.0598 9.71838V8.71838H11.0598V9.71838H12.0598ZM12.8141 9.71838H13.8141V8.71838H12.8141V9.71838ZM12.8141 10.2534H11.8141V11.0893L12.6368 11.2375L12.8141 10.2534ZM13.2855 10.456L12.6822 11.2535L12.6897 11.2591L12.6973 11.2647L13.2855 10.456ZM13.6541 11.145V12.145H14.7461L14.6502 11.0572L13.6541 11.145ZM12.8827 11.145H11.8827V12.145H12.8827V11.145ZM12.8055 10.9423L11.9882 11.5185L12.0235 11.5686L12.0646 11.6139L12.8055 10.9423ZM12.7284 10.8613L12.1164 11.6522L12.1329 11.6649L12.1499 11.6769L12.7284 10.8613ZM12.0512 10.837L12.0512 11.837L12.4157 11.837L12.6947 11.6024L12.0512 10.837ZM12.0255 10.8532L12.669 11.6187L12.8183 11.4931L12.9096 11.3206L12.0255 10.8532ZM11.9998 11.3557L12.6869 10.6291L12.6628 10.6064L12.6373 10.5853L11.9998 11.3557ZM12.0512 11.3962L12.6702 10.6108L12.5812 10.5407L12.4787 10.4922L12.0512 11.3962ZM12.2227 11.4935L12.6176 10.5748L12.608 10.5707L12.5983 10.5667L12.2227 11.4935ZM12.6084 11.6151L12.3669 12.5856L12.3783 12.5883L12.6084 11.6151ZM12.8055 11.6718L13.0889 10.7128L13.0625 10.705L13.0356 10.6987L12.8055 11.6718ZM13.1655 11.8015L13.593 10.8975L13.5768 10.8898L13.5604 10.8828L13.1655 11.8015ZM13.5341 12.0852L12.7506 12.7066L12.7604 12.719L12.7706 12.7311L13.5341 12.0852ZM13.6884 12.5797H12.6884V13.8436L13.9184 13.5528L13.6884 12.5797ZM12.7227 12.5715C12.7227 12.5678 12.723 12.5626 12.7239 12.5565C12.7248 12.5503 12.7261 12.5448 12.7274 12.5403C12.7303 12.5308 12.7317 12.5315 12.7241 12.5438L14.4298 13.5881C14.6076 13.2977 14.7227 12.957 14.7227 12.5715H12.7227ZM12.7371 12.5232C12.7487 12.5052 12.7554 12.5012 12.7472 12.5083C12.7387 12.5156 12.7184 12.531 12.6815 12.551L13.6324 14.3105C13.9134 14.1586 14.2062 13.9347 14.4168 13.6087L12.7371 12.5232ZM12.6985 12.542C12.7095 12.5363 12.7007 12.544 12.6412 12.556L13.0384 14.5162C13.2189 14.4796 13.4158 14.4224 13.6154 14.3195L12.6985 12.542ZM11.8398 13.5361V14.1521H13.8398V13.5361H11.8398ZM12.8398 13.1521H12.0855V15.1521H12.8398V13.1521ZM13.0855 14.1521V13.528H11.0855V14.1521H13.0855ZM12.2714 12.5454C12.2581 12.5429 12.2465 12.5401 12.2374 12.5374C12.2281 12.5347 12.2239 12.5329 12.2244 12.5332L11.4495 14.3769C11.6024 14.4412 11.7575 14.4837 11.8997 14.5106L12.2714 12.5454ZM12.2319 12.5363C12.1962 12.521 12.1745 12.5075 12.1638 12.4997C12.1533 12.4921 12.1579 12.4933 12.1688 12.5077L10.5794 13.7216C10.8222 14.0395 11.1424 14.245 11.442 14.3738L12.2319 12.5363ZM12.1688 12.5077C12.1807 12.5233 12.1906 12.5419 12.1967 12.5606C12.2028 12.5791 12.2027 12.5896 12.2027 12.5878H10.2027C10.2027 12.9969 10.3272 13.3914 10.5794 13.7216L12.1688 12.5077ZM11.2027 13.5878H11.9484V11.5878H11.2027V13.5878ZM10.9506 12.6537C10.9746 13.0179 11.1262 13.3649 11.3984 13.6223L12.7726 12.1692C12.8906 12.2808 12.9393 12.4169 12.9462 12.5218L10.9506 12.6537ZM11.3984 13.6223L11.4156 13.6386L12.7897 12.1854L12.7726 12.1692L11.3984 13.6223ZM11.4508 13.6703C11.7671 13.9422 12.1374 14.0336 12.4798 14.0336V12.0336C12.4805 12.0336 12.5177 12.0336 12.5755 12.0524C12.6379 12.0728 12.7007 12.1074 12.7546 12.1537L11.4508 13.6703ZM12.4798 14.0336C12.7442 14.0336 13.1185 13.9794 13.4431 13.7338L12.2365 12.1388C12.3194 12.0761 12.3915 12.0518 12.4257 12.0427C12.4446 12.0377 12.4586 12.0355 12.4667 12.0346C12.475 12.0336 12.4794 12.0336 12.4798 12.0336V14.0336ZM12.8398 12.9363C12.8398 13.9363 12.8403 13.9363 12.8408 13.9363C12.8409 13.9363 12.8414 13.9363 12.8417 13.9363C12.8423 13.9363 12.8429 13.9363 12.8435 13.9363C12.8448 13.9363 12.846 13.9363 12.8473 13.9363C12.8498 13.9362 12.8523 13.9362 12.8549 13.9362C12.86 13.9361 12.8651 13.936 12.8704 13.9358C12.881 13.9355 12.8919 13.935 12.9031 13.9343C12.9256 13.9329 12.9497 13.9306 12.9752 13.9272C13.0259 13.9203 13.0836 13.9086 13.1458 13.889C13.2727 13.849 13.4151 13.7767 13.544 13.6548L12.1699 12.2016C12.2903 12.0878 12.424 12.0195 12.5445 11.9815C12.6035 11.963 12.6586 11.9518 12.7074 11.9452C12.7319 11.9419 12.7553 11.9396 12.7773 11.9383C12.7883 11.9376 12.799 11.9371 12.8094 11.9368C12.8146 11.9366 12.8197 11.9365 12.8248 11.9364C12.8273 11.9364 12.8298 11.9363 12.8323 11.9363C12.8336 11.9363 12.8348 11.9363 12.8361 11.9363C12.8367 11.9363 12.8373 11.9363 12.8379 11.9363C12.8382 11.9363 12.8387 11.9363 12.8389 11.9363C12.8393 11.9363 12.8398 11.9363 12.8398 12.9363ZM13.4689 13.7191C13.8341 13.4365 13.9941 13.0328 13.9941 12.6364H11.9941C11.9941 12.5786 12.0047 12.4856 12.0533 12.3806C12.1034 12.2724 12.1755 12.1911 12.245 12.1373L13.4689 13.7191ZM13.9941 12.6364C13.9941 12.2813 13.8607 11.9593 13.6338 11.7141L12.1658 13.0724C12.1181 13.0208 12.0724 12.9534 12.0399 12.8713C12.0071 12.7887 11.9941 12.7076 11.9941 12.6364H13.9941ZM13.5869 11.6666C13.5837 11.6637 13.4875 11.5681 13.3645 11.4906L12.2979 13.1824C12.2734 13.167 12.2549 13.1534 12.243 13.1443C12.2308 13.135 12.2219 13.1275 12.2168 13.1232C12.2082 13.1158 12.2029 13.1105 12.2127 13.1198L13.5869 11.6666ZM13.4502 11.5511C13.3391 11.4635 13.1926 11.3671 12.994 11.2967L12.3256 13.1817C12.3001 13.1727 12.2737 13.1605 12.249 13.1461C12.2257 13.1325 12.2121 13.1218 12.2123 13.1219L13.4502 11.5511ZM12.985 11.2936C12.8697 11.2539 12.7231 11.208 12.5384 11.1556L11.9926 13.0797C12.1508 13.1245 12.2614 13.1597 12.3346 13.1849L12.985 11.2936ZM12.4956 11.1445C12.448 11.1332 12.4256 11.1265 12.4026 11.1184L11.7342 13.0034C11.8483 13.0439 11.9459 13.0696 12.0354 13.0908L12.4956 11.1445ZM12.3518 11.1019C12.2653 11.0763 12.1891 11.0458 12.075 11.0008L11.3418 12.8616C11.4333 12.8977 11.5971 12.9644 11.785 13.0199L12.3518 11.1019ZM12.1358 11.0272C12.0991 11.0098 12.0953 11.0004 12.1033 11.0098L10.5764 12.3015C10.79 12.554 11.0434 12.7229 11.2809 12.8352L12.1358 11.0272ZM12.1033 11.0098C12.1586 11.0752 12.1819 11.1358 12.1904 11.1659C12.198 11.1928 12.1941 11.1952 12.1941 11.1612H10.1941C10.1941 11.4836 10.2593 11.9268 10.5764 12.3015L12.1033 11.0098ZM12.1941 11.1612C12.1941 11.1458 12.1958 11.1545 12.189 11.177C12.1857 11.1875 12.1815 11.198 12.1767 11.2077C12.172 11.2173 12.1678 11.2237 12.1657 11.2267L10.5311 10.0743C10.3012 10.4004 10.1941 10.7668 10.1941 11.1612H12.1941ZM12.1657 11.2267C12.1598 11.2351 12.1539 11.242 12.1487 11.2473C12.1436 11.2525 12.1402 11.2551 12.1399 11.2554C12.1398 11.2555 12.1526 11.2458 12.1875 11.23L11.3663 9.40638C11.0754 9.53741 10.7656 9.74159 10.5311 10.0743L12.1657 11.2267ZM12.1021 11.2638C12.1525 11.2465 12.1812 11.2368 12.2065 11.2292C12.2301 11.2221 12.2354 11.2216 12.2293 11.2227L11.8904 9.2516C11.7025 9.2839 11.5308 9.34538 11.4518 9.37255L12.1021 11.2638ZM13.0598 10.2371V9.71838H11.0598V10.2371H13.0598ZM12.0598 10.7184H12.8141V8.71838H12.0598V10.7184ZM11.8141 9.71838V10.2534H13.8141V9.71838H11.8141ZM12.6368 11.2375C12.6501 11.2399 12.6617 11.2436 12.6706 11.2475C12.6798 11.2515 12.6835 11.2544 12.6822 11.2535L13.8888 9.65849C13.6316 9.46387 13.3219 9.32873 12.9914 9.26919L12.6368 11.2375ZM12.6973 11.2647C12.6941 11.2624 12.6873 11.2568 12.6792 11.2475C12.6711 11.2382 12.6645 11.2283 12.6597 11.2193C12.6496 11.2002 12.655 11.1994 12.658 11.2327L14.6502 11.0572C14.6029 10.5203 14.3631 10.0033 13.8738 9.64731L12.6973 11.2647ZM13.6541 10.145H12.8827V12.145H13.6541V10.145ZM13.8827 11.145C13.8827 10.8172 13.7656 10.5126 13.5464 10.2707L12.0646 11.6139C12.0167 11.5611 11.9662 11.4874 11.93 11.3934C11.894 11.2997 11.8827 11.2128 11.8827 11.145H13.8827ZM13.6228 10.3661C13.5825 10.309 13.479 10.1677 13.3069 10.0456L12.1499 11.6769C12.0938 11.6372 12.0553 11.5985 12.0324 11.5734C12.0091 11.5477 11.9941 11.5269 11.9882 11.5185L13.6228 10.3661ZM13.3403 10.0704C13.0352 9.83429 12.6773 9.74779 12.3512 9.74779V11.7478C12.3337 11.7478 12.233 11.7424 12.1164 11.6522L13.3403 10.0704ZM12.3512 9.74779C12.0948 9.74779 11.7332 9.79796 11.4078 10.0715L12.6947 11.6024C12.62 11.6653 12.5361 11.7067 12.4585 11.729C12.39 11.7488 12.3461 11.7478 12.3512 11.7478V9.74779ZM12.0512 10.837C12.0513 9.83695 12.0508 9.83695 12.0503 9.83695C12.0502 9.83695 12.0497 9.83695 12.0494 9.83695C12.0488 9.83696 12.0482 9.83696 12.0475 9.83696C12.0463 9.83696 12.045 9.83697 12.0438 9.83698C12.0412 9.837 12.0387 9.83703 12.0361 9.83707C12.0309 9.83715 12.0255 9.83727 12.0201 9.83744C12.0091 9.83778 11.9976 9.83831 11.9854 9.8391C11.9613 9.84068 11.9341 9.84331 11.9045 9.84762C11.8466 9.85603 11.7716 9.87197 11.6878 9.90365C11.5135 9.96957 11.286 10.1124 11.1415 10.3857L12.9096 11.3206C12.7736 11.5777 12.5589 11.7124 12.3954 11.7743C12.317 11.804 12.2467 11.8189 12.1924 11.8268C12.1645 11.8308 12.1387 11.8334 12.1155 11.8349C12.1039 11.8356 12.0927 11.8361 12.082 11.8365C12.0767 11.8366 12.0714 11.8368 12.0663 11.8368C12.0637 11.8369 12.0612 11.8369 12.0587 11.8369C12.0574 11.8369 12.0562 11.8369 12.0549 11.8369C12.0543 11.8369 12.0537 11.837 12.0531 11.837C12.0528 11.837 12.0523 11.837 12.0521 11.837C12.0517 11.837 12.0512 11.837 12.0512 10.837ZM11.3821 10.0877C11.0442 10.3717 10.9055 10.7685 10.9055 11.1369H12.9055C12.9055 11.1937 12.8953 11.2751 12.8561 11.3668C12.8159 11.4608 12.7524 11.5486 12.669 11.6187L11.3821 10.0877ZM10.9055 11.1369C10.9055 11.4471 11.0108 11.8353 11.3623 12.1262L12.6373 10.5853C12.7245 10.6574 12.8021 10.7573 12.8518 10.8781C12.8985 10.9916 12.9055 11.0869 12.9055 11.1369H10.9055ZM11.3127 12.0823C11.3162 12.0856 11.3493 12.1174 11.388 12.1495C11.4254 12.1804 11.5074 12.2452 11.6238 12.3003L12.4787 10.4922C12.578 10.5391 12.6428 10.5918 12.663 10.6086C12.6846 10.6264 12.7005 10.642 12.6869 10.6291L11.3127 12.0823ZM11.4323 12.1817C11.5732 12.2927 11.72 12.3688 11.8471 12.4203L12.5983 10.5667C12.6036 10.5689 12.6118 10.5725 12.6226 10.5786C12.6332 10.5845 12.6498 10.5947 12.6702 10.6108L11.4323 12.1817ZM11.8278 12.4122C11.9929 12.4832 12.18 12.539 12.3669 12.5855L12.8499 10.6447C12.711 10.6101 12.641 10.5849 12.6176 10.5748L11.8278 12.4122ZM12.3783 12.5883C12.3714 12.5866 12.3695 12.5856 12.4063 12.5972C12.4338 12.6059 12.5 12.6272 12.5754 12.645L13.0356 10.6987C13.0425 10.7003 13.0444 10.7013 13.0076 10.6897C12.9801 10.6811 12.9139 10.6598 12.8384 10.6419L12.3783 12.5883ZM12.5221 12.6308C12.6172 12.6589 12.7085 12.6935 12.7706 12.7202L13.5604 10.8828C13.434 10.8284 13.2681 10.7658 13.0889 10.7128L12.5221 12.6308ZM12.7381 12.7056C12.7559 12.714 12.7627 12.7191 12.7627 12.719C12.7626 12.719 12.7611 12.7178 12.7586 12.7155C12.7561 12.7131 12.7534 12.7101 12.7506 12.7066L14.3176 11.4638C14.0973 11.1861 13.8329 11.0109 13.593 10.8975L12.7381 12.7056ZM12.7706 12.7311C12.6773 12.6208 12.6884 12.5362 12.6884 12.5797H14.6884C14.6884 12.2178 14.5966 11.7928 14.2975 11.4393L12.7706 12.7311ZM13.9184 13.5528L13.9527 13.5447L13.4926 11.5984L13.4583 11.6065L13.9184 13.5528Z" fill="currentColor" mask="url(#path-2-inside-1_2648_896)"></path>
-                                      <path d="M22.8343 9.97999V12.06C22.8343 12.56 22.4829 12.97 22.0543 12.97H21.12C20.94 14.75 20.2457 16.35 19.2086 17.55C18.8572 17.96 18.4629 18.32 18.0429 18.63V21.6C18.0429 22.1 17.6914 22.51 17.2629 22.51H15.48C15.0514 22.51 14.7 22.1 14.7 21.6V19.83C14.6314 19.83 14.5457 19.83 14.4686 19.83H10.2943V21.59C10.2943 22.09 9.94287 22.5 9.5143 22.5H7.73144C7.30287 22.5 6.95144 22.09 6.95144 21.59V18.82C4.92001 17.48 3.54858 14.94 3.54858 12.02C3.54858 9.86999 4.30287 7.90999 5.51144 6.48999C6.72001 5.07999 8.39144 4.19999 10.2429 4.19999H14.4686L18.6 1.48999V5.86999C19.5 6.68999 20.22 7.78999 20.6657 9.05999H22.0457C22.4743 9.05999 22.8257 9.46999 22.8257 9.96999L22.8343 9.97999Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
-                                      <path d="M1.16577 13.39C1.16577 12.08 2.07434 11.01 3.20577 11.01H3.62577" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
-                                  </g>
-                                  <defs>
-                                      <clipPath id="clip0_2648_896"><rect width="24" height="24" fill="currentColor"></rect></clipPath>
-                                  </defs>
-                              </svg>
-                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Smart savings as a club member</span>
-                          </span>
-                      </li>
-                  </ol>
-              </div>
+                    <li class="relative">
+                        <div>
+                            <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
+                                <img alt="Category Crosslink Bottles 3" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/pennepasta.jpg" style="color: transparent;" data-savepage-loading="lazy">
+                            </div>
+                            <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Penne Pasta</div></div>
+                          </div>
+                    </li>
+                </ul>
+            </div>
+            <div role="region" id="discover-our-products" title="Discover our products" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
+               
+                <ul class="grid grid-cols-2 gap-4">
+                    <li class="relative">
+                        <div>
+                            <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
+                                <img alt="Home - Multicard - Bottles" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/garlicbread.jpg" style="color: transparent;" data-savepage-loading="lazy">
+                            </div>
+                            <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Garlic Bread</div></div>
+                          </div>
+                    </li>
+                    <li class="relative">
+                        <div>
+                            <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
+                                <img alt="Home - Multicard Pod" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/desi.png" style="color: transparent;object-fit: contain;" data-savepage-loading="lazy">
+                            </div>
+                            <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Indian Combo</div></div>
+                          </div>
+                    </li>
+                </ul>
+            </div>
+              
               <div role="region" id="how-to-use-the-air-up-bottle" title="How to use the air up bottle?" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
                  
                 <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 xl:text-center">Customer love ❤️</h2>
@@ -7678,47 +7711,22 @@ rect._pericles_section_highlight_style_border {
             </div>
               <div role="region" id="how-to-use-the-air-up-bottle" title="How to use the air up bottle?" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
                  
-                  <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 xl:text-center">The only pizza you'll ever crave!</h2>
+                  <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 xl:text-center">Why Us</h2>
                   <ol class="-mt-4 list-none overflow-clip xl:grid xl:grid-cols-3 xl:gap-5 xl:overflow-hidden">
-                      <li class="group contents xl:list-item">
-                          <span class="flex items-start gap-2 xl:min-h-20 py-4 xl:py-0 sticky z-10 xl:static top-[52px] bg-default glass-bg-light light-1">
-                              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
-                                  <title>one icon</title>
-                                  <g clip-path="url(#clip0_9124_8491)">
-                                      <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
-                                      <path fill="#fff" d="M10.0681 9.148V7.24H13.3921V16H11.2561V9.148H10.0681Z"></path>
-                                  </g>
-                                  <defs>
-                                      <clipPath id="clip0_9124_8491"><rect width="24" height="24" fill="white"></rect></clipPath>
-                                  </defs>
-                              </svg>
-                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Slim &amp; Light</span>
-                          </span>
-                          <div class="relative min-h-24 overflow-hidden bg-default mb-8">
-                              <div class="relative size-full flex-1 overflow-hidden">
-                                  <img alt="Home - How it works 1" width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" src="./img/images/pzbg1.jpg" style="color: transparent; height: 292px;" data-savepage-loading="lazy">
-                                  <img alt="Home - How it works 1" width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" sizes="" data-savepage-srcset="" data-savepage-loading="lazy" src="./img/images/panim.gif" style="
-                                      padding: 32px;
-                                      position: absolute;
-                                      top: 0px;
-                                  ">
-                              </div>
-                              <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
-                          </div>
-                      </li>
+                      
                       <li class="group contents xl:list-item">
                           <span class="glass-bg-light light-2 flex items-start gap-2 xl:min-h-20 py-4 xl:py-0 sticky z-10 xl:static top-[104px] bg-default">
-                              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
-                                  <title>two icon</title>
-                                  <g clip-path="url(#clip0_9124_8492)">
-                                      <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
-                                      <path fill="#fff" d="M9.04027 14.356C9.31227 14.14 9.43627 14.04 9.41227 14.056C10.1963 13.408 10.8123 12.876 11.2603 12.46C11.7163 12.044 12.1003 11.608 12.4123 11.152C12.7243 10.696 12.8803 10.252 12.8803 9.82C12.8803 9.492 12.8043 9.236 12.6523 9.052C12.5003 8.868 12.2723 8.776 11.9683 8.776C11.6643 8.776 11.4243 8.892 11.2483 9.124C11.0803 9.348 10.9963 9.668 10.9963 10.084H9.01627C9.03227 9.404 9.17627 8.836 9.44827 8.38C9.72827 7.924 10.0923 7.588 10.5403 7.372C10.9963 7.156 11.5003 7.048 12.0523 7.048C13.0043 7.048 13.7203 7.292 14.2003 7.78C14.6883 8.268 14.9323 8.904 14.9323 9.688C14.9323 10.544 14.6403 11.34 14.0563 12.076C13.4723 12.804 12.7283 13.516 11.8243 14.212H15.0643V15.88H9.04027V14.356Z"></path>
-                                  </g>
-                                  <defs>
-                                      <clipPath id="clip0_9124_8492"><rect width="24" height="24" fill="white"></rect></clipPath>
-                                  </defs>
-                              </svg>
-                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Baked at 500°C</span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
+                                <title>one icon</title>
+                                <g clip-path="url(#clip0_9124_8491)">
+                                    <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
+                                    <path fill="#fff" d="M10.0681 9.148V7.24H13.3921V16H11.2561V9.148H10.0681Z"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_9124_8491"><rect width="24" height="24" fill="white"></rect></clipPath>
+                                </defs>
+                            </svg>
+                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Served hot & fast! 🔥</span>
                           </span>
                           <div class="relative min-h-24 overflow-hidden bg-default mb-8">
                               <div class="relative size-full flex-1 overflow-hidden py-1" style="height: 300px">
@@ -7731,78 +7739,93 @@ rect._pericles_section_highlight_style_border {
                       </li>
                       <li class="group contents xl:list-item">
                           <span class="glass-bg-light light-3 flex items-start gap-2 xl:min-h-20 py-4 xl:py-0 sticky z-10 xl:static top-[156px] bg-default">
-                              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
-                                  <title>three icon</title>
-                                  <g clip-path="url(#clip0_9124_8493)">
-                                      <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
-                                      <path fill="#fff" d="M8.97919 9.712C9.01119 8.856 9.29119 8.196 9.81919 7.732C10.3472 7.268 11.0632 7.036 11.9672 7.036C12.5672 7.036 13.0792 7.14 13.5032 7.348C13.9352 7.556 14.2592 7.84 14.4752 8.2C14.6992 8.56 14.8112 8.964 14.8112 9.412C14.8112 9.94 14.6792 10.372 14.4152 10.708C14.1512 11.036 13.8432 11.26 13.4912 11.38V11.428C13.9472 11.58 14.3072 11.832 14.5712 12.184C14.8352 12.536 14.9672 12.988 14.9672 13.54C14.9672 14.036 14.8512 14.476 14.6192 14.86C14.3952 15.236 14.0632 15.532 13.6232 15.748C13.1912 15.964 12.6752 16.072 12.0752 16.072C11.1152 16.072 10.3472 15.836 9.77119 15.364C9.20319 14.892 8.90319 14.18 8.87119 13.228H10.8632C10.8712 13.58 10.9712 13.86 11.1632 14.068C11.3552 14.268 11.6352 14.368 12.0032 14.368C12.3152 14.368 12.5552 14.28 12.7232 14.104C12.8992 13.92 12.9872 13.68 12.9872 13.384C12.9872 13 12.8632 12.724 12.6152 12.556C12.3752 12.38 11.9872 12.292 11.4512 12.292H11.0672V10.624H11.4512C11.8592 10.624 12.1872 10.556 12.4352 10.42C12.6912 10.276 12.8192 10.024 12.8192 9.664C12.8192 9.376 12.7392 9.152 12.5792 8.992C12.4192 8.832 12.1992 8.752 11.9192 8.752C11.6152 8.752 11.3872 8.844 11.2352 9.028C11.0912 9.212 11.0072 9.44 10.9832 9.712H8.97919Z"></path>
-                                  </g>
-                                  <defs>
-                                      <clipPath id="clip0_9124_8493"><rect width="24" height="24" fill="white"></rect></clipPath>
-                                  </defs>
-                              </svg>
-                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Delivered Hot 🔥</span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
+                                <title>one icon</title>
+                                <g clip-path="url(#clip0_9124_8492)">
+                                    <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
+                                    <path fill="#fff" d="M9.04027 14.356C9.31227 14.14 9.43627 14.04 9.41227 14.056C10.1963 13.408 10.8123 12.876 11.2603 12.46C11.7163 12.044 12.1003 11.608 12.4123 11.152C12.7243 10.696 12.8803 10.252 12.8803 9.82C12.8803 9.492 12.8043 9.236 12.6523 9.052C12.5003 8.868 12.2723 8.776 11.9683 8.776C11.6643 8.776 11.4243 8.892 11.2483 9.124C11.0803 9.348 10.9963 9.668 10.9963 10.084H9.01627C9.03227 9.404 9.17627 8.836 9.44827 8.38C9.72827 7.924 10.0923 7.588 10.5403 7.372C10.9963 7.156 11.5003 7.048 12.0523 7.048C13.0043 7.048 13.7203 7.292 14.2003 7.78C14.6883 8.268 14.9323 8.904 14.9323 9.688C14.9323 10.544 14.6403 11.34 14.0563 12.076C13.4723 12.804 12.7283 13.516 11.8243 14.212H15.0643V15.88H9.04027V14.356Z"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_9124_8492"><rect width="24" height="24" fill="white"></rect></clipPath>
+                                </defs>
+                            </svg>  
+                              <span class="font-functional font-normal lg:text-body-lg self-center text-default">Portable & Quick Setup</span>
                           </span>
-                          <div class="relative min-h-24 overflow-hidden bg-default xl:z-0">
-                              <div class="relative size-full flex-1 overflow-hidden">
-                                  <img alt="How It Works 3 " width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" src="img/images/delivered.jpg" style="color: transparent;height:330px" data-savepage-loading="lazy">
-                              </div>
-                              <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
-                          </div>
+                          <div class="relative min-h-24 overflow-hidden bg-default mb-8">
+                            <div class="relative size-full flex-1 overflow-hidden py-1" style="height: 300px">
+                                  <video aria-label="Video Player - Bottles " data-video-index="0" class="absolute inset-0 size-full object-cover object-center" height="100%" title="Bottles " width="100%" autoplay="" playsinline="" muted="" loop="" style="height: 300px;border-radius: 14px;">
+                                    <source src="./img/images/setup.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
+                        </div>
                       </li>
+                      <li class="group contents xl:list-item">
+                        <span class="glass-bg-light light-3 flex items-start gap-2 xl:min-h-20 py-4 xl:py-0 sticky z-10 xl:static top-[156px] bg-default">
+                          
+                          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
+                                <title>three icon</title>
+                                <g clip-path="url(#clip0_9124_8493)">
+                                    <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
+                                    <path fill="#fff" d="M8.97919 9.712C9.01119 8.856 9.29119 8.196 9.81919 7.732C10.3472 7.268 11.0632 7.036 11.9672 7.036C12.5672 7.036 13.0792 7.14 13.5032 7.348C13.9352 7.556 14.2592 7.84 14.4752 8.2C14.6992 8.56 14.8112 8.964 14.8112 9.412C14.8112 9.94 14.6792 10.372 14.4152 10.708C14.1512 11.036 13.8432 11.26 13.4912 11.38V11.428C13.9472 11.58 14.3072 11.832 14.5712 12.184C14.8352 12.536 14.9672 12.988 14.9672 13.54C14.9672 14.036 14.8512 14.476 14.6192 14.86C14.3952 15.236 14.0632 15.532 13.6232 15.748C13.1912 15.964 12.6752 16.072 12.0752 16.072C11.1152 16.072 10.3472 15.836 9.77119 15.364C9.20319 14.892 8.90319 14.18 8.87119 13.228H10.8632C10.8712 13.58 10.9712 13.86 11.1632 14.068C11.3552 14.268 11.6352 14.368 12.0032 14.368C12.3152 14.368 12.5552 14.28 12.7232 14.104C12.8992 13.92 12.9872 13.68 12.9872 13.384C12.9872 13 12.8632 12.724 12.6152 12.556C12.3752 12.38 11.9872 12.292 11.4512 12.292H11.0672V10.624H11.4512C11.8592 10.624 12.1872 10.556 12.4352 10.42C12.6912 10.276 12.8192 10.024 12.8192 9.664C12.8192 9.376 12.7392 9.152 12.5792 8.992C12.4192 8.832 12.1992 8.752 11.9192 8.752C11.6152 8.752 11.3872 8.844 11.2352 9.028C11.0912 9.212 11.0072 9.44 10.9832 9.712H8.97919Z"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_9124_8493"><rect width="24" height="24" fill="white"></rect></clipPath>
+                                </defs>
+                            </svg>
+                            <span class="font-functional font-normal lg:text-body-lg self-center text-default">Non Fire Equipment (Electric Only)</span>
+                        </span>
+                        <div class="relative min-h-24 overflow-hidden bg-default xl:z-0">
+                            <div class="relative size-full flex-1 overflow-hidden">
+                                <img alt="How It Works 3 " width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" src="img/images/portable.png" style="color: transparent;height:330px" data-savepage-loading="lazy">
+                            </div>
+                            <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
+                        </div>
+                    </li>
+                    <li class="group contents xl:list-item">
+                        <span class="glass-bg-light light-3 flex items-start gap-2 xl:min-h-20 py-4 xl:py-0 sticky z-10 xl:static top-[156px] bg-default">
+                          
+                          <span style="color: white;position: absolute;top: 18px;font-size: 12px;left: 22px;font-family: 'Poppins';">4</span><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6 flex-none self-center text-active">
+                                <title>four icon</title>
+                                <g clip-path="url(#clip0_9124_8493)">
+                                    <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
+                                    
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_9124_8493"><rect width="24" height="24" fill="white"></rect></clipPath>
+                                </defs>
+                            </svg>
+                            <span class="font-functional font-normal lg:text-body-lg self-center text-default">Free Pizza Workshop (for kids)</span>
+                        </span>
+                        <div class="relative min-h-24 overflow-hidden bg-default xl:z-0">
+                            <div class="relative size-full flex-1 overflow-hidden">
+                                <img alt="How It Works 3 " width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" src="img/images/kids.jpg" style="color: transparent;height:330px" data-savepage-loading="lazy">
+                            </div>
+                            <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
+                        </div>
+                    </li>
                   </ol>
               </div>
-              <div role="region" id="explore-deeper" title="Explore Deeper" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
-                  <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12">More than just pizza</h2>
-                  <ul class="grid grid-cols-2 gap-4">
-                      <li class="relative">
-                          <div>
-                              <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
-                                  <img alt="Homepage Category Link-1 1 (1)" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/pennepasta.jpg" style="color: transparent;" data-savepage-loading="lazy">
-                              </div>
-                              <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Penne Pasta</div></div>
-                            </div>
-                      </li>
-                      <li class="relative">
-                          <div>
-                              <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
-                                  <img alt="Category Crosslink Bottles 3" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/garlicbread.jpg" style="color: transparent;" data-savepage-loading="lazy">
-                              </div>
-                              <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Garlic Bread</div></div>
-                            </div>
-                      </li>
-                  </ul>
-              </div>
-              <div role="region" id="discover-our-products" title="Discover our products" class="mx-auto max-w-7xl px-6 xl:px-18 transition-colors duration-700">
-                 
-                  <ul class="grid grid-cols-2 gap-4">
-                      <li class="relative">
-                          <div>
-                              <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
-                                  <img alt="Home - Multicard - Bottles" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/wrap.jpg" style="color: transparent;" data-savepage-loading="lazy">
-                              </div>
-                              <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Veg Wraps</div></div>
-                            </div>
-                      </li>
-                      <li class="relative">
-                          <div>
-                              <div class="relative size-full flex-1 overflow-hidden h-52 md:h-72">
-                                  <img alt="Home - Multicard Pod" width="1280" height="960" decoding="async" data-nimg="1" class="w-full object-center object-cover h-full rounded-[1rem]" src="./img/images/brownie2.jpg" style="color: transparent;" data-savepage-loading="lazy">
-                              </div>
-                              <div class="absolute bottom-1 w-full p-2 pl-3"><div class="font-attitude font-extrabold text-heading-2xs md:text-heading-xs hyphens-auto text-on-media">Fudgy Brownie</div></div>
-                            </div>
-                      </li>
-                  </ul>
-              </div>
+              
               <div role="region" id="got-questions-we-have-answers" title="Got questions? We have answers." class="mx-auto max-w-7xl px-6 xl:px-18 grid grid-cols-1 xl:grid-cols-2 xl:gap-x-28 transition-colors duration-700">
                 <div class="col-span-2">
-                    <span class="font-functional font-semibold text-label-md mb-4 block uppercase text-active">Now In Bangalore</span>
+                    <span class="font-functional font-semibold text-label-md mb-4 block uppercase text-active">Main outlet @Banashankari</span>
                     <h2 class="font-attitude font-extrabold text-heading-sm md:text-heading-md mb-8 flex flex-col text-default md:block xl:mb-12 hyphens-auto">Visit the Store</h2>
+                    
+                    
                     <div class="peer max-w-full break-words prose xl:prose-xl">
                       <div class="responsive-map">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243.04454409915434!2d77.56450371153785!3d12.926177522319833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1580f00ea4dd%3A0x380d40ed260e8e7f!2s21st%20Main%20Rd%2C%20Siddanna%20Layout%2C%20Banashankari%20Stage%20II%2C%20Banashankari%2C%20Bengaluru%2C%20Karnataka%20560070!5e0!3m2!1sen!2sin!4v1729939457162!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
+                    <br/>
+                    <div class="relative min-h-24 overflow-hidden bg-default xl:z-0">
+                        <div class="relative size-full flex-1 overflow-hidden">
+                            <img alt="How It Works 3 " width="640" height="480" decoding="async" data-nimg="1" class="w-full rounded-lg object-cover object-center" src="img/images/kiosk.png" style="color: transparent;height:330px;object-position: left;" data-savepage-loading="lazy">
+                        </div>
+                        <div class="peer max-w-full break-words prose xl:prose-xl p-2"><p></p></div>
+                    </div>
+                    
                 </div>
             </div>
               <div role="region" id="got-questions-we-have-answers" title="Got questions? We have answers." class="mx-auto max-w-7xl px-6 xl:px-18 grid grid-cols-1 xl:grid-cols-2 xl:gap-x-28 transition-colors duration-700">
@@ -7815,14 +7838,24 @@ rect._pericles_section_highlight_style_border {
                               Call us or whatsapp us @ +91-7619514999
                           </p>
                           <h5>How do I place an order?</h5>
-                          <p>Simply place an online order on our site or look for Slimcrust on your preferred food delivery platforms.</p>
-                          <h5>Do you undertake party or bulk orders?</h5>
-                          <p>
-                              Do send in your enquiry over whatsapp and we'll be happy to help out.
-                          </p>
+                          <p>Simply place an online order online or whatsapp us with the whatsapp icon on the bottom right.</p>
+                          <h5>My venue is in higher floor. Can the cart be setup there?</h5>
+                          <p>Yes, Totally! Our cart if fully portable and will be setup quickly at the time of your event.</p>
                           <h5>Are the ingredients natural?</h5>
                           <p>
                               Absolutely! The ingredients in slimcrust pizzas and any food on our menu is 100% natural and high quality. We do not use additives or preservatives &amp; prepare our dough fresh everyday!
+                          </p>
+                          <h5>What else do you serve apart from pizza at the live counter?</h5>
+                          <p>
+                              
+                        We serve pizzas, pasta, garlic bread, India Roti & Rice combo and kid-friendly drinks at the live counter.
+                    
+                          </p>
+                          <h5>What's the minimum quanity?</h5>
+                          <p>
+                              
+                        We provide the live counter with a minimum quanity of 20 guests for combos & 25 guests for large pizzas.
+                    
                           </p>
                       </div>
                   </div>
@@ -7835,10 +7868,14 @@ rect._pericles_section_highlight_style_border {
                       <img src="./img/images/logo_scw.png" style="width:110px">
                   </a>
                     <p style="color: #fff">Copyright © 2024 Slimcrust   |   <a href="/terms" style="display:inline;font-size:13px;color:#fff;text-decoration:underline">Terms &amp; Conditions</a></p>
-                  
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
               </footer>
           </div>
       </div>
+
+      <div id="bottomBar1" class="bottom-bar"></div>
+      <a id="bottomBar2" class="button" href="/order/" style="font-weight:bold;bottom:84px;letter-spacing: 1px;">Browse Packages</a>
+      <a id="bottomBar3" class="button" href="https://wa.me/7619514999" onclick="gtag_report_conversion()" style="font-weight:bold;color: #000;font-weight:bold;background: none;border: 2px solid #fd3e37;bottom: 25px;background: #fff;">Chat with us</a>
       <!--$--><!--$-->
       <style>
           #nprogress {
