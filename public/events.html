@@ -24,6 +24,34 @@
             color: white;
             font-size: 15px;
           }
+          .underline{position: relative;text-decoration:none;}
+         .underline:before {
+            content: "";
+            position:relative;
+            width:100%;
+            height: 2.45em;
+            left: 0;
+            width: 100%;
+            z-index:-10;
+            background-image: url('./img/images/underline.svg');
+            background-repeat: no-repeat;	
+            background-size: 100% 100%;
+            transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+            }
+            .underline:after {
+            content: "";
+            position:absolute;
+            width:100%;
+            height: 2.45em;
+            left: 0;
+            width: 100%;
+            top: 0px;
+            z-index:1;
+            background-image: url('./img/images/underline.svg');
+            background-repeat: no-repeat;	
+            background-size: 100% 100%;
+            transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+            }
           .responsive-map{
             overflow: hidden;
             padding-bottom:56.25%;
@@ -3904,7 +3932,7 @@ font-size: 150%;
               color: var(--float-sem-color-text-warning);
           }
           .underline {
-              text-decoration-line: underline;
+              text-decoration-line: none;
           }
           .line-through {
               text-decoration-line: line-through;
@@ -6511,6 +6539,15 @@ font-size: 150%;
               }
           }
       </style>
+      <script>
+        setInterval(function() {
+            var word = document.getElementById('rotated').innerHTML;
+            if(word=='pizza') document.getElementById('rotated').innerHTML = 'pasta';
+            else if(word=='pasta') document.getElementById('rotated').innerHTML = 'Indian';
+            else if(word=='Indian') document.getElementById('rotated').innerHTML = 'veg';
+            else document.getElementById('rotated').innerHTML = 'pizza';
+           },2000);
+      </script>
       <script data-savepage-type="module" type="text/plain" data-savepage-src="https://app.usercentrics.eu/browser-ui/3.55.0/index.module.js"></script>
       <style>
           ._pericles_action_prev,
@@ -7423,6 +7460,13 @@ rect._pericles_section_highlight_style_border {
                           <source src="./img/images/pizza.mp4" type="video/mp4">
                       </video>
                   </div>
+                  <img src="./img/images/starts.png" style="
+                        position: absolute;
+                        top: 88px;
+                        z-index: 1;
+                        width: 159px;
+                        left: 26px;
+                    ">
                   <div id="vidSlide2" class="absolute size-full opacity-0 duration-200 opacity-100 hidden">
                       <video aria-label="Video Player - Everyday pizza" data-video-index="1" class="absolute inset-0 size-full object-cover object-center" height="100%" title="Flavor pods" width="100%" autoplay="" playsinline="" muted="" loop="" poster="./img/images/pospasta.png">
                           <source src="./img/images/pastamore.mp4" type="video/mp4">
@@ -7438,7 +7482,7 @@ rect._pericles_section_highlight_style_border {
                           </div>
                       </div>
                       <div class="!flex flex-col gap-4 xl:gap-8" style="top: 16px;position: relative;">
-                          <h1 class="font-attitude font-extrabold text-heading-xs md:text-heading-md max-w-2xl text-balance text-on-media drop-shadow transition-opacity" style="line-height: 1.25;color:#fff;z-index: 1;">Live pizzas for your party!</h1>
+                          <h1 class="font-attitude font-extrabold text-heading-xs md:text-heading-md max-w-2xl text-balance text-on-media drop-shadow transition-opacity" style="line-height: 1.25;color:#fff;z-index: 1;font-size:1.8rem">Live <span id="rotated" class="underline">pizza</span> catering for your party!</h1>
                           <div class="flex">
                             <a class="relative inline-block rounded border-2 px-4 py-2 transition-colors xl:px-6 xl:py-4 disabled:pointer-events-none disabled:cursor-not-allowed focus-within:ring focus-within:ring-default focus:outline-none focus:ring focus:ring-default focus-visible:outline-none focus-visible:ring focus-visible:ring-default active:text-active active:border-none active:bg-active active:ring-0 font-functional font-semibold text-label-sm lg:text-label-md uppercase border-none bg-emphasis text-emphasis disabled:bg-mute disabled:text-mute" data-savepage-href="/us/en/flavors" href="/club" style="margin: 0 auto;left: 0;right: 0;padding: 6px;width: 100%;">
                               <div class="font-functional font-semibold text-label-md text-emphasis" style="text-transform: none;font-weight: bold;padding: 6px;font-size: 1.1rem;margin: 0 auto;width: 100%;text-align: center;margin: 0 auto;left: 0;right: 0;">Order Now</div>
@@ -7450,29 +7494,37 @@ rect._pericles_section_highlight_style_border {
                         </div>
                       </div>
                       <div style="overflow-y: hidden;" class="-mx-4 mb-2 mt-6 flex gap-2 overflow-x-auto p-0 px-4 scrollbar-hide xl:mt-0 xl:gap-4 max-xl-landscape:my-0">
-                          <button onclick="document.querySelector('#vidSlide2').classList.add('hidden')" aria-label="Bottles  play" data-index-video="0" data-video="https://web-media.cdn.air-up.com/en_all/hero-desktop-16-9-60mb-compressed.mp4" class="relative mx-2 flex-none overflow-hidden rounded-lg p-0 text-left ring-2 ring-default ring-offset-0 ring-offset-transparent ease-in-out [transition:transform_2.2s,width_1.1s,height_1.1s] h-[128px] w-[100px] hover:scale-[1.04]" style="width: 50%">
-                              <div class="relative flex-1 overflow-hidden aspect-[16/9] size-full border-none object-cover opacity-80 transition-opacity hover:opacity-100">
-                                  <img alt="Bottles  thumbnail" decoding="async" data-nimg="fill" class="w-full rounded-lg object-cover object-center" src="./img/images/slide1.png" data-savepage-loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                              </div>
-                              <div class="pointer-events-none absolute bottom-0 z-20 w-full p-4 opacity-0">
-                                  <div class="font-attitude font-extrabold text-heading-2xs mb-0.5 truncate text-on-media drop-shadow-md xl:mb-1.5">Bottles</div>
-                                  <div class="w-full overflow-hidden rounded-full bg-default opacity-0 transition-opacity delay-100">
-                                      <div class="h-[6px] w-full transform-gpu rounded-full bg-emphasis transition-transform duration-300 ease-linear" style="transform: translateX(-99%);">
-                                          <progress class="sr-only" max="100" value="1" title="Bottles  progress">1%</progress>
-                                      </div>
-                                  </div>
-                              </div>
-                          </button>
+                          
+                          <button onclick="document.querySelector('#vidSlide2').classList.remove('hidden')" aria-label="Flavor pods play" data-index-video="1" data-video="https://web-media.cdn.air-up.com/en_all/pods-trailer-2-nobadge-compressed.mp4" class="relative mx-2 flex-none overflow-hidden rounded-lg p-0 text-left ring-2 ring-default ring-offset-0 ring-offset-transparent ease-in-out [transition:transform_2.2s,width_1.1s,height_1.1s] h-[128px] w-[220px] scale-[1.11]">
+                            <div class="relative flex-1 overflow-hidden aspect-[9/16] size-full border-none object-cover opacity-80 !opacity-50 transition-opacity hover:opacity-100">
+                                <img alt="Flavor pods thumbnail" decoding="async" data-nimg="fill" class="w-full rounded-lg object-cover object-center" src="./img/images/slide1.png" style="position: absolute;height: 100%;width: 100%;inset: 0px;color: transparent;height: 116px;top: 6px;">
+                            </div>
+                            <div class="pointer-events-none absolute bottom-0 z-20 w-full p-4 opacity-0 opacity-100">
+                                <div class="font-attitude font-extrabold text-heading-2xs mb-0.5 truncate text-on-media drop-shadow-md xl:mb-1.5" onclick="" style="color: #fff;">Live Hot Pizzas</div>
+                                <div class="w-full overflow-hidden rounded-full bg-default opacity-0 transition-opacity delay-100 !opacity-100">
+                                    
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="document.querySelector('#vidSlide2').classList.remove('hidden')" aria-label="Flavor pods play" data-index-video="1" data-video="https://web-media.cdn.air-up.com/en_all/pods-trailer-2-nobadge-compressed.mp4" class="relative mx-2 flex-none overflow-hidden rounded-lg p-0 text-left ring-2 ring-default ring-offset-0 ring-offset-transparent ease-in-out [transition:transform_2.2s,width_1.1s,height_1.1s] h-[128px] w-[220px] scale-[1.11]">
+                            <div class="relative flex-1 overflow-hidden aspect-[9/16] size-full border-none object-cover opacity-80 !opacity-50 transition-opacity hover:opacity-100">
+                                <img alt="Flavor pods thumbnail" decoding="async" data-nimg="fill" class="w-full rounded-lg object-cover object-center" src="./img/images/desi.png" style="position: absolute;height: 100%;width: 100%;inset: 0px;color: transparent;height: 116px;top: 6px;">
+                            </div>
+                            <div class="pointer-events-none absolute bottom-0 z-20 w-full p-4 opacity-0 opacity-100">
+                                <div class="font-attitude font-extrabold text-heading-2xs mb-0.5 truncate text-on-media drop-shadow-md xl:mb-1.5" onclick="" style="color: #fff;">Indian Combo</div>
+                                <div class="w-full overflow-hidden rounded-full bg-default opacity-0 transition-opacity delay-100 !opacity-100">
+                                    
+                                </div>
+                            </div>
+                        </button>
                           <button onclick="document.querySelector('#vidSlide2').classList.remove('hidden')" aria-label="Flavor pods play" data-index-video="1" data-video="https://web-media.cdn.air-up.com/en_all/pods-trailer-2-nobadge-compressed.mp4" class="relative mx-2 flex-none overflow-hidden rounded-lg p-0 text-left ring-2 ring-default ring-offset-0 ring-offset-transparent ease-in-out [transition:transform_2.2s,width_1.1s,height_1.1s] h-[128px] w-[220px] scale-[1.11]">
                               <div class="relative flex-1 overflow-hidden aspect-[9/16] size-full border-none object-cover opacity-80 !opacity-50 transition-opacity hover:opacity-100">
                                   <img alt="Flavor pods thumbnail" decoding="async" data-nimg="fill" class="w-full rounded-lg object-cover object-center" src="./img/images/slide2.png" style="position: absolute;height: 100%;width: 100%;inset: 0px;color: transparent;height: 116px;top: 6px;">
                               </div>
                               <div class="pointer-events-none absolute bottom-0 z-20 w-full p-4 opacity-0 opacity-100">
-                                  <div class="font-attitude font-extrabold text-heading-2xs mb-0.5 truncate text-on-media drop-shadow-md xl:mb-1.5" onclick="" style="color: #fff;">Pasta &amp; More</div>
+                                  <div class="font-attitude font-extrabold text-heading-2xs mb-0.5 truncate text-on-media drop-shadow-md xl:mb-1.5" onclick="" style="color: #fff;">Live Pastas</div>
                                   <div class="w-full overflow-hidden rounded-full bg-default opacity-0 transition-opacity delay-100 !opacity-100">
-                                      <div class="h-[6px] w-full transform-gpu rounded-full bg-emphasis transition-transform duration-300 ease-linear" style="transform: translateX(-60%);">
-                                          <progress class="sr-only" max="100" value="40" title="Flavor pods progress">40%</progress>
-                                      </div>
+                                      
                                   </div>
                               </div>
                           </button>
