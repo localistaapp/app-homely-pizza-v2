@@ -3247,10 +3247,6 @@ span.club-code {
   || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
 
-if(iOS() && localStorage.getItem('notification-dialog') == null) {
-    document.querySelector('#addToHome').style.display = 'block';
-}
-
   if(localStorage.getItem('notification-dialog') != null || iOS()) {
         (function(d, t) {
                     var g = d.createElement(t),
@@ -3304,4 +3300,9 @@ function isValidCoupon() {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="../club.bundle.min.js"></script>
+<script>
+if(iOS() && localStorage.getItem('notification-dialog') == null) {
+    document.querySelector('#addToHome').style.display = 'block';
+}    
+</script>
 </body>
