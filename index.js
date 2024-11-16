@@ -2905,15 +2905,19 @@ app.post('/createBooking', function(req, res) {
                                  client.end();
                               } else {
                                 console.log(response);
-                                axios.post('https://api.pushalert.co/rest/v1/send', 'title=Order%20Received&message=New%20Pizza%20Order&icon=https://www.slimcrust.com/rounded.png&url=https://www.slimcrust.com', {headers: {'Authorization': 'api_key=c0a692d5772f7c2b7642013d80439aea'}})
-                                                                  .then(res => {
-                                                                    console.log('Pushalert success: ', res);
-                                                                    client.end();
-                                                                  })
-                                                                  .catch(error => {
-                                                                    console.log('Pushalert error: ', error);
-                                                                    client.end();
-                                                                  });
+                                const mailOptions = {
+                                  from: "slimcrustbskowner@gmail.com",
+                                  to: "sampath.oops@gmail.com",
+                                  subject: "New Booking",
+                                  text: "There is a new Web Booking from "+eMobile+".",
+                                };
+                                transporter.sendMail(mailOptions, (error, info) => {
+                                  if (error) {
+                                    console.error("Error sending email: ", error);
+                                  } else {
+                                    console.log("Email sent: ", info.response);
+                                  }
+                                });
                                 //res.send('{"orderId":"'+orderId+'", "whitelisted":true}');
                               }
 
