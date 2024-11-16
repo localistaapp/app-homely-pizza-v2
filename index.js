@@ -44,7 +44,7 @@ const transporter = nodemailer.createTransport({
       secure: true,
       auth: {
         user: "slimcrustbskowner@gmail.com",
-        pass: "leja pifj jmux fvgc",
+        pass: "lejapifjjmuxfvgc",
       },
     });
 const orderid = require('order-id')('randomgenid');
