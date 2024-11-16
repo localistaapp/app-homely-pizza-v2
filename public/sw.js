@@ -22,4 +22,4 @@ self.addEventListener('fetch', function(e) {
     })
   );
 });
-//importScripts("https://cdn.pushalert.co/sw-72995.js");
+importScripts("https://cdn.pushalert.co/sw-61487_2.js");
