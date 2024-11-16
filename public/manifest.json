@@ -1,1 +1,24 @@
-{"name":"Slimcrust Cafe","short_name":"Slimcrust Cafe","start_url":"https://slimcrust.com/cafe/acceldata","id":"https://slimcrust.com/cafe/acceldata","display":"standalone","background_color":"#ffffff","theme_color":"#ff0005","icons":[{"src":"https://cdn.pushalert.co/icons/app-icon-60282-1.png?1694852735","sizes":"512x504"}],"share_target":{"action":"/cafe/acceldata","method":"GET","params":{"title":"title","text":"text","url":"url"}}}
+{
+    "name": "Slimcrust",
+    "short_name": "Slimcrust",
+    "start_url": "https://slimcrust.com/club",
+    "id": "https://slimcrust.com/club",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ff0005",
+    "icons": [
+      {
+        "src": "https://cdn.pushalert.co/icons/app-icon-60282-1.png?1694852735",
+        "sizes": "512x504"
+      }
+    ],
+    "share_target": {
+      "action": "/club",
+      "method": "GET",
+      "params": {
+        "title": "title",
+        "text": "text",
+        "url": "url"
+      }
+    }
+  }
