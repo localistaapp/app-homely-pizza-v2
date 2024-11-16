@@ -2148,6 +2148,7 @@ app.post('/store/web-order', function(req, res) {
                                         const mailOptions = {
                                           from: "slimcrustbskowner@gmail.com",
                                           to: "slimcrustbsk@gmail.com",
+                                          cc: 'sampath.oops@gmail.com',
                                           subject: "New Web Order",
                                           text: "There is a new Web Order. Please check your dashboard.",
                                         };
@@ -2908,8 +2909,8 @@ app.post('/createBooking', function(req, res) {
                                 const mailOptions = {
                                   from: "slimcrustbskowner@gmail.com",
                                   to: "sampath.oops@gmail.com",
-                                  subject: "New Booking",
-                                  text: "There is a new Web Booking from "+eMobile+".",
+                                  subject: "New Event Booking",
+                                  text: "There is a new event booking from "+eMobile+".",
                                 };
                                 transporter.sendMail(mailOptions, (error, info) => {
                                   if (error) {
