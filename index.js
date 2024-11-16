@@ -11,6 +11,7 @@ var request= require('request');
 var { Client } = require('pg');
 var { Pool } = require('pg');
 var axios = require('axios');
+var nodemailer = require("nodemailer");
 var crypto = require('crypto');
 var QRCode = require('qrcode');
 //var mergeImages = require('merge-images');
@@ -36,6 +37,16 @@ let dbConfig = {
          ssl: { rejectUnauthorized: false },
          keepAlive:true
      }
+const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "slimcrustbskowner@gmail.com",
+        pass: "leja pifj jmux fvgc",
+      },
+    });
 const orderid = require('order-id')('randomgenid');
 var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai89eidZYXjM0OK3KeXfkPU@redis-16431.c10.us-east-1-2.ec2.cloud.redislabs.com:16431';
 redisURL = url.parse(redisURLVal);
@@ -2134,6 +2145,19 @@ app.post('/store/web-order', function(req, res) {
                                       client.end();
                                     } else {
                                         res.send("success");
+                                        const mailOptions = {
+                                          from: "slimcrustbskowner@gmail.com",
+                                          to: "slimcrustbsk@gmail.com",
+                                          subject: "New Web Order",
+                                          text: "There is a new Web Order. Please check your dashboard.",
+                                        };
+                                        transporter.sendMail(mailOptions, (error, info) => {
+                                          if (error) {
+                                            console.error("Error sending email: ", error);
+                                          } else {
+                                            console.log("Email sent: ", info.response);
+                                          }
+                                        });
                                         client.end();
                                     }
 
