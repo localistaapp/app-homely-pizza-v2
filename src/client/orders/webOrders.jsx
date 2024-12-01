@@ -433,7 +433,7 @@ class Dashboard extends Component {
         window.location.href='/dashboard-quote-res';
     }
     onOrderClicked(order){
-        this.setState({showOrderDetail: true, orderId: order.id, orderName:order.name, orderStatus: order.status, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: order.created_at});
+        this.setState({showOrderDetail: true, orderId: order.id, orderName:order.name, orderStatus: order.status, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: new Date(order.created_at).toLocaleString("en-IN", {month: "long",day: "numeric",hour: "2-digit", minute: "2-digit"})});
     }
     onCloseClick() {
         this.setState({showOrderDetail: false});
@@ -511,7 +511,7 @@ class Dashboard extends Component {
                                                             <div>{this.state.orderAddress}</div>
                                                             <div>{this.state.orderPincode}</div>
                                                             <div className='price-lbl'>₹{this.state.orderPrice}</div>
-                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.Please%20make%20payment%20of%20₹${this.state.orderPrice}via%20UPI/GPay%20to9972908138.%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
+                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.%20Please%20make%20payment%20of%20%E2%82%B9${this.state.orderPrice}%20via%20UPI/GPay%20to%20UPI%20ID%20paytmqr3othpfhox3@paytm%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
                                                             {this.state.orderStatus != 'PAID' && <div className='price-btn' onClick={()=>{this.onPaidClick(this.state.orderId)}}>Paid</div>}
                                                             <div>{this.state.orderSchedule == 'now' ? 'DELIVER NOW' : ''}</div>
                                                             {this.state.orderSlot != 'unknown' && <div>{this.state.orderSlot}</div>}

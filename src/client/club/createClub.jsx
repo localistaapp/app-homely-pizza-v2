@@ -192,6 +192,15 @@ class ReviewContainer extends Component {
         let size = this.props.reviewTopics[this.state.activeIndex].topic;
         return this.props.crustOptions[this.state.activeCrustIndex]["pricing"][size] * qty;
     }
+    renderPizzaSize(sizeText) {
+        if(sizeText == 'Large') {
+            return 'Large 10"';
+        } else if(sizeText == 'Medium') {
+            return 'Medium 8"';
+        } else if(sizeText == 'Small') {
+            return 'Small 6"';
+        }
+    }
 
     render() {
         let {reviewTopics, crustOptions, item, itemId, type} = this.props;
@@ -213,7 +222,7 @@ class ReviewContainer extends Component {
                     return (
                         <React.Fragment>
                             <div className={activeIndex===index ? 'review-topic active': 'review-topic'} onClick={()=>{this.setActiveTopic(review, index);  this.setSizePrice(index); }}>
-                                {review.topic}
+                            {this.renderPizzaSize(review.topic)}
                             </div>
                         </React.Fragment>
                     );
