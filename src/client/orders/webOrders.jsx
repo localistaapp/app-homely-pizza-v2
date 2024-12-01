@@ -511,7 +511,7 @@ class Dashboard extends Component {
                                                             <div>{this.state.orderAddress}</div>
                                                             <div>{this.state.orderPincode}</div>
                                                             <div className='price-lbl'>₹{this.state.orderPrice}</div>
-                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.%20Please%20make%20payment%20of%20%E2%82%B9${this.state.orderPrice}%20via%20UPI/GPay%20to%20UPI%20ID%20paytmqr3othpfhox3@paytm%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
+                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.%20Please%20make%20payment%20of%20%E2%82%B9${this.state.orderPrice}%20via%20UPI%2FGPay%20to%20UPI%20ID%20paytmqr3othpfhox3%40paytm.%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
                                                             {this.state.orderStatus != 'PAID' && <div className='price-btn' onClick={()=>{this.onPaidClick(this.state.orderId)}}>Paid</div>}
                                                             <div>{this.state.orderSchedule == 'now' ? 'DELIVER NOW' : ''}</div>
                                                             {this.state.orderSlot != 'unknown' && <div>{this.state.orderSlot}</div>}
