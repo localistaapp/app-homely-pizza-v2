@@ -3324,10 +3324,10 @@ function isValidCoupon() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="../club.bundle.min.js"></script>
 <script>
-if(iOS() && localStorage.getItem('notification-dialog') == null && localStorage.getItem('ios-home-msg') == null) {
+if(iOS() && localStorage.getItem('notification-dialog') == null && sessionStorage.getItem('ios-home-msg') == null) {
     document.querySelector('#addToHome').style.display = 'block';
     document.querySelector('#addToHomeMsg').style.display = 'block';
-    setTimeout(function(){localStorage.setItem('ios-home-msg', 'true');},500);
+    setTimeout(function(){sessionStorage.setItem('ios-home-msg', 'true');},500);
 }    
 </script>
 </body>

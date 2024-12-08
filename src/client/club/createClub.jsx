@@ -873,7 +873,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        if (iOS() && localStorage.getItem('ios-home-msg') == null) {
+        if (iOS() && sessionStorage.getItem('ios-home-msg') == null) {
             return null;
         }
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
