@@ -798,6 +798,18 @@ class Dashboard extends Component {
         }.bind(this);
         http.send(params);
     }
+    getCurrentTimeInFormat() {
+        const now = new Date();
+        let hours = now.getHours();
+        const isPM = hours >= 12;
+        if (hours > 12) {
+            hours -= 12;
+        } else if (hours === 0) {
+            hours = 12;
+        }
+        const period = isPM ? "pm" : "am";
+        return hours;
+    }
     isStoreAcceptingOrders() {
         axios.get(`/store/get/${localStorage.getItem('clubCode')}`)
           .then(function (response) {
@@ -846,7 +858,7 @@ class Dashboard extends Component {
             var curDay = weekdays[new Date().getDay()].toLowerCase();
             if (this.state.onlineOrdersTimings.hasOwnProperty(curDay) && this.state.onlineOrdersTimings[curDay].length > 0) {
                 console.log('--schedule--', this.state.onlineOrdersTimings[curDay]);
-                this.setState({currDayTimings: this.state.onlineOrdersTimings[curDay]});
+                this.setState({currDayTimings: this.state.onlineOrdersTimings[curDay].filter((slotStr)=>{return parseInt(slotStr.substr(0,slotStr.indexOf('pm'))) > this.getCurrentTimeInFormat()})});
 
                 this.setState({showDeliveryOptions: true, deliveryNotSupported: false});
                 document.getElementById('checkoutBtnStep2').style.display = 'block';
@@ -861,6 +873,9 @@ class Dashboard extends Component {
     }
 
     render() {
+        if (iOS() && localStorage.getItem('ios-home-msg') == null) {
+            return null;
+        }
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         console.log('::results::', results);
         return (<div style={{marginTop: '84px'}}>
@@ -915,6 +930,7 @@ class Dashboard extends Component {
                                                    {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
                                                    <br/><br/><br/><br/><br/>
                                                    <br/><br/><br/><br/>
+                                                   <span className="club-desc bottom" >Checking your Gmail login status... <br/>Login with your Gmail account in a separate tab and refresh this page.</span>
                                                 </div>}
                                                 {this.state.loggedIn && curStep != 3 &&
                                                    <div className="md-stepper-horizontal orange">
@@ -1072,20 +1088,21 @@ class Dashboard extends Component {
                                                         <input type="radio" id="deliverSchedule" name="deliveryTime" value="deliverSchedule" style={{marginTop: '14px'}} selected />
                                                         <label for="deliverSchedule">Deliver Later</label>
                                                     </div>}
-                                                      <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '40px'}}>
+                                                     {this.state.storeAcceptingOrders == true && <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '40px'}}>
                                                           <span>Select your time slot for delivery today:</span>
                                                           
-                                                      </div>
-                                                      <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '30px'}}>
+                                                      </div>}
+                                                      {this.state.storeAcceptingOrders == true && <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '30px'}}>
                                                           <select name="slot" id="slot" style={{height:'36px',marginLeft: '10px'}} className="slot-dropdown" onChange={(e)=>{sessionStorage.setItem('deliverySlot',e.target.options[e.target.selectedIndex].text);}}>
                                                               {this.state.currDayTimings && this.state.currDayTimings.map((item)=> {
                                                                 return (<option value={item}>{item}</option>)
                                                               })}
                                                             </select>
-                                                      </div>
+                                                      </div>}
                                                       <div className="slot"></div>
                                                   </div>
-                                                  <div className="delivery-section msg" style={{top:'50px', display: `${this.state.deliveryNotSupported == true ? 'block' : 'none'}`}}>
+                                                  {this.state.storeAcceptingOrders}
+                                                  <div className="delivery-section msg" style={{top:'50px', display: `${this.state.deliveryNotSupported == true || this.state.storeAcceptingOrders == false ? 'block' : 'none'}`}}>
                                                     
                                                       <div className="deliver-cell" style={{marginTop: '12px', marginLeft: '6px'}}>
                                                           <span>Sorry! We don't have any of your nearby stores accepting online orders at the moment.</span>

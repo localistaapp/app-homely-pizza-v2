@@ -18,6 +18,17 @@
 .largevp {
     display: none;
 }
+.online-banner {
+    background: #ff0402;
+    padding: 12px;
+    color: white;
+    padding-left: 16px;
+}
+.online-banner span {
+    margin-top: 8px;
+    position: absolute;
+    margin-left: 9px;
+}
 @media only screen and (min-width: 600px) {
   .largevp {
     display: block;
@@ -149,7 +160,7 @@ body {
     color: #454545;
     padding: 0px;
     margin: 0 auto;
-    top: 125px;
+    top: 164px;
     position: absolute;
     font-size: 27px;
     font-weight: normal;
@@ -1020,7 +1031,7 @@ button#next {
 button#prev {
 	left: -1.1em;
 }
-a {
+/*a {
 	position: relative;
 	display: block;
 	background-color: #ffffff;
@@ -1032,7 +1043,7 @@ a {
 	padding: 0.9em 0;
 	border-radius: 0.3em;
 	margin-top: 30px;
-}
+}*/
 .fab {
 	color: #ff0000;
 }
@@ -1376,7 +1387,7 @@ button.banner:after{
   margin: 0 auto;
   max-width: 75rem;
   width: 100%;
-  margin-top: 260px;
+  margin-top: 214px;
 }
 
 .main .gcontainer .glider-contain .glider .card-image {
@@ -1501,6 +1512,7 @@ if(location.href.indexOf('amrit15') != -1
 
 <div class="results">
 <div>
+<div class="online-banner" onclick="location.href = '/main';"><img style="width:32px" src="./img/images/deliveryicon.png" /> <span>To order pizza delivery, <a href="/main" style="color:white">click here!</a></span></div>
 <div class="logo" id="logoWrapper">
     <img id="logo" class="logo-img" src="../img/images/logo_scr.jpg" />
     <div id="logoHeading" class="logo-heading"></div>
