@@ -1559,6 +1559,120 @@ app.get("/enquiry-orders/:location/:franchiseId", function(req, res) {
       })
 });
 
+app.get("/prev-month-stats/:email", function(req, res) {
+  let orderStatus = req.params.status;
+  let origEmail = req.params.email;
+  email = origEmail.replace('owner@','@');
+  let franchiseWhereClause1 = '';
+  let franchiseWhereClause2 = '';
+
+  const client = new Client(dbConfig)
+
+client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+          client.end();
+        } else {
+  client.query("Select id from franchise where owner_email IN ('"+email+"') ",
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                                 client.end();
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("auth error");
+                                    client.end();
+                                 } else {
+                                    let franchiseId = response.rows[0]['id'];
+                                    if (franchiseId != null && franchiseId != '' && franchiseId != '1') {
+                                        franchiseWhereClause1 = 'where franchise_id = '+franchiseId;
+                                        franchiseWhereClause2 = 'and franchise_id = '+franchiseId;
+                                      } else {
+                                        franchiseWhereClause1 = '';
+                                        franchiseWhereClause2 = '';
+                                      }
+
+                                    
+                                      //if email contains owner, change query
+                                    let statsQuery ="SELECT SUM (quote_amt) as sales FROM confirmed_order where CAST(event_date AS timestamp) >= date_trunc('month', current_date - interval '1' month) and CAST(event_date AS timestamp) < date_trunc('month', current_date) "+franchiseWhereClause2;
+                                    if (origEmail.indexOf('owner') >= 0) {
+                                      console.log('--franchiseId--', franchiseId);
+                                      client.query("Select id from store where franchise_id = "+franchiseId,
+                                      [], (errNested, responseNested) => {
+                                            if (errNested) {
+                                              console.log(errNested)
+                                              res.send("error");
+                                              client.end();
+                                            } else {
+                                              console.log('--franchiseStoreId--', responseNested.rows[0]['id']);
+                                              let franchiseStoreId = responseNested.rows[0]['id'];
+                                              console.log('--statsQuery 1--', statsQuery);
+                                              
+                                              client.query(statsQuery,
+                                                [], (err, response) => {
+                                                      if (err) {
+                                                        console.log(err)
+                                                         res.send("error");
+                                                         client.end();
+                                                      } else {
+                                                        let eventOrders = response.rows[0].sales;
+                                                        
+                                                        let storeStatsQuery = "select sum(discounted_price) as sales from store_order where store_id IN (select id from store "+franchiseWhereClause1+") and status = 'PAID' and CAST(created_at AS timestamp) >= date_trunc('month', current_date - interval '1 month') AND CAST(created_at AS timestamp) < date_trunc('month', current_date)";
+
+                                                        console.log('-storeStatsQuery-', storeStatsQuery);    
+                                                          client.query(storeStatsQuery,
+                                                              [], (storeErr, storeResponse) => {
+                                                                    if (storeErr) {
+                                                                      console.log(storeErr)
+                                                                      res.send("error");
+                                                                      client.end();
+                                                                    } else {
+                                                                      let storeOrders = storeResponse.rows[0].sales;
+                                                                      console.log('--event orders--', eventOrders);
+                                                                      console.log('--storeOrders orders--', storeOrders);                                                  
+              
+                                                                      
+                                                                      res.send('{"eventSales":'+eventOrders+',"storeSales":'+storeOrders+'}');
+                                                                      client.end();
+                                                                    }
+                      
+                                                                  });
+                                                         //res.send(response.rows);
+                                                         //client.end();
+                                                      }
+         
+                                                    });
+                                            }});
+                                     
+                                      } else {
+                                        statsQuery = statsQuery + "";
+                                        console.log('--statsQuery 2--', statsQuery);
+                                        client.query(statsQuery,
+                                          [], (err, response) => {
+                                                if (err) {
+                                                  console.log(err)
+                                                   res.send("error");
+                                                   client.end();
+                                                } else {
+                                                   res.send(response.rows);
+                                                   client.end();
+                                                }
+   
+                                              });
+                                      }
+                                    }
+                                    
+
+                              }
+
+                            });
+        }
+    });
+});
+
 app.get("/stats/:email", function(req, res) {
   let orderStatus = req.params.status;
   let origEmail = req.params.email;

@@ -404,6 +404,27 @@ class Dashboard extends Component {
             }
           }.bind(this));
     }
+    loadPrevMonthSales() {
+        let enquiriesArr = [];
+        let email = sessionStorage.getItem('user');
+        email = email.replaceAll('"','');
+        axios.get(`/prev-month-stats/${email}`)
+          .then(function (response) {
+            if(response.data != 'auth error') {
+                sessionStorage.setItem('user', JSON.stringify(email));
+                if (response.data) {
+                    this.setState({
+                      statTotalSales: response.data.eventSales && response.data.storeSales?  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.eventSales + response.data.storeSales): 0,
+                      statEventSales: response.data.eventSales? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.eventSales) : 0,
+                      statStoreSales: response.data.storeSales? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(response.data.storeSales) : 0,
+                    });
+                }
+                document.getElementById('dash-content').style.display='block';
+                document.getElementById('logout').style.display='block';
+                this.getUserProfile(email);
+            }
+          }.bind(this));
+    }
     initializeStats(email) {
         let enquiriesArr = [];
         axios.get(`/stats/${email}`)
@@ -445,6 +466,7 @@ class Dashboard extends Component {
                                               <TabPanel value={this.state.value} index={0}>
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><RestaurantIcon />&nbsp;&nbsp;Business Dashboard</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
+                                                   <div className="arrow-container"><img class="left-arrow" src="../img/images/left.png" onClick={()=>{this.loadPrevMonthSales()}} /></div>
                                                    <div className="sales-dashlet">
                                                        <img className="dashboard-icon" src="../img/images/increase.png"/><span className="stage-desc dash">{statTotalSales}</span>
                                                        <img className="dashboard-icon" src="../img/images/event.png" style={{marginLeft: '86px',width:'26px'}}/><span className="stage-desc dash">{statEventSales}</span>
