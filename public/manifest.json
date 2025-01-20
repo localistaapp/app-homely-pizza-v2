@@ -1,1 +1,41 @@
-{"name":"Slimcrust","short_name":"Slimcrust","start_url":"https://slimcrust.com/club","id":"https://slimcrust.com/club","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","icons":[{"src":"https://cdn.pushalert.co/icons/app-icon-60282-2.png?1731747018","sizes":"48x48"}]}
+{
+  "name": "Slimcrust",
+  "short_name": "Slimcrust",
+  "orientation": "portrait",
+  "start_url": "https://slimcrust.com/club",
+  "id": "https://slimcrust.com/club",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "shortcuts": [
+    {
+      "name": "App",
+      "url": "/app"
+    }],
+  "icons": [
+    {
+      "src": "manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
