@@ -881,7 +881,7 @@ class Dashboard extends Component {
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px',zIndex:'-1'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/offer.png" style={{zIndex:'-1'}} />
-                    <span className='club'  style={{zIndex:'-1'}}>Club</span>
+                    <span className='club'  style={{zIndex:'-1'}}>App</span>
                     <div id="checkoutHeader">
                         <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-40px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Checkout&nbsp;→
                             <div className=""></div>
@@ -922,7 +922,7 @@ class Dashboard extends Component {
                                                     </div>
                                                 }
                                                 {!this.state.loggedIn && <div className="club-main" >
-                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the club!</span>
+                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the app!</span>
                                                    <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
                                                    <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
                                                    <br/><br/><br/>
