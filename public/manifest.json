@@ -1,12 +1,16 @@
 {
   "name": "Slimcrust",
   "short_name": "Slimcrust",
+  "description": "Exotic food made healthy. Order high-protein, healthy & authentic Slimcrust pizzas & more.",
+  "categories": ["food"],
+  "lang": "en",
   "orientation": "portrait",
   "start_url": "https://slimcrust.com/club",
   "id": "https://slimcrust.com/club",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
+  "launch_handler": "auto",
   "shortcuts": [
     {
       "name": "App",
@@ -36,6 +40,38 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots" : [
+    {
+      "src": "01.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
+    },
+    {
+      "src": "02.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
+    },
+    {
+      "src": "03.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
+    },
+    {
+      "src": "04.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
+    },
+    {
+      "src": "05.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
+    },
+    {
+      "src": "06.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg"
     }
   ]
 }
