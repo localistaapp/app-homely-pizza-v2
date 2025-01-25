@@ -1006,6 +1006,10 @@ app.get("/club/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'club.html'));
 });
 
+app.get("/app/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'app.html'));
+});
+
 app.get("/cafe/:cafeId", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'corporatepwa.html'));
 });
