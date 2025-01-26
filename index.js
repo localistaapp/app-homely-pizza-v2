@@ -2299,7 +2299,6 @@ app.post('/store/web-order', function(req, res) {
 app.post('/createAppUser', function(req, res) {
   
   const fingerprint = req.body.fingerprint;
-  const name = req.body.name;
   const loggedIn = 'Y';
   
   const client = new Client(dbConfig)
@@ -2339,8 +2338,8 @@ app.post('/createAppUser', function(req, res) {
                     code += characters.charAt(Math.floor(Math.random() * charactersLength));
                     counter += 1;
                   }
-                  client.query("INSERT INTO \"public\".\"app_user\"(customer_code, fingerprint, name, logged_in) VALUES($1, $2, $3, $4)",
-                      [code, email, name, loggedIn], (err, response) => {
+                  client.query("INSERT INTO \"public\".\"app_user\"(customer_code, fingerprint, logged_in) VALUES($1, $2, $3)",
+                      [code, fingerprint, loggedIn], (err, response) => {
                             if (err) {
                               console.log(err)
                                res.send("error");

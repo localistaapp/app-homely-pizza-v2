@@ -20,7 +20,6 @@ import InventoryIcon from '@material-ui/icons/ShoppingBasket';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
-import { randomUUID } from 'crypto';
 
 const useStyles = makeStyles({
   root: {
@@ -740,6 +739,17 @@ class Dashboard extends Component {
             http.send(params);
             gtag('event', 'entered_num_guests', {'eDate': eventQty});
         }
+        makeid() {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < 30) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength));
+              counter += 1;
+            }
+            return result;
+        }
     login(user) {
         /*user = {
             randomFingerPrint: "323b0e12-4f15-47fa-b9f6-c498b1c74801"
@@ -760,6 +770,7 @@ class Dashboard extends Component {
                 this.setState({curStep: 1});
             }
             
+            this.setState({curStep: 3});
             return;
         } else {
             if (user) {
@@ -772,8 +783,8 @@ class Dashboard extends Component {
         var http = new XMLHttpRequest();
         var url = '/createAppUser';
         var randomFingerPrint = localStorage.getItem('fp');
-        if (fp == null) {
-            randomFingerprint = new randomUUID();
+        if (randomFingerPrint == null) {
+            randomFingerPrint = this.makeid();
         }
         var params = 'fingerprint='+randomFingerPrint;
         http.open('POST', url, true);
@@ -792,7 +803,7 @@ class Dashboard extends Component {
                     }
                     localStorage.setItem('clubCode', res.code);
                     localStorage.setItem('app-fp',randomFingerPrint);
-                    this.setState({loggedIn: true});
+                    this.setState({loggedIn: true, curStep: 3});
                     this.showNotificationDialog();
                 }
             }
