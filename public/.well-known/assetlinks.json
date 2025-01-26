@@ -1,8 +1,8 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.slimcrust.www.twa",
-        "sha256_cert_fingerprints": ["56:0B:36:52:EF:CB:84:41:B9:54:00:00:5D:2E:37:A8:71:5A:5F:E7:22:35:7E:84:7D:29:3C:21:E9:DC:00:D2"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.slimcrust.www.twa",
+    "sha256_cert_fingerprints": ["5B:E7:05:B4:9B:D4:C9:3A:A8:17:C2:CC:6F:9A:73:79:3D:F6:6B:10:6A:80:C7:B3:BF:B7:B7:64:90:10:EF:2E"]
+  }
+}]
