@@ -7,7 +7,7 @@
   "orientation": "portrait",
   "start_url": "https://www.slimcrust.com/app",
   "id": "https://www.slimcrust.com/app",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "launch_handler": "auto",
