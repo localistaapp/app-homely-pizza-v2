@@ -1488,6 +1488,12 @@ setTimeout(ldinsp, 0);
 })();
 </script>
 <!-- End Inspectlet Asynchronous Code -->
+
+<script>
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('/pwasw.js')
+  }
+</script>
 </head>
 <body>
 <div>

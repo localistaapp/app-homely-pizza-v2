@@ -20,6 +20,7 @@ import InventoryIcon from '@material-ui/icons/ShoppingBasket';
 
 import { questions, conditionalQuestions } from '../../data-source/mockDataQnA';
 import { useHistory } from "react-router-dom";
+import { randomUUID } from 'crypto';
 
 const useStyles = makeStyles({
   root: {
@@ -435,7 +436,7 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
-            loggedIn: localStorage.getItem('club-user-email') != null
+            loggedIn: true
         };
         window.weekdays = new Array(7);
         window.weekdays[0] = "Sunday";
@@ -456,7 +457,7 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
-        if(localStorage.getItem('clubCode') != null) {
+        /*if(localStorage.getItem('clubCode') != null) {
             axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
           .then(function (response) {
             console.log('user signed up-----', response.data);
@@ -471,7 +472,9 @@ class Dashboard extends Component {
             if(localStorage.getItem('notification-dialog')!=null && localStorage.getItem('notification-dialog')=='true' && !signedInUser) {
                 this.setState({curStep: 1});
             } 
-        } 
+        } */
+
+        this.login();
         
     }
     handleTabChange(event, newValue) {
@@ -739,15 +742,13 @@ class Dashboard extends Component {
         }
     login(user) {
         /*user = {
-            email: "sampath.oops@gmail.com",
-            name: "Sampath Kumar",
-            picture: "https://lh3.googleusercontent.com/a/ACg8ocLtum4AlxFD493ly4Vq6eWkcn5OVzamu8t38lwSh57P=s96-c"
+            randomFingerPrint: "323b0e12-4f15-47fa-b9f6-c498b1c74801"
         }*/
-        var email = '';
+        var randomFingerPrint = '';
         var name = '';
         var picture = '';
-        if (localStorage.getItem('club-user-name') != null) {
-            email = localStorage.getItem('club-user-email');
+        if (localStorage.getItem('app-fp') != null) {
+            randomFingerPrint = localStorage.getItem('app-fp');
             name = localStorage.getItem('club-user-name');
             picture = localStorage.getItem('club-user-pic');
             this.setState({loggedIn: true});
@@ -762,18 +763,19 @@ class Dashboard extends Component {
             return;
         } else {
             if (user) {
-                email = user.email;
-                name = user.name;
-                picture = user.picture;
-                localStorage.setItem('club-user-pic',user.picture);
-                this.setState({clubUserSrc: picture});
+                randomFingerPrint = user.randomFingerPrint;
+                this.setState({clubUserSrc: ''});
             }
         }
         
         //create order
         var http = new XMLHttpRequest();
-        var url = '/createClubUser';
-        var params = 'email='+email+'&name='+name;
+        var url = '/createAppUser';
+        var randomFingerPrint = localStorage.getItem('fp');
+        if (fp == null) {
+            randomFingerprint = new randomUUID();
+        }
+        var params = 'fingerprint='+randomFingerPrint;
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -789,8 +791,7 @@ class Dashboard extends Component {
                         this.fetchJson();
                     }
                     localStorage.setItem('clubCode', res.code);
-                    localStorage.setItem('club-user-email',email);
-                    localStorage.setItem('club-user-name',name);
+                    localStorage.setItem('app-fp',randomFingerPrint);
                     this.setState({loggedIn: true});
                     this.showNotificationDialog();
                 }
@@ -921,64 +922,8 @@ class Dashboard extends Component {
                                                         </div>
                                                     </div>
                                                 }
-                                                {!this.state.loggedIn && <div className="club-main" >
-                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the app!</span>
-                                                   <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                   <span className="club-desc" >Get exclusive benefits instantly! Login with your Google account for instant access.</span>
-                                                   <br/><br/><br/>
-                                                   <img className='club-banner' src="../img/images/club-banner.png" />
-                                                   {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
-                                                   <br/><br/><br/><br/><br/>
-                                                   <br/><br/><br/><br/>
-                                                   <span className="club-desc bottom" >Checking your Gmail login status... <br/>Login with your Gmail account in a separate tab and refresh this page.</span>
-                                                </div>}
-                                                {this.state.loggedIn && curStep != 3 &&
-                                                   <div className="md-stepper-horizontal orange">
-                                                        <div id="step1" className="md-step" style={{paddingLeft: '10px'}}>
-                                                        <div className={`md-step-circle ${this.state.curStep == 1 ? 'active' : ''}`}><span>1</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 1 ? 'active' : ''}`}>Subscribe</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
-                                                        <div id="step2" className="md-step">
-                                                        <div className={`md-step-circle ${this.state.curStep == 2 ? 'active' : ''}`}><span>2</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 2 ? 'active' : ''}`}>Review</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
-                                                        <div id="step3" className="md-step">
-                                                        <div className={`md-step-circle ${this.state.curStep == 3 ? 'active' : ''}`}><span>3</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 3 ? 'active' : ''}`}>Avail</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
-                                                    </div>}
-                                                {curStep == 1 && <div>
-                                                    <span className="club-heading" style={{top: '12px'}}></span>
-                                                        <hr className="line-light" style={{marginTop: '22px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-1" >Subscribe to notifications to continue. You will receive delivery, tracking & offer notifications.</span>
-                                                        <br/><br/><br/>
-                                                        <img className='club-banner' src="../img/images/club-banner.png" style={{marginTop: '6px'}}/>
-                                                        {localStorage.getItem('club-user') == null && this.state.clubUserSrc == '' && localStorage.getItem('club-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
-                                                        <br/>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(2);this.loadSurvey();}}>Next</a>
-                                                        <br/>
-                                                   </div>}
-                                                   {curStep == 2 && <div>
-                                                    <span className="club-heading" style={{top: '12px'}}></span>
-                                                        <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-2" >Your club code:<span className="club-code">{localStorage.getItem('clubCode')}</span></span>
-                                                        <br/>
-                                                        <span className='club-desc-1' style={{marginTop: '64px'}}>
-                                                        🎉 Congratulations! You're now a CLUB member!
-                                                        </span>
-                                                        <span className='club-desc-1' style={{marginTop: '128px'}}>
-                                                        Enjoy savings with every order.
-                                                        </span>
-                                                        <br/>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();}}>Next</a>
-                                                        <br/>
-                                                   </div>}
+                                                
+                                                
                                                    {curStep == 3 && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>

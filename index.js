@@ -2296,6 +2296,68 @@ app.post('/store/web-order', function(req, res) {
   })
 })
 
+app.post('/createAppUser', function(req, res) {
+  
+  const fingerprint = req.body.fingerprint;
+  const name = req.body.name;
+  const loggedIn = 'Y';
+  
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected')
+
+      client.query("select id, customer_code from app_user where fingerprint = '"+fingerprint+"'",
+      [], (err, response) => {
+            if (err) {
+              console.log(err)
+               res.send("error");
+            } else {
+              if(response.rows && response.rows.length > 0) {
+                  let userId = response.rows[0].id;
+                  let customerCode = response.rows[0].customer_code;
+                  client.query("UPDATE \"public\".\"club_user\" SET logged_in = $1, last_active_on = now() where id = $2",
+                      ['Y', userId], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                //res.send(response);
+                                res.send('{"code":"'+customerCode+'","registered":"true"}');
+                            }
+
+                          });
+                } else {
+                  //Generate unique code
+                  let code = '';
+                  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                  const charactersLength = characters.length;
+                  let counter = 0;
+                  while (counter < 6) {
+                    code += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    counter += 1;
+                  }
+                  client.query("INSERT INTO \"public\".\"app_user\"(customer_code, fingerprint, name, logged_in) VALUES($1, $2, $3, $4)",
+                      [code, email, name, loggedIn], (err, response) => {
+                            if (err) {
+                              console.log(err)
+                               res.send("error");
+                            } else {
+                                //res.send(response);
+                                res.send('{"code":"'+code+'","registered":"false"}');
+                            }
+
+                          });
+
+                }
+            }
+    })
+  }
+ })
+});
+
 app.post('/createClubUser', function(req, res) {
   
   const email = req.body.email;
