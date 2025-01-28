@@ -2913,6 +2913,30 @@ app.get('/store/get/:clubCode', function(req, res) {
       }});
 });
 
+app.get('/store/get-all/', function(req, res) {
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      //client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id in (select store_id from store_order where user_id in (select id from club_user where customer_code='"+clubCode+"'))",
+      //ToDo: uncomment above and check if existing rows, then use above - else below query with default BSK store
+      client.query("select online_orders_timings,accepting_online_orders,online_orders_pincodes from store where id = 77",
+                  [], (err, response) => {
+                        if (err) {
+                          console.log(err)
+                            res.send("error");
+                            client.end();
+                        } else {
+                          res.send(response.rows);
+                          client.end();
+                        }
+                  });
+
+      }});
+});
+
 app.get('/user/get/:clubCode', function(req, res) {
   let clubCode = req.params.clubCode;
   const client = new Client(dbConfig)

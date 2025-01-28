@@ -533,9 +533,9 @@ class Dashboard extends Component {
                   .then(function (response) {
                     this.setState({starters: response.data.results});
                   }.bind(this));
-        if (localStorage.getItem('club-user-email') != null) {
+        //if (localStorage.getItem('club-user-email') != null) {
             this.isStoreAcceptingOrders();
-        }
+        //}
         
     }
     getTotal() {
@@ -823,7 +823,7 @@ class Dashboard extends Component {
         return hours;
     }
     isStoreAcceptingOrders() {
-        axios.get(`/store/get/${localStorage.getItem('clubCode')}`)
+        axios.get(`/store/get-all`)
           .then(function (response) {
             console.log('storeAcceptingOrders-----', response.data);
             this.setState({onlineOrdersTimings:response.data[0].online_orders_timings, storeAcceptingOrders: response.data[0].accepting_online_orders == 'Y' ? true: false, onlineOrdersPinCodes: response.data[0].online_orders_pincodes});
