@@ -9,6 +9,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+var crypto = require('crypto');
 import GoogleOneTapLogin from 'react-google-one-tap-login';
 import Dialog from "@material-ui/core/Dialog";
 
@@ -308,6 +309,15 @@ class QuoteCard extends Component {
     }
 }
 
+const config = {
+    merchantId: "MERCHANTUAT",
+    salt: process.env.PHONEPE_SALT,
+    saltIndex: "1",
+    apiEndpoint: "https://api.phonepe.com/apis/hermes/pg/v1/pay",
+    callbackUrl: "https://www.slimcrust.com/callback",
+    redirectUrl: "https://www.slimcrust.com/redirect"
+};
+
 class Card extends Component {
 
     constructor(props) {
@@ -591,6 +601,82 @@ class Dashboard extends Component {
         sessionStorage.setItem('delivery-timeslot',deliveryTimeSlot);
         this.setState({activeStep: 3, showSlot: true});
     }
+    generateHash(payload, salt) {
+        const data = payload + '/pg/v1/pay' + salt;
+        const hash = crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
+        return hash;
+    };
+    createPayload(amount, transactionId, customerDetails) {
+        return {
+            merchantId: config.merchantId,
+            merchantTransactionId: transactionId,
+            merchantUserId: customerDetails.userId,
+            amount: amount * 100, // Convert to paise
+            redirectUrl: config.redirectUrl,
+            redirectMode: "POST",
+            callbackUrl: config.callbackUrl,
+            mobileNumber: customerDetails.mobileNumber,
+            paymentInstrument: {
+                type: "PAY_PAGE"
+            }
+        };
+    };
+    async initiatePhonePeTransaction (amount, customerDetails) {
+        try {
+            // Generate unique transaction ID
+            const transactionId = `TX_${Date.now()}`;
+            
+            // Create payload
+            const payload = this.createPayload(amount, transactionId, customerDetails);
+            const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+            
+            // Generate checksum
+            const checksum = this.generateHash(base64Payload, config.salt);
+            
+            // API request headers
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-VERIFY': checksum
+            };
+            
+            // Make API request
+            const response = await fetch(config.apiEndpoint, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    request: base64Payload
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Redirect to PhonePe payment page
+                window.location.href = result.data.instrumentResponse.redirectInfo.url;
+            } else {
+                throw new Error(result.message || 'Transaction failed');
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('PhonePe transaction failed:', error);
+            throw error;
+        }
+    };
+    startPayment() {
+        const customerDetails = {
+            userId: "Sampath",
+            mobileNumber: "9902302516"
+        };
+        
+        this.initiatePhonePeTransaction(100, customerDetails) // Amount in rupees
+            .then(response => {
+                console.log('Transaction initiated:', response);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
     captureAddress() {
         let deliveryPincode = sessionStorage.getItem('delivery-pincode');
         let deliverySchedule = sessionStorage.getItem('delivery-schedule');
@@ -612,8 +698,12 @@ class Dashboard extends Component {
         document.getElementById('checkoutBtnStep12').style.display='block';
 
         summary = summary != null ? summary : '';
+
+        this.startPayment();
+
+
         //create order
-        var http = new XMLHttpRequest();
+        /*var http = new XMLHttpRequest();
         var url = '/store/web-order';
         var params = 'storeId='+storeId+'&clubCode='+clubCode+'&price='+price+'&mobile='+deliveryMobile+'&name='+deliveryName+'&slot='+deliveryTimeslot+'&items='+summary+'&pincode='+deliveryPincode+'&schedule='+deliverySchedule+'&address='+deliveryAddress;
         http.open('POST', url, true);
@@ -633,7 +723,7 @@ class Dashboard extends Component {
                 
             }
         }.bind(this);
-        http.send(params);
+        http.send(params);*/
     }
     makePaymentRequest() {
         //uncomment
@@ -1109,7 +1199,7 @@ class Dashboard extends Component {
                                     </div>
                                   </div>
 
-                                      <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '548px', marginTop: 'auto', width: '190px'}} onClick={()=>{document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.add('done');document.getElementById('step3Circle').classList.add('active');this.captureAddress();}}>Complete Order&nbsp;→
+                                      <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '548px', marginTop: 'auto', width: '220px'}} onClick={()=>{document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.add('done');document.getElementById('step3Circle').classList.add('active');this.captureAddress();}}>Confirm & Pay Later&nbsp;→
                                           <div className=""></div>
                                       </div>
                                       <div id="checkoutBtnStep12" className="card-btn checkout home-btn" style={{top: '548px', marginTop: 'auto', width: '190px', display: 'none'}} onClick={()=>{window.location.href='/club';}}>←&nbsp;Back Home
