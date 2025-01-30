@@ -14,6 +14,7 @@ var axios = require('axios');
 var nodemailer = require("nodemailer");
 //var nodemailer = {createTransport: function(){}};
 var crypto = require('crypto');
+var cors = require('cors');
 var QRCode = require('qrcode');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
