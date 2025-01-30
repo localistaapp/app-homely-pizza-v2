@@ -309,15 +309,6 @@ class QuoteCard extends Component {
     }
 }
 
-const config = {
-    merchantId: "MERCHANTUAT",
-    salt: process.env.PHONEPE_SALT,
-    saltIndex: "1",
-    apiEndpoint: "https://api.phonepe.com/apis/hermes/pg/v1/pay",
-    callbackUrl: "https://www.slimcrust.com/callback",
-    redirectUrl: "https://www.slimcrust.com/redirect"
-};
-
 class Card extends Component {
 
     constructor(props) {
@@ -601,53 +592,20 @@ class Dashboard extends Component {
         sessionStorage.setItem('delivery-timeslot',deliveryTimeSlot);
         this.setState({activeStep: 3, showSlot: true});
     }
-    generateHash(payload, salt) {
-        const data = payload + '/pg/v1/pay' + salt;
-        const hash = crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
-        return hash;
-    };
-    createPayload(amount, transactionId, customerDetails) {
-        return {
-            merchantId: config.merchantId,
-            merchantTransactionId: transactionId,
-            merchantUserId: customerDetails.userId,
-            amount: amount * 100, // Convert to paise
-            redirectUrl: config.redirectUrl,
-            redirectMode: "POST",
-            callbackUrl: config.callbackUrl,
-            mobileNumber: customerDetails.mobileNumber,
-            paymentInstrument: {
-                type: "PAY_PAGE"
-            }
-        };
-    };
-    async initiatePhonePeTransaction (amount, customerDetails) {
+
+     async initiatePayment (amount, customerDetails) {
         try {
-            // Generate unique transaction ID
-            const transactionId = `TX_${Date.now()}`;
-            
-            // Create payload
-            const payload = this.createPayload(amount, transactionId, customerDetails);
-            const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
-            
-            // Generate checksum
-            const checksum = this.generateHash(base64Payload, config.salt);
-            
-            // API request headers
-            const headers = {
-                'Content-Type': 'application/json',
-                'X-VERIFY': checksum
-            };
-            
-            // Make API request
-            const response = await fetch(config.apiEndpoint, {
+            const response = await fetch('https://www.slimcrust.com/api/my-initiate-payment', {
                 method: 'POST',
-                headers: headers,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
-                    request: base64Payload
+                    amount,
+                    customerDetails
                 })
             });
-            
+    
             const result = await response.json();
             
             if (result.success) {
@@ -659,17 +617,19 @@ class Dashboard extends Component {
             
             return result;
         } catch (error) {
-            console.error('PhonePe transaction failed:', error);
+            console.error('Payment initiation failed:', error);
             throw error;
         }
     };
+    
+    
     startPayment() {
         const customerDetails = {
             userId: "Sampath",
             mobileNumber: "9902302516"
         };
         
-        this.initiatePhonePeTransaction(100, customerDetails) // Amount in rupees
+        this.initiatePayment(100, customerDetails) // Amount in rupees
             .then(response => {
                 console.log('Transaction initiated:', response);
             })

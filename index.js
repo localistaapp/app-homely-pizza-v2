@@ -95,7 +95,6 @@ var keyName = 0;
 var valName = 0;
 
 var bodyParser = require('body-parser')
-var referrerPolicy = require('referrer-policy')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
@@ -103,7 +102,69 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 //app.use(app.json());       // to support JSON-encoded bodies
 //app.use(app.urlencoded()); // to support URL-encoded bodies
 
-app.use(referrerPolicy({ policy: 'same-origin' }));
+app.use(cors({
+  origin: 'https://www.slimcrust.com',
+  methods: ['POST'],
+  allowedHeaders: ['Content-Type']
+}));
+
+
+const config = {
+  merchantId: "M22WYKCJJ65TP",
+  salt: process.env.PHONEPE_SALT,
+  saltIndex: "1",
+  apiEndpoint: "https://api.phonepe.com/apis/hermes/pg/v1/pay",
+  callbackUrl: "https://www.slimcrust.com/callback",
+  redirectUrl: "https://www.slimcrust.com/redirect"
+};
+
+const generateHash = (payload) => {
+  const data = payload + '/pg/v1/pay' + config.salt;
+  return crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
+};
+
+app.post('/api/my-initiate-payment', async (req, res) => {
+  try {
+      const { amount, customerDetails } = req.body;
+      
+      const payload = {
+          merchantId: config.merchantId,
+          merchantTransactionId: `TX_${Date.now()}`,
+          merchantUserId: customerDetails.userId,
+          amount: amount * 100,
+          redirectUrl: config.redirectUrl,
+          redirectMode: "POST",
+          callbackUrl: config.callbackUrl,
+          mobileNumber: customerDetails.mobileNumber,
+          paymentInstrument: {
+              type: "PAY_PAGE"
+          }
+      };
+
+      const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+      const checksum = generateHash(base64Payload);
+
+      const response = await axios.post(config.apiEndpoint, 
+          { request: base64Payload },
+          { 
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-VERIFY': checksum
+              }
+          }
+      );
+
+      res.json(response.data);
+  } catch (error) {
+      console.error('Payment initiation failed:', error);
+      res.status(500).json({ 
+          success: false, 
+          message: error.message || 'Payment initiation failed' 
+      });
+  }
+});
+
+
 var pages = [];
   fs.readFile("public/index.html", "utf8", function(err, data) {
     pages.index = data;
