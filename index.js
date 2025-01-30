@@ -102,7 +102,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 //app.use(app.json());       // to support JSON-encoded bodies
 //app.use(app.urlencoded()); // to support URL-encoded bodies
 
-
+app.use(referrerPolicy({ policy: 'same-origin' }));
 var pages = [];
   fs.readFile("public/index.html", "utf8", function(err, data) {
     pages.index = data;
