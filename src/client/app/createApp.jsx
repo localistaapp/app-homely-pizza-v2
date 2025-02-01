@@ -463,7 +463,7 @@ class Dashboard extends Component {
             axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data-----', response.data);
-                    this.setState({trackingLink: response.data.tracking_link});
+                    this.setState({trackingLink: response.data.tracking_link, payStatus: response.data.status});
                 }.bind(this));
         }
         if (window.location.href.indexOf('?apppay=success') != -1) {
@@ -471,7 +471,7 @@ class Dashboard extends Component {
             axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_SUCCESS'}).then((response) => {
                 console.log(response.status);
                 });
-                this.setState({payStatus: 'COMPLETE'});
+                this.setState({payStatus: 'PAYMENT_SUCCESS'});
 
         } else if (window.location.href.indexOf('?apppay=failure') != -1) {
             axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_FAILED'}).then((response) => {
@@ -1269,18 +1269,18 @@ class Dashboard extends Component {
                                                                     <div className="top">
                                                                         <iframe className='track-frame' src={`https://${this.state.trackingLink}`} style={{width: `${screen.width-32}px`}} />
                                                                         <br/>
-                                                                        {this.state.payStatus != 'COMPLETE' && <div className='pay-card'>
+                                                                        {this.state.payStatus != 'PAYMENT_SUCCESS' && <div className='pay-card'>
                                                                             <span>Your payment is pending. Please pay now to complete your order.</span>
                                                                         </div>}
-                                                                        {this.state.payStatus != 'COMPLETE' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
+                                                                        {this.state.payStatus != 'PAYMENT_SUCCESS' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
 
                                                                         {this.state.payStatus == 'PAYMENT_FAILED' && <div className='pay-card'>
                                                                             <span>Your payment FAILED! Please TRY AGAIN to complete your order.</span>
                                                                         </div>}
                                                                         {this.state.payStatus == 'PAYMENT_FAILED' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
 
-                                                                        {this.state.payStatus == 'COMPLETE' && <div className='pay-card'>
-                                                                            <span>Your payment is successful. Thanks for ordering with Slimcrust!</span>
+                                                                        {this.state.payStatus == 'PAYMENT_SUCCESS' && <div className='pay-card'>
+                                                                            <span style={{color: '#407f40'}}>Your payment is successful. Thanks for ordering with Slimcrust!</span>
                                                                         </div>}
                                                                         
                                                                     </div>
