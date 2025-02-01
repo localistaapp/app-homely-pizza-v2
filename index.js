@@ -159,15 +159,19 @@ app.post('/callback', async (req, res) => {
       switch (code) {
           case 'PAYMENT_SUCCESS':
               console.log(transactionId+'--txn success--');
+              res.redirect('/app?apppay=success');
               break;
           case 'PAYMENT_ERROR':
           case 'PAYMENT_DECLINED':
             console.log(transactionId+'--txn declined--');
+            res.redirect('/app?apppay=failure');
               break;
           case 'PAYMENT_PENDING':
+            res.redirect('/app?apppay=failure');
             console.log(transactionId+'--txn pending--');
               break;
           default:
+            res.redirect('/app?apppay=failure');
             console.log(transactionId+'--txn unhandled/declined--');
       }
 
