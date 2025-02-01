@@ -931,16 +931,15 @@ class Dashboard extends Component {
                         localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
                         localStorage.setItem('onlineOrderStatus', response.data.status);
                         localStorage.setItem('order-created', 'true');
-                    } else if (response.data.status != 'PENDING') {
+                    } else if (response.data.status == 'COMPLETE') {
                         localStorage.removeItem('onlineOrderId');
                         localStorage.removeItem('onlineOrderName');
                         localStorage.removeItem('onlineOrderMobile');
                         localStorage.removeItem('onlineOrderPrice');
                         localStorage.removeItem('onlineOrderStatus');
                         localStorage.removeItem('order-created');
-                    } else {
-                        this.setState({trackingLink: ''});
-                    }
+                    } else if (response.data.status == 'PAYMENT_SUCCESS') {
+                    } 
                 }.bind(this));
         return true;
     }
