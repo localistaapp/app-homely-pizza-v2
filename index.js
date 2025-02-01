@@ -125,7 +125,7 @@ const generateHash = (payload) => {
 };
 
 app.post('/app', async (req, res) => {
-  res.redirect('/app');
+  res.redirect('/app?apppay=success');
 });
 
 app.post('/callback', async (req, res) => {
