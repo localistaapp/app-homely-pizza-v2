@@ -132,7 +132,6 @@ app.post('/callback', async (req, res) => {
   try {
     console.log('-req.params-', req.params);
     console.log('-req.body-', req.body);
-      const { merchantTransactionId, transactionId, providerReferenceId, code, status } = req.body;
       
       const encodedResponse = req.body.response;
       console.log('-encodedResponse-', encodedResponse);
@@ -145,29 +144,31 @@ app.post('/callback', async (req, res) => {
       console.log('-encodedResponse-', responseObj);
       
       // Verify callback authenticity
-      /*const checksum = req.headers['x-verify'];
+      const checksum = req.headers['x-verify'];
       const calculatedChecksum = generateHash(JSON.stringify(req.body), '/pg/v1/status');
       
       if (checksum !== calculatedChecksum) {
           throw new Error('Invalid callback signature');
-      }*/
+      }
+
+      let transactionId = decodedResponse.data.merchantTransactionId;
+      let code = decodedResponse.code;
       console.log('--pstatus transactionId--', transactionId);
-      console.log('--pstatus providerReferenceId--', providerReferenceId);
       console.log('--pstatus code--', code);
       // Handle different status codes
       switch (code) {
           case 'PAYMENT_SUCCESS':
-              console.log(merchantTransactionId+'--txn success--');
+              console.log(transactionId+'--txn success--');
               break;
           case 'PAYMENT_ERROR':
           case 'PAYMENT_DECLINED':
-            console.log(merchantTransactionId+'--txn declined--');
+            console.log(transactionId+'--txn declined--');
               break;
           case 'PAYMENT_PENDING':
-            console.log(merchantTransactionId+'--txn pending--');
+            console.log(transactionId+'--txn pending--');
               break;
           default:
-            console.log(merchantTransactionId+'--txn unhandled/declined--');
+            console.log(transactionId+'--txn unhandled/declined--');
       }
 
       res.json({ success: true });
