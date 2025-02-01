@@ -151,8 +151,8 @@ app.post('/callback', async (req, res) => {
           throw new Error('Invalid callback signature');
       }*/
 
-      let transactionId = decodedResponse.data.merchantTransactionId;
-      let code = decodedResponse.code;
+      let transactionId = responseObj.data.merchantTransactionId;
+      let code = responseObj.code;
       console.log('--pstatus transactionId--', transactionId);
       console.log('--pstatus code--', code);
       // Handle different status codes
