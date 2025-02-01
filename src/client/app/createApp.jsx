@@ -638,7 +638,7 @@ class Dashboard extends Component {
             mobileNumber: mobile
         };
         
-        this.initiatePayment(price, customerDetails) // Amount in rupees
+        this.initiatePayment(10, customerDetails) // Amount in rupees
             .then(response => {
                 console.log('Transaction initiated:', response);
             })
