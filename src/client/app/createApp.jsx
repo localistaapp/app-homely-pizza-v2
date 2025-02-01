@@ -961,9 +961,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        if (iOS() && sessionStorage.getItem('ios-home-msg') == null && !window.matchMedia('(display-mode: standalone)').matches) {
-            return null;
-        }
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         console.log('::results::', results);
         return (<div style={{marginTop: '84px'}}>
