@@ -2685,6 +2685,31 @@ app.post('/onboardCorporateUser', function(req, res) {
  })
 });
 
+app.post('/store/update-web-order/', function(req, res) {
+  
+  const onlineOrderId = req.body.onlineOrderId;
+  const status = req.body.status;
+  
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      client.query("UPDATE \"public\".\"online_order\" SET status = $2 where id = $1",
+          ['Y', email], (err, response) => {
+                if (err) {
+                  console.log(err)
+                    res.send("error");
+                } else {
+                    //res.send(response);
+                    res.send('success');
+                }
+
+              });
+  }
+ })
+});
+
 app.post('/onboardClubUser', function(req, res) {
   
   const email = req.body.email;

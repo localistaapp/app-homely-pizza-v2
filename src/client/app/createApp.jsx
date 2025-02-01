@@ -466,6 +466,19 @@ class Dashboard extends Component {
                     this.setState({trackingLink: response.data.tracking_link});
                 }.bind(this));
         }
+        if (window.location.href.indexOf('?apppay=success') != -1) {
+            
+            axios.post(`/store/update-web-order/${localStorage.getItem('onlineOrderId')}`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
+                console.log(response.status);
+                });
+                this.setState({payStatus: 'COMPLETE'});
+
+        } else if (window.location.href.indexOf('?apppay=failure') != -1) {
+            axios.post(`/store/update-web-order/${localStorage.getItem('onlineOrderId')}`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_FAILED'}).then((response) => {
+                console.log(response.status);
+                });
+            this.setState({payStatus: 'PAYMENT_FAILED'});
+        }
         /*if(localStorage.getItem('clubCode') != null) {
             axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
           .then(function (response) {
@@ -1257,17 +1270,22 @@ class Dashboard extends Component {
                                                                     <div className="top">
                                                                         <iframe className='track-frame' src={`https://${this.state.trackingLink}`} style={{width: `${screen.width-32}px`}} />
                                                                         <br/>
-                                                                        <div className='pay-card'>
+                                                                        {this.state.payStatus != 'COMPLETE' && <div className='pay-card'>
                                                                             <span>Your payment is pending. Please pay now to complete your order.</span>
-                                                                        </div>
-                                                                        <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>
+                                                                        </div>}
+                                                                        {this.state.payStatus != 'COMPLETE' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
+
+                                                                        {this.state.payStatus == 'PAYMENT_FAILED' && <div className='pay-card'>
+                                                                            <span>Your payment FAILED! Please TRY AGAIN to complete your order.</span>
+                                                                        </div>}
+                                                                        {this.state.payStatus != 'PAYMENT_FAILED' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
                                                                         
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         }
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
+                                                        {this.state.payStatus != 'COMPLETE' && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
                                                             this.checkOrderStatus() &&  
                                                             <div className="card-container notify-card">
                                                             <div className="section-one-notify">
