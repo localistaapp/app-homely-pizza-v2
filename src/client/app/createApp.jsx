@@ -468,7 +468,7 @@ class Dashboard extends Component {
         }
         if (window.location.href.indexOf('?apppay=success') != -1) {
             
-            axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
+            axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_SUCCESS'}).then((response) => {
                 console.log(response.status);
                 });
                 this.setState({payStatus: 'COMPLETE'});
