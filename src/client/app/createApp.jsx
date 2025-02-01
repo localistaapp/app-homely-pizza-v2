@@ -459,7 +459,7 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
-        if (location.href.indexOf('?track=true') != -1) {
+        if (location.href.indexOf('?track=true') != -1 || location.href.indexOf('?apppay=') != -1) {
             axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data-----', response.data);
