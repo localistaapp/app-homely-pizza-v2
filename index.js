@@ -130,6 +130,8 @@ app.post('/app', async (req, res) => {
 
 app.post('/callback', async (req, res) => {
   try {
+    console.log('-req.params-', req.params);
+    console.log('-req.body-', req.body);
       const { merchantTransactionId, transactionId, providerReferenceId, code, status } = req.body;
       
       // Verify callback authenticity
