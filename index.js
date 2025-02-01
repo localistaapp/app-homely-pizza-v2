@@ -124,10 +124,6 @@ const generateHash = (payload) => {
   return crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
 };
 
-app.post('/app', async (req, res) => {
-  res.redirect('/app?apppay=success');
-});
-
 app.post('/callback', async (req, res) => {
   try {
     console.log('-req.params-', req.params);
