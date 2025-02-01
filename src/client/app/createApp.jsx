@@ -910,7 +910,7 @@ class Dashboard extends Component {
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data1-----', response.data);
-                    if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.status == 'PENDING') {
+                    if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.tracking_link != 'null' && response.data.status == 'PENDING') {
                         this.setState({trackingLink: response.data.tracking_link});
                         localStorage.setItem('onlineOrderId', response.data.onlineOrderId);
                         localStorage.setItem('onlineOrderName', response.data.onlineOrderName);
@@ -918,14 +918,15 @@ class Dashboard extends Component {
                         localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
                         localStorage.setItem('onlineOrderStatus', response.data.status);
                         localStorage.setItem('order-created', 'true');
-                    } else {
-                        this.setState({trackingLink: ''});
+                    } else if (response.data.status != 'PENDING') {
                         localStorage.removeItem('onlineOrderId');
                         localStorage.removeItem('onlineOrderName');
                         localStorage.removeItem('onlineOrderMobile');
                         localStorage.removeItem('onlineOrderPrice');
-                        localStorage.removeItem('order-created');
                         localStorage.removeItem('onlineOrderStatus');
+                        localStorage.removeItem('order-created');
+                    } else {
+                        this.setState({trackingLink: ''});
                     }
                 }.bind(this));
         return true;
@@ -1246,7 +1247,7 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && 
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' &&
                                                             <div className="card-container notify-card-track">
                                                                 <div className="section-one-notify">
                                                                 </div>
@@ -1266,7 +1267,7 @@ class Dashboard extends Component {
                                                             </div>
                                                         }
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && this.state.trackingLink == '' &&
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
                                                             this.checkOrderStatus() &&  
                                                             <div className="card-container notify-card">
                                                             <div className="section-one-notify">
