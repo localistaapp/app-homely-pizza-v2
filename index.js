@@ -2695,8 +2695,8 @@ app.post('/store/update-web-order/', function(req, res) {
     if (err) {
       console.error('error connecting', err.stack)
     } else {
-      client.query("UPDATE \"public\".\"online_order\" SET status = $2 where id = $1",
-          ['Y', email], (err, response) => {
+      client.query("UPDATE \"public\".\"online_order\" SET status = $1 where id = $2",
+          [status, onlineOrderId], (err, response) => {
                 if (err) {
                   console.log(err)
                     res.send("error");
