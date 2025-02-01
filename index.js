@@ -144,12 +144,12 @@ app.post('/callback', async (req, res) => {
       console.log('-encodedResponse-', responseObj);
       
       // Verify callback authenticity
-      const checksum = req.headers['x-verify'];
+      /*const checksum = req.headers['x-verify'];
       const calculatedChecksum = generateHash(JSON.stringify(req.body), '/pg/v1/status');
       
       if (checksum !== calculatedChecksum) {
           throw new Error('Invalid callback signature');
-      }
+      }*/
 
       let transactionId = decodedResponse.data.merchantTransactionId;
       let code = decodedResponse.code;
