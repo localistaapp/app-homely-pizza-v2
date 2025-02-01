@@ -427,6 +427,7 @@ class Dashboard extends Component {
             curStep: 0,
             redirect: false,
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default',
+            payStatus: window.location.href.indexOf('?apppay=success') >= 0 ? 'success' :'default',
             clubUserSrc: '',
             orderSavings: 0,
             qty: 0,
@@ -436,7 +437,8 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
-            loggedIn: true
+            loggedIn: true,
+            trackingLink: ''
         };
         window.weekdays = new Array(7);
         window.weekdays[0] = "Sunday";
@@ -457,6 +459,13 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
+        if (location.href.indexOf('?track=true') != -1) {
+            axios.get(`/store/web-order/${sessionStorage.getItem('onlineOrderId')}`)
+                .then(function (response) {
+                    console.log('tracking data-----', response.data);
+                    this.setState({trackingLink: response.data.tracking_link});
+                }.bind(this));
+        }
         /*if(localStorage.getItem('clubCode') != null) {
             axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
           .then(function (response) {
@@ -623,13 +632,13 @@ class Dashboard extends Component {
     };
     
     
-    startPayment() {
+    startPayment(name, mobile, price) {
         const customerDetails = {
-            userId: "Sampath",
-            mobileNumber: "9902302516"
+            userId: name,
+            mobileNumber: mobile
         };
         
-        this.initiatePayment(100, customerDetails) // Amount in rupees
+        this.initiatePayment(price, customerDetails) // Amount in rupees
             .then(response => {
                 console.log('Transaction initiated:', response);
             })
@@ -659,11 +668,13 @@ class Dashboard extends Component {
 
         summary = summary != null ? summary : '';
 
-        this.startPayment();
-
+        var inputVal = window.confirm("You will be notified to make payment once the order is dispatched.");
+        if (inputVal) {
+            //show the confirmation with food is being prepared screen
+        }
 
         //create order
-        /*var http = new XMLHttpRequest();
+        var http = new XMLHttpRequest();
         var url = '/store/web-order';
         var params = 'storeId='+storeId+'&clubCode='+clubCode+'&price='+price+'&mobile='+deliveryMobile+'&name='+deliveryName+'&slot='+deliveryTimeslot+'&items='+summary+'&pincode='+deliveryPincode+'&schedule='+deliverySchedule+'&address='+deliveryAddress;
         http.open('POST', url, true);
@@ -678,12 +689,27 @@ class Dashboard extends Component {
                 } else {
                     if(res != null) {
                         console.log('---order created---', res);
+                        var onlineOrderId = JSON.parse(res).onlineOrderId;
+                        var onlineOrderName = JSON.parse(res).onlineOrderName;
+                        var onlineOrderMobile = JSON.parse(res).onlineOrderMobile;
+                        var onlineOrderPrice = JSON.parse(res).onlineOrderPrice;
+                        sessionStorage.setItem('onlineOrderId', onlineOrderId);
+                        sessionStorage.setItem('onlineOrderName', onlineOrderName);
+                        sessionStorage.setItem('onlineOrderMobile', onlineOrderMobile);
+                        sessionStorage.setItem('onlineOrderPrice', onlineOrderPrice);
+                        sessionStorage.setItem('order-created', 'true');
                     }
                 }
                 
             }
         }.bind(this);
-        http.send(params);*/
+        http.send(params);
+    }
+    payOrderNow() {
+        let oName = sessionStorage.getItem('onlineOrderName');
+        let oMobile = sessionStorage.getItem('onlineOrderMobile');
+        let oPrice = sessionStorage.getItem('onlineOrderPrice');
+        this.startPayment(oName,oMobile,oPrice);
     }
     makePaymentRequest() {
         //uncomment
@@ -991,7 +1017,7 @@ class Dashboard extends Component {
                                                         {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
                                                         {this.state.orderSavings == 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Place your order with best of savings!</span>}
                                                         <br/>
-                                                       
+                                                       {/*<iframe id="trackingElem" style={{width: '103%',height:'100vh',marginLeft: '-8px'}} src="https://porter.in/rd/c5b9a2528d"></iframe>*/}
                                                        
                                                        
                                                         <div className={`main fadeInBottom ${this.state.showList}`}>
@@ -1151,9 +1177,9 @@ class Dashboard extends Component {
 
                                   <div className="card-container small" style={{display: `${this.state.showOrderConfirmationMsg ? 'block' : 'none'}`,padding: '0px 12px 0px 12px', minHeight: '246px'}}>
                                       <div className="section-one">
-                                      <div className="deliver-cell" style={{marginLeft: '6px', fontSize: '14px', paddingBottom: '24px', color:'#6c4c00', margin: '0 auto',width: '64px', marginTop: '36px',textAlign: 'center'}}>
-                                                          <img src="../img/images/icheck.png" style={{width: '64px'}} />  
-                                                          <span className="order-conf-msg">Thank you for your order! Our delivery agent will contact you as per your selected delivery time.</span>
+                                      <div className="deliver-cell" style={{marginLeft: '6px', fontSize: '14px', paddingBottom: '24px', color:'#6c4c00', margin: '0 auto',width: '78px', marginTop: '36px',textAlign: 'center'}}>
+                                                          <img src="../img/images/tickvo.gif" style={{width: '78px'}} />  
+                                                          <span className="order-conf-msg">Thank you for your order! Our agent will notify you once the order is dispatched.</span>
                                                           
                                                       </div>
                                     </div>
@@ -1162,7 +1188,7 @@ class Dashboard extends Component {
                                       <div id="checkoutBtnStep11" className="card-btn checkout" style={{top: '548px', marginTop: 'auto', width: '220px'}} onClick={()=>{document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.add('done');document.getElementById('step3Circle').classList.add('active');this.captureAddress();}}>Confirm & Pay Later&nbsp;→
                                           <div className=""></div>
                                       </div>
-                                      <div id="checkoutBtnStep12" className="card-btn checkout home-btn" style={{top: '548px', marginTop: 'auto', width: '190px', display: 'none'}} onClick={()=>{window.location.href='/club';}}>←&nbsp;Back Home
+                                      <div id="checkoutBtnStep12" className="card-btn checkout home-btn" style={{top: '548px', marginTop: 'auto', width: '190px', display: 'none'}} onClick={()=>{window.location.href='/app';}}>←&nbsp;Back Home
                                           <div className=""></div>
                                       </div>
                               </div>
@@ -1199,7 +1225,41 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                
+                                                        {sessionStorage.getItem('order-created') != null && sessionStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && 
+                                                            <div className="card-container notify-card-track">
+                                                                <div className="section-one-notify">
+                                                                </div>
+                                                                <div className="title notify-title"><img src="./img/images/trk.gif" style={{width: '42px'}}/><span className='track-icon-title'>Track your order</span></div>
+                                                                
+                                                                <div className="section-two">
+                                                                    <div className="top">
+                                                                        <iframe className='track-frame' src={`https://${this.state.trackingLink}`} style={{width: `${screen.width-32}px`}} />
+                                                                        <br/>
+                                                                        <div className='pay-card'>
+                                                                            <span>Your payment is pending. Please pay now to complete your order.</span>
+                                                                        </div>
+                                                                        <span className='card-btn pay-now' onClick={this.payOrderNow()}>Pay Now</span>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                        {sessionStorage.getItem('order-created') != null && sessionStorage.getItem('order-created') == 'true'  && this.state.trackingLink == '' && 
+                                                            <div className="card-container notify-card">
+                                                            <div className="section-one-notify">
+                                                            </div>
+                                                            <div className="title notify-title">Preparing your order...</div>
+                                                            <hr className="line"/>
+                                                            <div className="section-two">
+                                                                <div className="top">
+                                                                    <img className='notify-img flip' src="./img/images/otop.gif" />
+                                                                    <br/>
+                                                                    <span class="notify-desc">Our staff will notify you once your order is dispatched.</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        }
 
 
                                {window.location.href.indexOf('/redirect/')!=-1 && window.location.href.indexOf('&payment_status=Credit') !=-1 && <div className="card-container">

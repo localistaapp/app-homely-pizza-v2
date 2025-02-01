@@ -116,13 +116,49 @@ const config = {
   saltIndex: "1",
   apiEndpoint: "https://api.phonepe.com/apis/hermes/pg/v1/pay",
   callbackUrl: "https://www.slimcrust.com/callback",
-  redirectUrl: "https://www.slimcrust.com/redirect"
+  redirectUrl: "https://www.slimcrust.com/app?track=true&pay=success"
 };
 
 const generateHash = (payload) => {
   const data = payload + '/pg/v1/pay' + config.salt;
   return crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
 };
+
+app.post('/callback', async (req, res) => {
+  try {
+      const { merchantTransactionId, transactionId, providerReferenceId, code, status } = req.body;
+      
+      // Verify callback authenticity
+      const checksum = req.headers['x-verify'];
+      const calculatedChecksum = generateHash(JSON.stringify(req.body), '/pg/v1/status');
+      
+      if (checksum !== calculatedChecksum) {
+          throw new Error('Invalid callback signature');
+      }
+      console.log('--pstatus transactionId--', transactionId);
+      console.log('--pstatus providerReferenceId--', providerReferenceId);
+      console.log('--pstatus code--', code);
+      // Handle different status codes
+      switch (code) {
+          case 'PAYMENT_SUCCESS':
+              console.log(merchantTransactionId+'--txn success--');
+              break;
+          case 'PAYMENT_ERROR':
+          case 'PAYMENT_DECLINED':
+            console.log(merchantTransactionId+'--txn declined--');
+              break;
+          case 'PAYMENT_PENDING':
+            console.log(merchantTransactionId+'--txn pending--');
+              break;
+          default:
+            console.log(merchantTransactionId+'--txn unhandled/declined--');
+      }
+
+      res.json({ success: true });
+  } catch (error) {
+      handlePaymentError(error, res);
+  }
+});
 
 app.post('/api/my-initiate-payment', async (req, res) => {
   try {
@@ -2129,6 +2165,39 @@ app.get("/store/checklist/:franchiseId", function(req, res) {
 
 });
 
+app.get("/store/web-order/:onlineOrderId", function(req, res) {
+  let onlineOrderId = req.params.onlineOrderId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+          client.end();
+        } else {
+            client.query("Select tracking_link from online_order where id = "+onlineOrderId,
+                        [], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                                client.end();
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                    client.end();
+                                 } else {
+                                    res.send(response.rows[0]);
+                                    client.end();
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
 app.post('/eventOrder', function(req, res) {
 
     const eDate = req.body.eDate;
@@ -2326,7 +2395,25 @@ app.post('/store/web-order', function(req, res) {
                                       res.send("error");
                                       client.end();
                                     } else {
-                                        res.send("success");
+                                        client.query("select id,name,mobile,price from online_order where mobile=$1 order by created_at desc",
+                                          [mobile], (err, responseSelect) => {
+                                                if (err) {
+                                                  console.log(err)
+                                                  res.send("error");
+                                                } else {
+                                                  if(responseSelect.rows && responseSelect.rows.length > 0) {
+                                                      let onlineOrderId = responseSelect.rows[0].id;
+                                                      let onlineOrderName = responseSelect.rows[0].name;
+                                                      let onlineOrderMobile = responseSelect.rows[0].mobile;
+                                                      let onlineOrderPrice = responseSelect.rows[0].price;
+                                                      res.send('{"onlineOrderId":"'+onlineOrderId+'", "onlineOrderName":"'+onlineOrderName+'", "onlineOrderMobile":"'+onlineOrderMobile+'", "onlineOrderPrice":"'+onlineOrderPrice+'"}');
+                                                    } else {
+                                                      res.send("error");
+                                                    }
+                                                }
+                                                client.end();
+                                        })
+                                        //res.send("success--");
                                         /*const mailOptions = {
                                           from: "slimcrustbskowner@gmail.com",
                                           to: "slimcrustbsk@gmail.com",
@@ -2341,7 +2428,8 @@ app.post('/store/web-order', function(req, res) {
                                             console.log("Email sent: ", info.response);
                                           }
                                         });*/
-                                        client.end();
+                                        
+                                        
                                     }
 
                                   });
