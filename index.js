@@ -2175,7 +2175,7 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
           res.send('{}');
           client.end();
         } else {
-            client.query("Select tracking_link from online_order where id = "+onlineOrderId,
+            client.query("Select id, name, mobile, price, tracking_link, status from online_order where id = "+onlineOrderId,
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
@@ -2192,7 +2192,8 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
                                   let onlineOrderMobile = response.rows[0].mobile;
                                   let onlineOrderPrice = response.rows[0].price;
                                   let trackingLink = response.rows[0].tracking_link;
-                                  res.send('{"tracking_link":"'+trackingLink+'","onlineOrderId":"'+onlineOrderId+'", "onlineOrderName":"'+onlineOrderName+'", "onlineOrderMobile":"'+onlineOrderMobile+'", "onlineOrderPrice":"'+onlineOrderPrice+'"}');
+                                  let status = response.rows[0].status;
+                                  res.send('{"tracking_link":"'+trackingLink+'","onlineOrderId":"'+onlineOrderId+'", "onlineOrderName":"'+onlineOrderName+'", "onlineOrderMobile":"'+onlineOrderMobile+'", "onlineOrderPrice":"'+onlineOrderPrice+'", "status": "'+status+'"}');
                              
                                     client.end();
                                  }

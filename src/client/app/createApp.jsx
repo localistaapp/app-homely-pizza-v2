@@ -910,8 +910,22 @@ class Dashboard extends Component {
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data1-----', response.data);
-                    if (response.data.tracking_link !=null && response.data.tracking_link != '') {
+                    if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.status == 'PENDING') {
                         this.setState({trackingLink: response.data.tracking_link});
+                        localStorage.setItem('onlineOrderId', response.data.onlineOrderId);
+                        localStorage.setItem('onlineOrderName', response.data.onlineOrderName);
+                        localStorage.setItem('onlineOrderMobile', response.data.onlineOrderMobile);
+                        localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
+                        localStorage.setItem('onlineOrderStatus', response.data.status);
+                        localStorage.setItem('order-created', 'true');
+                    } else {
+                        this.setState({trackingLink: ''});
+                        localStorage.removeItem('onlineOrderId');
+                        localStorage.removeItem('onlineOrderName');
+                        localStorage.removeItem('onlineOrderMobile');
+                        localStorage.removeItem('onlineOrderPrice');
+                        localStorage.removeItem('order-created');
+                        localStorage.removeItem('onlineOrderStatus');
                     }
                 }.bind(this));
         return true;
