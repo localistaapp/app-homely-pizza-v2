@@ -124,6 +124,10 @@ const generateHash = (payload) => {
   return crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
 };
 
+app.post('/app', async (req, res) => {
+  res.redirect('/app');
+});
+
 app.post('/callback', async (req, res) => {
   try {
     console.log('-req.params-', req.params);
@@ -155,9 +159,11 @@ app.post('/callback', async (req, res) => {
       switch (code) {
           case 'PAYMENT_SUCCESS':
               console.log(transactionId+'--txn success--');
+              //update here
               return res.redirect('/app?apppay=success');
           case 'PAYMENT_ERROR':
           case 'PAYMENT_DECLINED':
+            //update here
             console.log(transactionId+'--txn declined--');
             return res.redirect('/app?apppay=failure');
           case 'PAYMENT_PENDING':
