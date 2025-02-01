@@ -2187,7 +2187,13 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
                                     res.send("error");
                                     client.end();
                                  } else {
-                                    res.send(response.rows[0]);
+                                  let onlineOrderId = responseSelect.rows[0].id;
+                                  let onlineOrderName = responseSelect.rows[0].name;
+                                  let onlineOrderMobile = responseSelect.rows[0].mobile;
+                                  let onlineOrderPrice = responseSelect.rows[0].price;
+                                  let trackingLink = responseSelect.rows[0].tracking_link;
+                                  res.send('{"tracking_link":"'+trackingLink+'","onlineOrderId":"'+onlineOrderId+'", "onlineOrderName":"'+onlineOrderName+'", "onlineOrderMobile":"'+onlineOrderMobile+'", "onlineOrderPrice":"'+onlineOrderPrice+'"}');
+                             
                                     client.end();
                                  }
                               }

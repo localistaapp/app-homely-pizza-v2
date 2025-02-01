@@ -460,7 +460,7 @@ class Dashboard extends Component {
         }
         var signedInUser = false;
         if (location.href.indexOf('?track=true') != -1) {
-            axios.get(`/store/web-order/${sessionStorage.getItem('onlineOrderId')}`)
+            axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data-----', response.data);
                     this.setState({trackingLink: response.data.tracking_link});
@@ -693,11 +693,11 @@ class Dashboard extends Component {
                         var onlineOrderName = JSON.parse(res).onlineOrderName;
                         var onlineOrderMobile = JSON.parse(res).onlineOrderMobile;
                         var onlineOrderPrice = JSON.parse(res).onlineOrderPrice;
-                        sessionStorage.setItem('onlineOrderId', onlineOrderId);
-                        sessionStorage.setItem('onlineOrderName', onlineOrderName);
-                        sessionStorage.setItem('onlineOrderMobile', onlineOrderMobile);
-                        sessionStorage.setItem('onlineOrderPrice', onlineOrderPrice);
-                        sessionStorage.setItem('order-created', 'true');
+                        localStorage.setItem('onlineOrderId', onlineOrderId);
+                        localStorage.setItem('onlineOrderName', onlineOrderName);
+                        localStorage.setItem('onlineOrderMobile', onlineOrderMobile);
+                        localStorage.setItem('onlineOrderPrice', onlineOrderPrice);
+                        localStorage.setItem('order-created', 'true');
                     }
                 }
                 
@@ -706,9 +706,9 @@ class Dashboard extends Component {
         http.send(params);
     }
     payOrderNow() {
-        let oName = sessionStorage.getItem('onlineOrderName');
-        let oMobile = sessionStorage.getItem('onlineOrderMobile');
-        let oPrice = sessionStorage.getItem('onlineOrderPrice');
+        let oName = localStorage.getItem('onlineOrderName');
+        let oMobile = localStorage.getItem('onlineOrderMobile');
+        let oPrice = localStorage.getItem('onlineOrderPrice');
         this.startPayment(oName,oMobile,oPrice);
     }
     makePaymentRequest() {
@@ -904,6 +904,16 @@ class Dashboard extends Component {
             console.log('storeAcceptingOrders-----', response.data);
             this.setState({onlineOrdersTimings:response.data[0].online_orders_timings, storeAcceptingOrders: response.data[0].accepting_online_orders == 'Y' ? true: false, onlineOrdersPinCodes: response.data[0].online_orders_pincodes});
           }.bind(this));
+        return true;
+    }
+    checkOrderStatus() {
+        axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
+                .then(function (response) {
+                    console.log('tracking data1-----', response.data);
+                    if (response.data.tracking_link !=null && response.data.tracking_link != '') {
+                        this.setState({trackingLink: response.data.tracking_link});
+                    }
+                }.bind(this));
         return true;
     }
     onboardClubUser() {
@@ -1222,7 +1232,7 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                                        {sessionStorage.getItem('order-created') != null && sessionStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && 
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && 
                                                             <div className="card-container notify-card-track">
                                                                 <div className="section-one-notify">
                                                                 </div>
@@ -1235,14 +1245,15 @@ class Dashboard extends Component {
                                                                         <div className='pay-card'>
                                                                             <span>Your payment is pending. Please pay now to complete your order.</span>
                                                                         </div>
-                                                                        <span className='card-btn pay-now' onClick={this.payOrderNow()}>Pay Now</span>
+                                                                        <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>
                                                                         
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         }
 
-                                                        {sessionStorage.getItem('order-created') != null && sessionStorage.getItem('order-created') == 'true'  && this.state.trackingLink == '' && 
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && this.state.trackingLink == '' &&
+                                                            this.checkOrderStatus() &&  
                                                             <div className="card-container notify-card">
                                                             <div className="section-one-notify">
                                                             </div>
