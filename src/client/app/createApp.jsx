@@ -1269,15 +1269,19 @@ class Dashboard extends Component {
                                                                     <div className="top">
                                                                         <iframe className='track-frame' src={`https://${this.state.trackingLink}`} style={{width: `${screen.width-32}px`}} />
                                                                         <br/>
-                                                                        {this.state.payStatus != 'COMPLETE' && <div className='pay-card'>
+                                                                        {this.state.payStatus != 'PAYMENT_SUCCESS' && <div className='pay-card'>
                                                                             <span>Your payment is pending. Please pay now to complete your order.</span>
                                                                         </div>}
-                                                                        {this.state.payStatus != 'COMPLETE' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
+                                                                        {this.state.payStatus != 'PAYMENT_SUCCESS' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
 
                                                                         {this.state.payStatus == 'PAYMENT_FAILED' && <div className='pay-card'>
                                                                             <span>Your payment FAILED! Please TRY AGAIN to complete your order.</span>
                                                                         </div>}
-                                                                        {this.state.payStatus != 'PAYMENT_FAILED' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
+                                                                        {this.state.payStatus == 'PAYMENT_FAILED' && <span className='card-btn pay-now' onClick={()=>{this.payOrderNow()}}>Pay Now</span>}
+
+                                                                        {this.state.payStatus == 'PAYMENT_SUCCESS' && <div className='pay-card'>
+                                                                            <span>Your payment is successful. Thanks for ordering with Slimcrust!</span>
+                                                                        </div>}
                                                                         
                                                                     </div>
                                                                 </div>
