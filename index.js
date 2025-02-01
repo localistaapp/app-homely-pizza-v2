@@ -134,6 +134,16 @@ app.post('/callback', async (req, res) => {
     console.log('-req.body-', req.body);
       const { merchantTransactionId, transactionId, providerReferenceId, code, status } = req.body;
       
+      const encodedResponse = req.body.response;
+      console.log('-encodedResponse-', encodedResponse);
+      // Decode from base64
+      const decodedResponse = Buffer.from(encodedResponse, 'base64').toString();
+      
+      // Parse the JSON string to object
+      const responseObj = JSON.parse(decodedResponse);
+      
+      console.log('-encodedResponse-', responseObj);
+      
       // Verify callback authenticity
       /*const checksum = req.headers['x-verify'];
       const calculatedChecksum = generateHash(JSON.stringify(req.body), '/pg/v1/status');
