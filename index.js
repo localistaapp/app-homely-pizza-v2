@@ -2187,11 +2187,11 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
                                     res.send("error");
                                     client.end();
                                  } else {
-                                  let onlineOrderId = responseSelect.rows[0].id;
-                                  let onlineOrderName = responseSelect.rows[0].name;
-                                  let onlineOrderMobile = responseSelect.rows[0].mobile;
-                                  let onlineOrderPrice = responseSelect.rows[0].price;
-                                  let trackingLink = responseSelect.rows[0].tracking_link;
+                                  let onlineOrderId = response.rows[0].id;
+                                  let onlineOrderName = response.rows[0].name;
+                                  let onlineOrderMobile = response.rows[0].mobile;
+                                  let onlineOrderPrice = response.rows[0].price;
+                                  let trackingLink = response.rows[0].tracking_link;
                                   res.send('{"tracking_link":"'+trackingLink+'","onlineOrderId":"'+onlineOrderId+'", "onlineOrderName":"'+onlineOrderName+'", "onlineOrderMobile":"'+onlineOrderMobile+'", "onlineOrderPrice":"'+onlineOrderPrice+'"}');
                              
                                     client.end();
