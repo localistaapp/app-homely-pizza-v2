@@ -124,6 +124,10 @@ const generateHash = (payload) => {
   return crypto.createHash('sha256').update(data).digest('hex') + '###' + config.saltIndex;
 };
 
+app.post('/app', async (req, res) => {
+  res.redirect('/app?apppay=success');
+});
+
 app.post('/callback', async (req, res) => {
   try {
       const { merchantTransactionId, transactionId, providerReferenceId, code, status } = req.body;
@@ -156,7 +160,9 @@ app.post('/callback', async (req, res) => {
 
       res.json({ success: true });
   } catch (error) {
-      handlePaymentError(error, res);
+      console.log('--error--', error);
+      console.log('--error res--', res);
+      res.redirect('/app?apppay=failed');
   }
 });
 
