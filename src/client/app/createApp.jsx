@@ -940,6 +940,12 @@ class Dashboard extends Component {
             this.setState({orderCompleted: true});
             axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
                 console.log(response.status);
+                localStorage.removeItem('onlineOrderId');
+                localStorage.removeItem('onlineOrderName');
+                localStorage.removeItem('onlineOrderMobile');
+                localStorage.removeItem('onlineOrderPrice');
+                localStorage.removeItem('onlineOrderStatus');
+                localStorage.removeItem('order-created');
                 localStorage.removeItem('onlineOrderCreationTime');
                 });
             //update status to COMPELTE via API call
@@ -973,6 +979,16 @@ class Dashboard extends Component {
         window.checkOStatus = setInterval(()=> {
             if (this.isOlderThanNinetyMinutes()) {
                 this.setState({orderCompleted: true});
+                axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
+                    console.log(response.status);
+                    localStorage.removeItem('onlineOrderId');
+                    localStorage.removeItem('onlineOrderName');
+                    localStorage.removeItem('onlineOrderMobile');
+                    localStorage.removeItem('onlineOrderPrice');
+                    localStorage.removeItem('onlineOrderStatus');
+                    localStorage.removeItem('order-created');
+                    localStorage.removeItem('onlineOrderCreationTime');
+                    });
             }
             if (localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' || localStorage.getItem('onlineOrderId') == null) {
                 return;
