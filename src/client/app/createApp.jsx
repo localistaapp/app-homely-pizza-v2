@@ -1323,7 +1323,7 @@ class Dashboard extends Component {
                                                             </div>
                                                         }
 
-                                                        {this.state.payStatus != 'COMPLETE' && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
+                                                        {(this.state.payStatus != 'COMPLETE' || this.state.payStatus != 'PAYMENT_SUCCESS') && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
                                                             this.checkOrderStatusNow() &&  this.checkOrderStatus() &&
                                                             <div className="card-container notify-card">
                                                             <div className="section-one-notify">
