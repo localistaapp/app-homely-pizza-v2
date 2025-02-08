@@ -981,6 +981,7 @@ class Dashboard extends Component {
                         localStorage.setItem('onlineOrderMobile', response.data.onlineOrderMobile);
                         localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
                         localStorage.setItem('onlineOrderStatus', response.data.status);
+                        localStorage.setItem('onlineOrderCreationTime', new Date().toISOString());
                         localStorage.setItem('order-created', 'true');
                     } else if (response.data.status == 'COMPLETE') {
                         localStorage.removeItem('onlineOrderId');
