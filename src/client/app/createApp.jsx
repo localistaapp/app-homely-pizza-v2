@@ -472,16 +472,16 @@ class Dashboard extends Component {
         //}
         if (window.location.href.indexOf('?apppay=success') != -1) {
             
-            axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_SUCCESS'}).then((response) => {
+            /*axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_SUCCESS'}).then((response) => {
                 console.log(response.status);
                 });
-                this.setState({payStatus: 'PAYMENT_SUCCESS'});
+                this.setState({payStatus: 'PAYMENT_SUCCESS'});*/
 
         } else if (window.location.href.indexOf('?apppay=failure') != -1) {
-            axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_FAILED'}).then((response) => {
+            /*axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_FAILED'}).then((response) => {
                 console.log(response.status);
                 });
-            this.setState({payStatus: 'PAYMENT_FAILED'});
+            this.setState({payStatus: 'PAYMENT_FAILED'});*/
         }
         /*if(localStorage.getItem('clubCode') != null) {
             axios.get(`/user/get/${localStorage.getItem('clubCode')}`)
