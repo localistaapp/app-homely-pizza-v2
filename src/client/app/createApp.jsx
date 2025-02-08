@@ -452,7 +452,6 @@ class Dashboard extends Component {
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
-        this.clearStatusInterval = this.clearStatusInterval.bind(this);
         this.checkOrderStatusNow = this.checkOrderStatusNow.bind(this);
         this.checkOrderStatus = this.checkOrderStatus.bind(this);
     }
@@ -974,10 +973,6 @@ class Dashboard extends Component {
                 }.bind(this))}, 10000);
         return true;
     }
-    clearStatusInterval() {
-        clearInterval(window.checkOStatus);
-        return true;
-    }
     onboardClubUser() {
         var http = new XMLHttpRequest();
         var url = '/onboardClubUser';
@@ -1294,7 +1289,7 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' && this.clearStatusInterval() &&
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' &&
                                                             <div className="card-container notify-card-track">
                                                                 <div className="section-one-notify">
                                                                 </div>
