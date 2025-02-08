@@ -936,7 +936,7 @@ class Dashboard extends Component {
         return (now - timestamp) > ninetyMinutesInMs;
     }
     checkOrderStatusNow() {
-        if (isOlderThanNinetyMinutes()) {
+        if (this.isOlderThanNinetyMinutes()) {
             this.setState({orderCompleted: true});
         }
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
