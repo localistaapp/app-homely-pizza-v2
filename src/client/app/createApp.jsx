@@ -438,7 +438,8 @@ class Dashboard extends Component {
             currDayTimings: [],
             showOrderConfirmationMsg: false,
             loggedIn: true,
-            trackingLink: ''
+            trackingLink: '',
+            orderCompleted: false
         };
         window.weekdays = new Array(7);
         window.weekdays[0] = "Sunday";
@@ -454,6 +455,7 @@ class Dashboard extends Component {
         this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
         this.checkOrderStatusNow = this.checkOrderStatusNow.bind(this);
         this.checkOrderStatus = this.checkOrderStatus.bind(this);
+        this.isOlderThanNinetyMinutes = this.isOlderThanNinetyMinutes.bind(this);
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
@@ -921,7 +923,22 @@ class Dashboard extends Component {
           }.bind(this));
         return true;
     }
+    isOlderThanNinetyMinutes() {
+        const savedDate = localStorage.getItem('onlineOrderCreationTime');
+        if (!savedDate) return true;  // If no date saved, consider it as old
+        
+        const now = new Date();
+        const timestamp = new Date(savedDate);
+        //let duration = 90;
+        let duration = 3;//use above for prod
+        const ninetyMinutesInMs = duration * 60 * 1000;
+        
+        return (now - timestamp) > ninetyMinutesInMs;
+    }
     checkOrderStatusNow() {
+        if (isOlderThanNinetyMinutes()) {
+            this.setState({orderCompleted: true});
+        }
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then((response) => {
                     console.log('tracking data1-----', response.data);
@@ -932,6 +949,7 @@ class Dashboard extends Component {
                         localStorage.setItem('onlineOrderMobile', response.data.onlineOrderMobile);
                         localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
                         localStorage.setItem('onlineOrderStatus', response.data.status);
+                        localStorage.setItem('onlineOrderCreationTime', new Date().toISOString());
                         localStorage.setItem('order-created', 'true');
                     } else if (response.data.status == 'COMPLETE') {
                         localStorage.removeItem('onlineOrderId');
@@ -947,6 +965,9 @@ class Dashboard extends Component {
     }
     checkOrderStatus() {
         window.checkOStatus = setInterval(()=> {
+            if (isOlderThanNinetyMinutes()) {
+                this.setState({orderCompleted: true});
+            }
             if (localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' || localStorage.getItem('onlineOrderId') == null) {
                 return;
             }
@@ -1289,7 +1310,7 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' &&
+                                                        {this.state.orderCompleted == false && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' &&
                                                             <div className="card-container notify-card-track">
                                                                 <div className="section-one-notify">
                                                                 </div>
