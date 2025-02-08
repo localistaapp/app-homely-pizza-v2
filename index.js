@@ -156,6 +156,24 @@ app.post('/callback', async (req, res) => {
       console.log('--pstatus transactionId--', transactionId);
       console.log('--pstatus code--', code);
       console.log('--Order id--', req.query.oid);
+
+      const client = new Client(dbConfig)
+      client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+        } else {
+          client.query("UPDATE \"public\".\"online_order\" SET status = $1 where id = $2",
+              [code, req.query.oid], (err, response) => {
+                    if (err) {
+                      console.log(err)
+                        client.end();
+                    } else {
+                        client.end();
+                    }
+    
+                  });
+      }
+    })
       // Handle different status codes
       switch (code) {
           case 'PAYMENT_SUCCESS':
@@ -2369,9 +2387,11 @@ app.post('/store/web-order/update', function(req, res) {
                   if (err) {
                     console.log(err)
                       res.send("error");
+                      client.end();
                   } else {
                       //res.send(response);
                       res.send('success');
+                      client.end();
                   }
   
                 });
