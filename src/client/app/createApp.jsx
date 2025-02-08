@@ -962,6 +962,7 @@ class Dashboard extends Component {
                         localStorage.removeItem('onlineOrderPrice');
                         localStorage.removeItem('onlineOrderStatus');
                         localStorage.removeItem('order-created');
+                        localStorage.removeItem('onlineOrderCreationTime');
                     } else if (response.data.status == 'PAYMENT_SUCCESS') {
                     } 
                 });
@@ -993,6 +994,7 @@ class Dashboard extends Component {
                         localStorage.removeItem('onlineOrderMobile');
                         localStorage.removeItem('onlineOrderPrice');
                         localStorage.removeItem('onlineOrderStatus');
+                        localStorage.removeItem('onlineOrderCreationTime');
                         localStorage.removeItem('order-created');
                     } else if (response.data.status == 'PAYMENT_SUCCESS') {
                     } 
