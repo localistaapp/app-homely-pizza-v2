@@ -361,6 +361,7 @@ class Dashboard extends Component {
             orderMobile: '',
             orderAddress: '',
             orderPincode: '',
+            trackingLink: '',
             orderPrice: '',
             orderSchedule: '',
             orderSlot: '',
@@ -371,7 +372,7 @@ class Dashboard extends Component {
         this.handleTabChange = this.handleTabChange.bind(this);
         this.onOrderClicked = this.onOrderClicked.bind(this);
         this.onCloseClick = this.onCloseClick.bind(this);
-        this.onPaidClick = this.onPaidClick.bind(this);
+        this.onTrackingUpdate = this.onTrackingUpdate.bind(this);
         this.initializeEnquiries();
     }
     componentDidMount() {
@@ -433,28 +434,17 @@ class Dashboard extends Component {
         window.location.href='/dashboard-quote-res';
     }
     onOrderClicked(order){
-        this.setState({showOrderDetail: true, orderId: order.id, orderName:order.name, orderStatus: order.status, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: new Date(order.created_at).toLocaleString("en-IN", {month: "long",day: "numeric",hour: "2-digit", minute: "2-digit"})});
+        this.setState({showOrderDetail: true, orderId: order.id, orderName:order.name, orderStatus: order.status, orderMobile:order.mobile, orderAddress:order.address, orderPincode:order.delivery_pincode, orderPrice:order.price, trackingLink: order.tracking_link, orderSchedule:order.delivery_schedule, orderSlot: order.delivery_timeslot, orderCreatedAt: new Date(order.created_at).toLocaleString("en-IN", {month: "long",day: "numeric",hour: "2-digit", minute: "2-digit"})});
     }
     onCloseClick() {
         this.setState({showOrderDetail: false});
     }
-    onPaidClick(currWebOrderId) {
-        var http = new XMLHttpRequest();
-            var url = '/updateWebOrder/'+currWebOrderId+'/PAID';
-            http.open('POST', url, true);
-            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-            http.onreadystatechange = function() {//Call a function when the state changes.
-                if(http.readyState == 4 && http.status == 200) {
-                    console.log('confirmed order creation post response:', http.responseText);
-                    var res = http.responseText;
-                    if(res != null){
-                        alert('Order marked as Paid!');
-                        location.reload();
-                    }
-                }
-            }.bind(this);
-            http.send();
+    onTrackingUpdate(trackingLinkVal) {
+        axios.post(`/store/web-order/update`, {onlineOrderId: this.state.orderId, trackingLink: trackingLinkVal}).then((response) => {
+            console.log(response.status);
+            this.setState({trackingLink: trackingLinkVal});
+            window.open(`https://wa.me/+91${this.state.orderMobile}?text=Hello!%20Your%20slimcrust%20order%20has%20been%20dispatched!%20Please%20track%20your%20delivery%20on%20the%20app%20at%20https://www.slimcrust.com/app?track=true`,'_blank');
+        });
     }
     render() {
         const {orders, enquiries, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
@@ -511,8 +501,8 @@ class Dashboard extends Component {
                                                             <div>{this.state.orderAddress}</div>
                                                             <div>{this.state.orderPincode}</div>
                                                             <div className='price-lbl'>₹{this.state.orderPrice}</div>
-                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' href={`https://wa.me/+91${this.state.orderMobile}?text=Hello!%20Requesting%20payment%20for%20your%20slimcrust%20pizza%20order.%20Please%20make%20payment%20of%20%E2%82%B9${this.state.orderPrice}%20via%20UPI%2FGPay%20to%20UPI%20ID%20paytmqr3othpfhox3%40paytm.%20Thank%20You!`} style={{right: '123px', width: '189px'}}>Request Payment</a>}
-                                                            {this.state.orderStatus != 'PAID' && <div className='price-btn' onClick={()=>{this.onPaidClick(this.state.orderId)}}>Paid</div>}
+                                                            {this.state.orderStatus != 'PAID'  && <div className='input-delivery'><input id="trackingLinkElemId" type='text' value={this.state.trackingLink} placeholder='Enter tracking link' /></div>}
+                                                            {this.state.orderStatus != 'PAID'  && <a className='price-btn' onClick={()=>{this.onTrackingUpdate(document.getElementById('trackingLinkElemId').value);}} style={{right: '123px', width: '189px', margin: '0 auto', left: '0', right: '0'}}>Update Delivery</a>}
                                                             <div>{this.state.orderSchedule == 'now' ? 'DELIVER NOW' : ''}</div>
                                                             {this.state.orderSlot != 'unknown' && <div>{this.state.orderSlot}</div>}
                                                         </div>

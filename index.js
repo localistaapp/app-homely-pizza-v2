@@ -2095,7 +2095,7 @@ app.get("/web-orders/:franchiseId", function(req, res) {
           res.send('{}');
           client.end();
         } else {
-            client.query("Select o.id, o.name, o.mobile, o.status, o.address, o.delivery_pincode, o.delivery_schedule, o.delivery_timeslot, o.price, o.created_at, o.order from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId+" group by s.id, o.id order by o.created_at desc",
+            client.query("Select o.id, o.name, o.mobile, o.status, o.address, o.delivery_pincode, o.delivery_schedule, o.delivery_timeslot, o.price, o.created_at, o.order, o.tracking_link from store s, online_order o where o.store_id = s.id and s.franchise_id = "+franchiseId+" group by s.id, o.id order by o.created_at desc",
                         [], (err, response) => {
                               if (err) {
                                 console.log(err);
@@ -2353,6 +2353,30 @@ app.post('/createStore', function(req, res) {
     }
   })
 })
+
+app.post('/store/web-order/update', function(req, res) {
+    const trackingLink = req.body.trackingLink;
+    const onlineOrderId = req.body.onlineOrderId;
+    
+    const client = new Client(dbConfig)
+    client.connect(err => {
+      if (err) {
+        console.error('error connecting', err.stack)
+      } else {
+        client.query("UPDATE \"public\".\"online_order\" SET tracking_link = $1 where id = $2",
+            [trackingLink, onlineOrderId], (err, response) => {
+                  if (err) {
+                    console.log(err)
+                      res.send("error");
+                  } else {
+                      //res.send(response);
+                      res.send('success');
+                  }
+  
+                });
+    }
+   })
+});
 
 app.post('/store/web-order', function(req, res) {
   
