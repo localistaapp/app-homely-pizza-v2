@@ -115,7 +115,7 @@ const config = {
   salt: process.env.PHONEPE_SALT,
   saltIndex: "1",
   apiEndpoint: "https://api.phonepe.com/apis/hermes/pg/v1/pay",
-  callbackUrl: "https://www.slimcrust.com/callback",
+  callbackUrl: "https://www.slimcrust.com/callback?oid=",
   redirectUrl: "https://www.slimcrust.com/app?track=true&pay=success"
 };
 
@@ -155,6 +155,7 @@ app.post('/callback', async (req, res) => {
       let code = responseObj.code;
       console.log('--pstatus transactionId--', transactionId);
       console.log('--pstatus code--', code);
+      console.log('--Order id--', req.query.oid);
       // Handle different status codes
       switch (code) {
           case 'PAYMENT_SUCCESS':
@@ -190,7 +191,7 @@ app.post('/api/my-initiate-payment', async (req, res) => {
           amount: amount * 100,
           redirectUrl: config.redirectUrl,
           redirectMode: "POST",
-          callbackUrl: config.callbackUrl,
+          callbackUrl: config.callbackUrl+customerDetails.orderId,
           mobileNumber: customerDetails.mobileNumber,
           paymentInstrument: {
               type: "PAY_PAGE"

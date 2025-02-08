@@ -649,10 +649,11 @@ class Dashboard extends Component {
     };
     
     
-    startPayment(name, mobile, price) {
+    startPayment(name, mobile, price, orderId) {
         const customerDetails = {
             userId: name,
-            mobileNumber: mobile
+            mobileNumber: mobile,
+            orderId: orderId
         };
         
         this.initiatePayment(10, customerDetails) // Amount in rupees
@@ -726,7 +727,8 @@ class Dashboard extends Component {
         let oName = localStorage.getItem('onlineOrderName');
         let oMobile = localStorage.getItem('onlineOrderMobile');
         let oPrice = localStorage.getItem('onlineOrderPrice');
-        this.startPayment(oName,oMobile,oPrice);
+        let orderId = localStorage.getItem('onlineOrderId');
+        this.startPayment(oName,oMobile,oPrice,orderId);
     }
     makePaymentRequest() {
         //uncomment
