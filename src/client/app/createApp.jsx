@@ -461,13 +461,13 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
-        if (location.href.indexOf('?track=true') != -1 || location.href.indexOf('?apppay=') != -1) {
+        //if (location.href.indexOf('?track=true') != -1 || location.href.indexOf('?apppay=') != -1) {
             axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data-----', response.data);
                     this.setState({trackingLink: response.data.tracking_link, payStatus: response.data.status});
                 }.bind(this));
-        }
+        //}
         if (window.location.href.indexOf('?apppay=success') != -1) {
             
             axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'PAYMENT_SUCCESS'}).then((response) => {
@@ -951,7 +951,7 @@ class Dashboard extends Component {
                 return;
             }
             axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
-                .then(function (response) {
+                .then((response) => {
                     console.log('tracking data1-----', response.data);
                     if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.tracking_link != 'null' && response.data.status == 'PENDING') {
                         this.setState({trackingLink: response.data.tracking_link});
@@ -970,7 +970,7 @@ class Dashboard extends Component {
                         localStorage.removeItem('order-created');
                     } else if (response.data.status == 'PAYMENT_SUCCESS') {
                     } 
-                }.bind(this))}, 10000);
+                })}, 10000);
         return true;
     }
     onboardClubUser() {
@@ -1317,7 +1317,7 @@ class Dashboard extends Component {
                                                                 </div>
                                                             </div>
                                                         }
-
+                                                        
                                                         {(this.state.payStatus != 'COMPLETE' || this.state.payStatus != 'PAYMENT_SUCCESS') && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
                                                             this.checkOrderStatusNow() &&  this.checkOrderStatus() &&
                                                             <div className="card-container notify-card">
