@@ -938,6 +938,10 @@ class Dashboard extends Component {
     checkOrderStatusNow() {
         if (this.isOlderThanNinetyMinutes()) {
             this.setState({orderCompleted: true});
+            axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
+                console.log(response.status);
+                });
+            //update status to COMPELTE via API call
         }
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then((response) => {
