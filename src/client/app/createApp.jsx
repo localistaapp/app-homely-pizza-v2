@@ -452,6 +452,9 @@ class Dashboard extends Component {
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
+        this.clearStatusInterval = this.clearStatusInterval.bind(this);
+        this.checkOrderStatusNow = this.checkOrderStatusNow.bind(this);
+        this.checkOrderStatus = this.checkOrderStatus.bind(this);
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
@@ -919,8 +922,36 @@ class Dashboard extends Component {
           }.bind(this));
         return true;
     }
-    checkOrderStatus() {
+    checkOrderStatusNow() {
         axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
+                .then((response) => {
+                    console.log('tracking data1-----', response.data);
+                    if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.tracking_link != 'null' && response.data.status == 'PENDING') {
+                        this.setState({trackingLink: response.data.tracking_link});
+                        localStorage.setItem('onlineOrderId', response.data.onlineOrderId);
+                        localStorage.setItem('onlineOrderName', response.data.onlineOrderName);
+                        localStorage.setItem('onlineOrderMobile', response.data.onlineOrderMobile);
+                        localStorage.setItem('onlineOrderPrice', response.data.onlineOrderPrice);
+                        localStorage.setItem('onlineOrderStatus', response.data.status);
+                        localStorage.setItem('order-created', 'true');
+                    } else if (response.data.status == 'COMPLETE') {
+                        localStorage.removeItem('onlineOrderId');
+                        localStorage.removeItem('onlineOrderName');
+                        localStorage.removeItem('onlineOrderMobile');
+                        localStorage.removeItem('onlineOrderPrice');
+                        localStorage.removeItem('onlineOrderStatus');
+                        localStorage.removeItem('order-created');
+                    } else if (response.data.status == 'PAYMENT_SUCCESS') {
+                    } 
+                });
+        return true;
+    }
+    checkOrderStatus() {
+        window.checkOStatus = setInterval(()=> {
+            if (localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' || localStorage.getItem('onlineOrderId') == null) {
+                return;
+            }
+            axios.get(`/store/web-order/${localStorage.getItem('onlineOrderId')}`)
                 .then(function (response) {
                     console.log('tracking data1-----', response.data);
                     if (response.data.tracking_link !=null && response.data.tracking_link != '' && response.data.tracking_link != 'null' && response.data.status == 'PENDING') {
@@ -940,7 +971,11 @@ class Dashboard extends Component {
                         localStorage.removeItem('order-created');
                     } else if (response.data.status == 'PAYMENT_SUCCESS') {
                     } 
-                }.bind(this));
+                }.bind(this))}, 10000);
+        return true;
+    }
+    clearStatusInterval() {
+        clearInterval(window.checkOStatus);
         return true;
     }
     onboardClubUser() {
@@ -1259,7 +1294,7 @@ class Dashboard extends Component {
                                                                        return (<Card index={index} data={resultItem} type="pizzas" />);
                                                                    })}
 
-                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' &&
+                                                        {localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' && this.clearStatusInterval() &&
                                                             <div className="card-container notify-card-track">
                                                                 <div className="section-one-notify">
                                                                 </div>
@@ -1289,7 +1324,7 @@ class Dashboard extends Component {
                                                         }
 
                                                         {this.state.payStatus != 'COMPLETE' && localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true'  && (this.state.trackingLink == '' || this.state.trackingLink == 'null') &&
-                                                            this.checkOrderStatus() &&  
+                                                            this.checkOrderStatusNow() &&  this.checkOrderStatus() &&
                                                             <div className="card-container notify-card">
                                                             <div className="section-one-notify">
                                                             </div>
