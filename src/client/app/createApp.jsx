@@ -925,7 +925,7 @@ class Dashboard extends Component {
     }
     isOlderThanNinetyMinutes() {
         const savedDate = localStorage.getItem('onlineOrderCreationTime');
-        if (!savedDate) return true;  // If no date saved, consider it as old
+        if (!savedDate) return false;  // If no date saved, consider it as old
         
         const now = new Date();
         const timestamp = new Date(savedDate);
