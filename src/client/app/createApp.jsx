@@ -940,6 +940,7 @@ class Dashboard extends Component {
             this.setState({orderCompleted: true});
             axios.post(`/store/update-web-order/`, {onlineOrderId: localStorage.getItem('onlineOrderId'), status: 'COMPLETE'}).then((response) => {
                 console.log(response.status);
+                localStorage.removeItem('onlineOrderCreationTime');
                 });
             //update status to COMPELTE via API call
         }
