@@ -965,7 +965,7 @@ class Dashboard extends Component {
     }
     checkOrderStatus() {
         window.checkOStatus = setInterval(()=> {
-            if (isOlderThanNinetyMinutes()) {
+            if (this.isOlderThanNinetyMinutes()) {
                 this.setState({orderCompleted: true});
             }
             if (localStorage.getItem('order-created') != null && localStorage.getItem('order-created') == 'true' && this.state.trackingLink != '' && this.state.trackingLink != 'null' || localStorage.getItem('onlineOrderId') == null) {
