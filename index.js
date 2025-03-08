@@ -16,6 +16,7 @@ var nodemailer = require("nodemailer");
 var crypto = require('crypto');
 var cors = require('cors');
 var QRCode = require('qrcode');
+const { OpenAI } = require('openai');
 //var mergeImages = require('merge-images');
 var base64 = require('file-base64');
 //const { Canvas, Image } = require('canvas');
@@ -49,6 +50,11 @@ const transporter = nodemailer.createTransport({
         pass: "lejapifjjmuxfvgc",
       },
     });
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
 const orderid = require('order-id')('randomgenid');
 var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai89eidZYXjM0OK3KeXfkPU@redis-16431.c10.us-east-1-2.ec2.cloud.redislabs.com:16431';
 redisURL = url.parse(redisURLVal);
@@ -126,6 +132,26 @@ const generateHash = (payload) => {
 
 app.post('/app', async (req, res) => {
   res.redirect('/app?apppay=success');
+});
+
+app.get('/questions/', async (req, res) => {
+  try {
+    const prompt = `
+    For a mid-level engineer working on frontend tech stack of javascript node js html css and react,
+     can you share 5 multiple choice questions to check whether he has higher order system design skills? But keep it medium complexity
+Return in JSON array format like [{"question":"","question":[{"option":"A","text":""}]},...].
+`;
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const messages = response.data.choices[0].message.content;
+    res.json(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating notifications");
+  }
 });
 
 app.post('/callback', async (req, res) => {

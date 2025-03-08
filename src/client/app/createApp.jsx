@@ -656,7 +656,7 @@ class Dashboard extends Component {
             orderId: orderId
         };
         
-        this.initiatePayment(10, customerDetails) // Amount in rupees
+        this.initiatePayment(price, customerDetails) // Amount in rupees
             .then(response => {
                 console.log('Transaction initiated:', response);
             })
