@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.slimcrust.www.twa",
-    "sha256_cert_fingerprints": ["2D:DD:26:07:E2:1F:10:AD:2E:F2:E9:5C:F7:B7:09:AD:85:91:23:66:38:96:8F:67:89:E8:F6:43:26:B1:C9:55"]
+    "sha256_cert_fingerprints": ["B7:84:E8:1B:7B:E9:CF:C8:8D:12:71:B7:59:A7:60:49:4A:64:8B:1A:43:4B:2D:D1:F1:B4:51:17:4C:00:D0:25"]
   }
 }]
