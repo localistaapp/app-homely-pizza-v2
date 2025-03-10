@@ -228,7 +228,7 @@ class Dashboard extends Component {
                 </span>
                 </div>
 
-                {this.state.role == 'SUPERUSER' && <div className='accepting'>
+                {<div className='accepting'>
                 <GreenSwitch
                   checked={this.state.accepting}
                   onChange={this.handleToggle}
