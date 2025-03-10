@@ -488,6 +488,11 @@ class Dashboard extends Component {
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>
                                                    </div>}
 
+                                                   {role == 'super-user' && <div>
+                                                   <span className="stage-desc" onClick={()=>{window.location.href='/dashboard-create-notif';}}><ChatBubbleIcon /> Notifications</span>
+                                                   <hr className="line-light" style={{marginTop: '18px'}}/>
+                                                   </div>}
+
                                                    <span className="stage-desc" onClick={()=>{window.location.href='/store';}}>
                                                         <InventoryIcon /> Store</span>
                                                    <hr className="line-light" style={{marginTop: '18px'}}/>

@@ -15,6 +15,7 @@ import StoreInventory from './storeInventory.jsx';
 import StoreChecklist from './storeChecklist.jsx';
 import StoreOnboarding from './storeOnboarding.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
+import CreateNotification from './createNotification.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import StoreMenu from'./storeMenu.jsx';
@@ -31,6 +32,7 @@ var QuoteWithRouter = withRouter(Quote);
 var QuoteResWithRouter = withRouter(QuoteRes);
 var CreateOrderWithRouter = withRouter(CreateOrder);
 var CreateEnquiryWithRouter = withRouter(CreateEnquiry);
+var CreateNotificationWithRouter = withRouter(CreateNotification);
 var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
 var StoreLocationPannerWithRouter = withRouter(StoreLocationPlanner);
 var StoreMenuWithRouter = withRouter(StoreMenu);
@@ -84,6 +86,11 @@ render(<Router>
                             <div className="results">
                                     <Route exact path="/" component={CreateEnquiryWithRouter} />
                                 <Route  path="/dashboard-create-enquiry" component={CreateEnquiryWithRouter} />
+                            </div>)} />
+        <Route path="/dashboard-create-notif" exact render={() => (
+                            <div className="results">
+                                    <Route exact path="/" component={CreateNotificationWithRouter} />
+                                <Route  path="/dashboard-create-notif" component={CreateNotificationWithRouter} />
                             </div>)} />
         <Route path="/dashboard-create-sample-order" exact render={() => (
                     <div className="results">
