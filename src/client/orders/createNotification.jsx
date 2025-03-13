@@ -354,6 +354,8 @@ class CreateNotification extends Component {
             mobileNum: '',
             curStep: 1,
             redirect: false,
+            notifJsonText: '',
+            notifJsonArr: [],
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default'
         };
         window.currSlotSelected = '';
@@ -362,7 +364,20 @@ class CreateNotification extends Component {
     }
     componentDidMount() {
         var winHeight = window.innerHeight;
-
+        this.handlePaste = this.handlePaste.bind(this);
+        this.sendNotif = this.sendNotif.bind(this);
+    }
+    handlePaste(clipboardText) {
+        this.setState({notifJsonText: clipboardText});
+        this.setState({notifJsonArr: JSON.parse(clipboardText)});
+        console.log('--notifArr--', clipboardText);
+        
+    }
+    sendNotif(pTitle, pDesc) {
+        axios.post(`/push-notif`, {title: pTitle, description: pDesc}).then((response) => {
+            console.log('--Push Response--', response);
+            window.location.href='/dashboard-create-notif?status=success';
+        });
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
@@ -413,23 +428,33 @@ class CreateNotification extends Component {
     }
 
     render() {
-        const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {status, notifJsonText, notifJsonArr, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
-                    {status == 'success' && <span className="stage-heading status-success">Enquiry created successfully</span>}
+                    {status == 'success' && <span className="stage-heading status-success">Notification sent successfully</span>}
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><ChatBubble />&nbsp;&nbsp;Create Notification</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <br/>
-                                                   <span className="stage-desc" ><textarea id="notifTitle1" className="txt-field right" style={{float: 'left', left: '40px', width: 'auto', minHeight: '60px'}} value="Hit Hunger for Six During the India vs. England ODI!" /></span>
-                                                   <br/><br/>
-                                                   <span className="stage-desc"><textarea id="notifDesc1" className="txt-field right" style={{float: 'left', left: '40px', width: 'auto', minHeight: '150px'}} value="Cheer for Team India with a pizza in hand! Order now and enjoy the perfect match-day feast as the cricket action unfolds." /></span>
+                                                   <span className="stage-desc"><textarea id="notifJson" value={this.state.notifJsonText} onChange={(e) => this.setState({notifJsonText: e.target.value})} className="txt-field right" style={{float: 'left', left: '40px', width: 'auto', minHeight: '80px'}} onPaste={(e)=>{console.log('--pasted1--', e.clipboardData.getData("text"));this.handlePaste(e.clipboardData.getData("text"));}}></textarea></span>
+                                                   
                                                    <br/>
-                                                   <br/><br/><br/><br/><br/><br/>
-                                                   <a className="button" onClick={this.createEnquiryOrder} style={{position:'absolute'}}>Push →</a>
+
+                                                   {
+                                                    notifJsonArr.map((item, index) => {
+                                                        return (
+                                                        <div className="notif-c" style={{marginTop: index == 0? '0px' : '270px'}}>
+                                                            <span className="stage-desc" ><textarea id={`notifTitle${index}`} className="txt-field right" style={{float: 'left', left: '40px', width: 'auto', minHeight: '60px', marginTop: '60px'}}  >{item.title}</textarea></span>
+                                                            <span className="stage-desc"><textarea id={`notifDesc${index}`} className="txt-field right" style={{float: 'left', left: '40px', width: 'auto', minHeight: '150px', marginTop: '110px'}}  >{item.description}</textarea></span>
+                                                            <a className="button" style={{position:'absolute',marginTop:'270px',width:'80%'}} onClick={()=>{this.sendNotif(document.getElementById(`notifTitle${index}`).value,document.getElementById(`notifDesc${index}`).value);}}>Push →</a>
+                                                        </div>
+                                                        );
+                                                    })
+                                                   }
+                                                   
                                                    <br/><br/>
                                                    <br/>
 

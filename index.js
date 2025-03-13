@@ -154,6 +154,24 @@ Return in JSON array format like [{"question":"","question":[{"option":"A","text
   }
 });
 
+app.get('/notify/', async (req, res) => {
+  try {
+    const prompt = `As an Indian pizza brand in Bangalore, what relevant event for the day can I quote to form a witty push notification message with title and description to remind people of an occasion to have pizza. Note: Please send 3 different response with topics of 1. cricket or significant event in sport, 2. new OTT release 3. TV screening or festival or significant event of the day. Keep the response in a json array format: eg [{"title":"","description":""},...]. Keep the title and description to a single line with title and description less than 14 words`;
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    console.log('--response--', response.choices[0].message);
+    const messages = response.choices[0].message.content;
+
+    res.send(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating notifications");
+  }
+});
+
 app.post('/callback', async (req, res) => {
   try {
     console.log('-req.params-', req.params);
@@ -1238,6 +1256,10 @@ app.get("/dashboard-create-notif/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-create-game/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-sample-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -2271,6 +2293,22 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
     });
 
 
+});
+
+app.post('/push-notif', function(req, res) {
+  const title = req.body.title;
+  const description = req.body.description;
+  console.log('--Push Title--', title);
+  console.log('--Push Description--', description);
+  res.send('push success');
+  /*axios
+  .post('https://api.pushalert.co/rest/v1/send', 'title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
+  .then(res => {
+    console.log('Pushalert success: ', res);
+  })
+  .catch(error => {
+    console.log('Pushalert error: ', error);
+  });*/
 });
 
 app.post('/eventOrder', function(req, res) {
