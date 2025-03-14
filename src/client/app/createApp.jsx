@@ -333,6 +333,7 @@ class Card extends Component {
          extraClasses = 'starter';
         }
         return (
+
         <div className="card-container">
             <div className="section-one">
                 <br/>
@@ -439,7 +440,10 @@ class Dashboard extends Component {
             showOrderConfirmationMsg: false,
             loggedIn: true,
             trackingLink: '',
-            orderCompleted: false
+            orderCompleted: false,
+            contentImgSrc: '',
+            contentPostTitle: '',
+            contentPostDesc: ''
         };
         window.weekdays = new Array(7);
         window.weekdays[0] = "Sunday";
@@ -501,6 +505,21 @@ class Dashboard extends Component {
         } */
 
         this.login();
+
+        //fetch content
+        if (location.href.indexOf('?content=true') != -1 ) {
+            const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            axios.get('/get-push-content/'+dayName)
+            .then(function (response) {
+                console.log('--response.data--', response.data);
+                const contentData = response.data && response.data[0] ? response.data[0] : response.data;
+                axios.get('https://api.pexels.com/v1/search?per_page=10&query='+contentData.title, {headers: {"Authorization" : "hSw8j6DGI2bdFLRRDenSsYpja0zA0CENUsIIskj5ZdHHNm3mAr7iEgkz"}})
+                .then(function (imgres) {
+                    console.log('--img res--', imgres.data.photos[Math.floor(Math.random() * 6) + 1].src.large);
+                    this.setState({contentPostTitle: contentData.title, contentPostDesc: contentData.description, contentImgSrc: imgres.data.photos[Math.floor(Math.random() * 6) + 1].src.large });
+                }.bind(this));
+            }.bind(this));
+        }
         
     }
     handleTabChange(event, newValue) {
@@ -1130,6 +1149,7 @@ class Dashboard extends Component {
                                                         <br/>
                                                        {/*<iframe id="trackingElem" style={{width: '103%',height:'100vh',marginLeft: '-8px'}} src="https://porter.in/rd/c5b9a2528d"></iframe>*/}
                                                        
+                                                      {window.location.href.indexOf('?content=true')!=-1 && <div class="card-container" onClick={()=>{window.location.href='/content';}}><div class="section-one"><br/><div class="top"><div><img id="primaryImg0" class="primary-img rotatable sf-img " style={{borderRadius: '12px'}} src={this.state.contentImgSrc} /></div><div class="top-right"><div class="usp-title"></div></div></div></div><div class="title">{this.state.contentPostTitle}</div><hr class="line"/><div class="section-two"><div class=""><div class="reviews-container "><div class="topic-container"><div style={{fontFamily: 'Quicksand'}}>{this.state.contentPostDesc}</div></div><div class="topic-container"><div class="featured-content">Featured content for you</div></div></div></div></div></div>}
                                                        
                                                         <div className={`main fadeInBottom ${this.state.showList}`}>
                         

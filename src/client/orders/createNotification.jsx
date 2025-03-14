@@ -356,6 +356,7 @@ class CreateNotification extends Component {
             redirect: false,
             notifJsonText: '',
             notifJsonArr: [],
+            contentTitle: '', contentDesc: '', contentHTML: '', contentHeroImg: '',
             status: window.location.href.indexOf('?status=success') >= 0 ? 'success' :'default'
         };
         window.currSlotSelected = '';
@@ -366,6 +367,7 @@ class CreateNotification extends Component {
         var winHeight = window.innerHeight;
         this.handlePaste = this.handlePaste.bind(this);
         this.sendNotif = this.sendNotif.bind(this);
+        this.sendContentNotif = this.sendContentNotif.bind(this);
     }
     handlePaste(clipboardText) {
         this.setState({notifJsonText: clipboardText});
@@ -379,9 +381,28 @@ class CreateNotification extends Component {
             setTimeout(()=>{window.location.href='/dashboard-create-notif?status=success';},2000);
         });
     }
+    sendContentNotif(pTitle, pDesc, pUrl) {
+        axios.post(`/push-content-notif`, {title: pTitle, description: pDesc, url: pUrl}).then((response) => {
+            console.log('--Push Response--', response);
+            setTimeout(()=>{window.location.href='/dashboard-create-notif?status=success';},2000);
+        });
+    }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);
         this.setState({value: newValue});
+        if(newValue == 1) { //content tab 
+            const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            axios.get('/get-push-content/'+dayName)
+            .then(function (response) {
+                console.log('--response.data--', response.data);
+                const contentData = response.data && response.data[0] ? response.data[0] : response.data;
+                axios.get('https://api.pexels.com/v1/search?per_page=10&query='+contentData.title, {headers: {"Authorization" : "hSw8j6DGI2bdFLRRDenSsYpja0zA0CENUsIIskj5ZdHHNm3mAr7iEgkz"}})
+                .then(function (imgres) {
+                    console.log('--img res--', imgres.data.photos[Math.floor(Math.random() * 6) + 1].src.large);
+                    this.setState({contentTitle: contentData.title, contentDesc: contentData.description, contentHTML: contentData.html, contentHeroImg: imgres.data.photos[Math.floor(Math.random() * 6) + 1].src.large });
+                }.bind(this));
+            }.bind(this));
+        }
     }
     createEnquiryOrder() {
         var orderName = document.getElementById('orderName').value;
@@ -431,11 +452,22 @@ class CreateNotification extends Component {
         const {status, notifJsonText, notifJsonArr, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
 
         return (<div style={{marginTop: '84px'}}>
-                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px'}} onClick={()=>{window.location.href='/dashboard';}} />
+                    <img id="logo" className="logo-img" src="../img/images/logo_scr.jpg" style={{width: '142px',position: 'absolute'}} onClick={()=>{window.location.href='/dashboard';}} />
                     {status == 'success' && <span className="stage-heading status-success">Notification sent successfully</span>}
                     <Paper>
-
-                                              <TabPanel value={this.state.value} index={0}>
+                    <Tabs
+                            value={this.state.value}
+                            onChange={this.handleTabChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            centered
+                            style={{paddingLeft: '10px'}}
+                          >
+                            <Tab label="Event" />
+                            <Tab label="Content" />
+                            <Tab label="Product/Offer" />
+                          </Tabs>
+                          <TabPanel value={this.state.value} index={0}>
                                                    <span className="stage-heading" style={{top: '12px',background: '#f6f6f6'}}><ChatBubble />&nbsp;&nbsp;Create Notification</span>
                                                    <hr className="line-light" style={{visibility: 'hidden'}}/>
                                                    <br/>
@@ -460,9 +492,16 @@ class CreateNotification extends Component {
 
                                               </TabPanel>
                                               <TabPanel value={this.state.value} index={1}>
-
-
-
+                                                <div className='content-elem'>
+                                                    <div className='content-post-title' >{this.state.contentTitle}</div>
+                                                    <div className='content-post-img' ><img src={this.state.contentHeroImg} /></div>
+                                                    <div className='content-post-body' dangerouslySetInnerHTML={{__html: this.state.contentHTML}} />
+                                                </div>
+                                                <div className='content-notif-elem'>
+                                                    <div className='content-elem-title'>{this.state.contentTitle}</div>
+                                                    <div className='content-elem-body'>{this.state.contentDesc}</div>
+                                                    <a className="button" onClick={()=>{this.sendContentNotif(this.state.contentTitle,this.state.contentDesc,'https://www.slimcrust.com/app?content=true');}}>Push →</a>
+                                                </div>
                                               </TabPanel>
                                             </Paper>
                 </div>)

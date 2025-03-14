@@ -15,14 +15,13 @@ import StoreInventory from './storeInventory.jsx';
 import StoreChecklist from './storeChecklist.jsx';
 import StoreOnboarding from './storeOnboarding.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
-
+import CreateNotification from './createNotification.jsx';
+import Content from './content.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import StoreMenu from'./storeMenu.jsx';
 import Enquiries from './enquiries.jsx';
 import WebOrders from './webOrders.jsx';
-import CreateNotification from './createNotification.jsx';
-import CreateGame from './createGame.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
 
@@ -34,6 +33,8 @@ var QuoteWithRouter = withRouter(Quote);
 var QuoteResWithRouter = withRouter(QuoteRes);
 var CreateOrderWithRouter = withRouter(CreateOrder);
 var CreateEnquiryWithRouter = withRouter(CreateEnquiry);
+var CreateNotificationWithRouter = withRouter(CreateNotification);
+var ContentWithRouter = withRouter(Content);
 var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
 var StoreLocationPannerWithRouter = withRouter(StoreLocationPlanner);
 var StoreMenuWithRouter = withRouter(StoreMenu);
@@ -44,8 +45,6 @@ var PayStoreOrderWithRouter = withRouter(PayStoreOrder);
 var StoreInventoryWithRouter = withRouter(StoreInventory);
 var StoreChecklistWithRouter = withRouter(StoreChecklist);
 var StoreOnboardingWithRouter =  withRouter(StoreOnboarding);
-var CreateNotificationWithRouter = withRouter(CreateNotification);
-var CreateGameithRouter = withRouter(CreateGame);
 var WebOrdersWithRouter = withRouter(WebOrders);
 
 render(<Router>
@@ -89,16 +88,72 @@ render(<Router>
                             <div className="results">
                                     <Route exact path="/" component={CreateEnquiryWithRouter} />
                                 <Route  path="/dashboard-create-enquiry" component={CreateEnquiryWithRouter} />
-        </div>)} />
+                            </div>)} />
         <Route path="/dashboard-create-notif" exact render={() => (
                             <div className="results">
                                     <Route exact path="/" component={CreateNotificationWithRouter} />
                                 <Route  path="/dashboard-create-notif" component={CreateNotificationWithRouter} />
-                                </div>)} />
-        <Route path="/dashboard-create-game" exact render={() => (
+                            </div>)} />
+        <Route path="/content" exact render={() => (
                             <div className="results">
-                                    <Route exact path="/" component={CreateGameithRouter} />
-                                <Route  path="/dashboard-create-game" component={CreateGameithRouter} />
+                                    <Route exact path="/" component={ContentWithRouter} />
+                                <Route  path="/content" component={ContentWithRouter} />
+                            </div>)} />
+                            <Route path="/dashboard-create-sample-order" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={CreateSampleOrderWithRouter} />
+                        <Route  path="/dashboard-create-sample-order" component={CreateSampleOrderWithRouter} />
+                    </div>)} />
+        <Route path="/dashboard-enquiries" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={EnquiriesWithRouter} />
+                        <Route  path="/dashboard-enquiries" component={EnquiriesWithRouter} />
+                    </div>)} />
+        <Route path="/web-orders" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={WebOrdersWithRouter} />
+                        <Route  path="/web-orders" component={WebOrdersWithRouter} />
+                    </div>)} />
+        <Route path="/store-location-planner" exact render={() => (
+                    <div className="results">
+                            <Route exact path="/" component={StoreLocationPannerWithRouter} />
+                        <Route  path="/store-location-planner" component={StoreLocationPannerWithRouter} />
+                    </div>)} />
+        <Route path="/dashboard-create-store" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={CreateStoreWithRouter} />
+            <Route  path="/dashboard-create-store" component={CreateStoreWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-create-store-order" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={CreateStoreOrderWithRouter} />
+            <Route  path="/dashboard-create-store-order" component={CreateStoreOrderWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-pay-store-order" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={PayStoreOrderWithRouter} />
+            <Route  path="/dashboard-pay-store-order" component={PayStoreOrderWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-store-inventory" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreInventoryWithRouter} />
+            <Route  path="/dashboard-store-inventory" component={StoreInventoryWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-store-checklist" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreChecklistWithRouter} />
+            <Route  path="/dashboard-store-checklist" component={StoreChecklistWithRouter} />
+        </div>)} />
+        <Route path="/dashboard-store-onboarding" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreOnboardingWithRouter} />
+            <Route  path="/dashboard-store-onboarding" component={StoreOnboardingWithRouter} />
+        </div>)} />
+
+        <Route path="/store" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={StoreMenuWithRouter} />
+            <Route  path="/store" component={StoreMenuWithRouter} />
         </div>)} />
        
     </div>

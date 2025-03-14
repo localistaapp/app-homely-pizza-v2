@@ -443,6 +443,12 @@ class Dashboard extends Component {
                 this.getUserProfile(email);
             }
           }.bind(this));
+
+          const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+          axios.get(`/content-lookup/${dayName}`)
+          .then(function (response) {
+            console.log('---content-lookup-response---', response.data);
+          }.bind(this));
     }
     handleTabChange(event, newValue) {
         console.log('neValue: ', newValue);

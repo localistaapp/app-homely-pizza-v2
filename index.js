@@ -55,6 +55,35 @@ const transporter = nodemailer.createTransport({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
+const contentDayMap = {
+  "monday": ["seasonal"],
+  "tuesday": ["mediterranean"],
+  "wednesday": ["health_inspiration"],
+  "thursday": ["superfoods"],
+  "friday": ["mythbusting"],
+  "saturday": ["streaming"],
+  "sunday": ["streaming"],
+}
+
+const contentPromptMap = {
+  "seasonal": "As a health-first exotic food brand in Bangalore, create an article on "+"seasonal ingredients"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+  "mediterranean": "As a health-first exotic food brand in Bangalore, create an article on "+"mediterranean healthy life"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+  "health_inspiration": "As a health-first exotic food brand in Bangalore, create an article on "+"daily health inspiration"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+  "superfoods": "As a health-first exotic food brand in Bangalore, create an article on "+"recent superfoods"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+  "mythbusting": "As a health-first exotic food brand in Bangalore, create an article on "+"pizza myth busting"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+  "streaming": "As a health-first exotic food brand in Bangalore, create an article on "+"movie night paired with pizza ideas"+" that's vegetarian-friendly with subtle orientation on pizza. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {\"title\":\"\",\"description\":\"\",\"html\":\"\",\"hero_img\":\"\"}. Keep the content to a minimum of 500 words and title to less than 6 words and description to less than 12 words. Ensure not to use \" in html as it messes up json formatting. Avoid adding heading in the html as it shall be generated in title property. Ensure valid JSON output in single line.",
+}
+
+const contentPostStore = {
+  "monday": {"title":"","description":"","html":"","hero_img":""},
+  "tuesday": {"title":"","description":"","html":"","hero_img":""},
+  "wednesday": {"title":"","description":"","html":"","hero_img":""},
+  "thursday": {"title":"","description":"","html":"","hero_img":""},
+  "friday": {"title":"","description":"","html":"","hero_img":""},
+  "saturday": {"title":"","description":"","html":"","hero_img":""},
+  "sunday": {"title":"","description":"","html":"","hero_img":""},
+}
+
 const orderid = require('order-id')('randomgenid');
 var redisURLVal = process.env.REDISCLOUD_URL || 'redis://rediscloud:vWISiXr6xai89eidZYXjM0OK3KeXfkPU@redis-16431.c10.us-east-1-2.ec2.cloud.redislabs.com:16431';
 redisURL = url.parse(redisURLVal);
@@ -157,6 +186,42 @@ Return in JSON array format like [{"question":"","question":[{"option":"A","text
 app.get('/notify/', async (req, res) => {
   try {
     const prompt = `As an Indian pizza brand in Bangalore, what relevant event for the day can I quote to form a witty push notification message with title and description to remind people of an occasion to have pizza. Note: Please send 3 different response with topics of 1. cricket or significant event in sport, 2. new OTT release 3. TV screening or festival or significant event of the day. Keep the response in a json array format: eg [{"title":"","description":""},...]. Keep the title and description to a single line with title and description less than 14 words`;
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    console.log('--response--', response.choices[0].message);
+    const messages = response.choices[0].message.content;
+
+    res.send(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating notifications");
+  }
+});
+
+app.get('/article/', async (req, res) => {
+  try {
+    const prompt = `As a health-first exotic pizza brand in Bangalore, create an article on recent healthy food trend with a stock photo from pexels.com or similar that's vegetarian-friendly. Let the content have clear structure with styling for headlines, quoted text etc. Keep the response in a json array format: eg {"title":"","html":""}. Keep the content to a minimum of 500 words`;
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    console.log('--response--', response.choices[0].message);
+    const messages = response.choices[0].message.content;
+
+    res.send(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating notifications");
+  }
+});
+
+app.get('/article-video/', async (req, res) => {
+  try {
+    const prompt = `As a health-first exotic pizza brand in Bangalore, create an article on enjoying pizza with today's OTT release. Let the content have clear structure with styling for headlines, quoted text etc and share an embddable Youtube URL. Keep the response in a json array format: eg {"title":"","videoUrl":"","html":""}. Keep the content to a minimum of 500 words`;
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [{ role: 'user', content: prompt }],
@@ -1256,6 +1321,10 @@ app.get("/dashboard-create-notif/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/content/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-game/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -1976,6 +2045,41 @@ client.connect(err => {
                             });
         }
     });
+
+    
+});
+
+app.get("/content-lookup/:day", async function(req, res) {
+  let day = req.params.day;
+  if (contentPostStore[day].title == '') {
+    try {
+      const prompt = contentPromptMap[contentDayMap[day]];
+      console.log('--content prompt--', prompt);
+      const response = await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+      });
+  
+      console.log('--response--', response.choices[0].message);
+      const messages = response.choices[0].message.content;
+      console.log('--messages--', messages);
+      contentPostStore[day] = messages;
+      console.log('--contentPostStore--', contentPostStore[day]);
+      res.send('content stored');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error generating notifications");
+    }
+  }
+});
+
+app.get("/get-push-content/:day", async function(req, res) {
+  let day = req.params.day;
+  if (contentPostStore[day].title != '') {
+    res.send(contentPostStore[day]);
+  } else {
+    res.send('error');
+  }
 });
 
 app.get("/locations-reach/:loc", function(req, res) {
@@ -2300,15 +2404,34 @@ app.post('/push-notif', function(req, res) {
   const description = req.body.description;
   console.log('--Push Title--', title);
   console.log('--Push Description--', description);
-  res.send('push success');
   axios
+  .post('https://api.pushalert.co/rest/v1/send', 'url=https://www.slimcrust.com/app&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
+  .then(res => {
+    console.log('Pushalert success: ');
+    res.send('push success');
+  })
+  .catch(error => {
+    console.log('Pushalert error: ', error);
+    res.send('push error');
+  });
+});
+
+app.post('/push-content-notif', function(req, res) {
+  const title = req.body.title;
+  const description = req.body.description;
+  const url = req.body.url;
+  console.log('--Push Title--', title);
+  console.log('--Push Description--', description);
+  console.log('--Push URL--', url);
+  res.send('push success');
+  /*axios
   .post('https://api.pushalert.co/rest/v1/send', 'url=https://www.slimcrust.com/app&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
   .then(res => {
     console.log('Pushalert success: ');
   })
   .catch(error => {
     console.log('Pushalert error: ', error);
-  });
+  });*/
 });
 
 app.post('/eventOrder', function(req, res) {
