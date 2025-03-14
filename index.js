@@ -2302,9 +2302,9 @@ app.post('/push-notif', function(req, res) {
   console.log('--Push Description--', description);
   res.send('push success');
   axios
-  .post('https://api.pushalert.co/rest/v1/send', 'title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
+  .post('https://api.pushalert.co/rest/v1/send', 'url=https://www.slimcrust.com/app&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
   .then(res => {
-    console.log('Pushalert success: ', res);
+    console.log('Pushalert success: ');
   })
   .catch(error => {
     console.log('Pushalert error: ', error);
