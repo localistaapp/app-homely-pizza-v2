@@ -376,7 +376,7 @@ class CreateNotification extends Component {
     sendNotif(pTitle, pDesc) {
         axios.post(`/push-notif`, {title: pTitle, description: pDesc}).then((response) => {
             console.log('--Push Response--', response);
-            window.location.href='/dashboard-create-notif?status=success';
+            setTimeout(()=>{window.location.href='/dashboard-create-notif?status=success';},2000);
         });
     }
     handleTabChange(event, newValue) {
