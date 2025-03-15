@@ -950,8 +950,8 @@ class Dashboard extends Component {
         
         const now = new Date();
         const timestamp = new Date(savedDate);
-        //let duration = 90;
-        let duration = 3;//use above for prod
+        let duration = 90;
+        //let duration = 3;//use above for prod
         const ninetyMinutesInMs = duration * 60 * 1000;
         
         return (now - timestamp) > ninetyMinutesInMs;
