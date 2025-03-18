@@ -382,7 +382,8 @@ class CreateNotification extends Component {
         });
     }
     sendContentNotif(pTitle, pDesc, pUrl) {
-        axios.post(`/push-content-notif`, {title: pTitle, description: pDesc, url: pUrl}).then((response) => {
+        const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+        axios.post(`/push-content-notif`, {title: pTitle, description: pDesc, url: pUrl, currDay: dayName}).then((response) => {
             console.log('--Push Response--', response);
             setTimeout(()=>{window.location.href='/dashboard-create-notif?status=success';},2000);
         });

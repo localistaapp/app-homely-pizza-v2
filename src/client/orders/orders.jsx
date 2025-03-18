@@ -16,7 +16,6 @@ import StoreChecklist from './storeChecklist.jsx';
 import StoreOnboarding from './storeOnboarding.jsx';
 import CreateEnquiry from './createEnquiry.jsx';
 import CreateNotification from './createNotification.jsx';
-import Content from './content.jsx';
 import CreateSampleOrder from'./createSampleOrder.jsx';
 import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import StoreMenu from'./storeMenu.jsx';
@@ -34,7 +33,6 @@ var QuoteResWithRouter = withRouter(QuoteRes);
 var CreateOrderWithRouter = withRouter(CreateOrder);
 var CreateEnquiryWithRouter = withRouter(CreateEnquiry);
 var CreateNotificationWithRouter = withRouter(CreateNotification);
-var ContentWithRouter = withRouter(Content);
 var CreateSampleOrderWithRouter = withRouter(CreateSampleOrder);
 var StoreLocationPannerWithRouter = withRouter(StoreLocationPlanner);
 var StoreMenuWithRouter = withRouter(StoreMenu);
@@ -94,12 +92,8 @@ render(<Router>
                                     <Route exact path="/" component={CreateNotificationWithRouter} />
                                 <Route  path="/dashboard-create-notif" component={CreateNotificationWithRouter} />
                             </div>)} />
-        <Route path="/content" exact render={() => (
-                            <div className="results">
-                                    <Route exact path="/" component={ContentWithRouter} />
-                                <Route  path="/content" component={ContentWithRouter} />
-                            </div>)} />
-                            <Route path="/dashboard-create-sample-order" exact render={() => (
+        
+        <Route path="/dashboard-create-sample-order" exact render={() => (
                     <div className="results">
                             <Route exact path="/" component={CreateSampleOrderWithRouter} />
                         <Route  path="/dashboard-create-sample-order" component={CreateSampleOrderWithRouter} />

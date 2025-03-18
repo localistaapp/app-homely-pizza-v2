@@ -1325,6 +1325,10 @@ app.get("/content/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/app/content/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'app.html'));
+});
+
 app.get("/dashboard-create-game/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -2420,6 +2424,7 @@ app.post('/push-content-notif', function(req, res) {
   const title = req.body.title;
   const description = req.body.description;
   const url = req.body.url;
+  const currDay = req.body.currDay;
   console.log('--Push Title--', title);
   console.log('--Push Description--', description);
   console.log('--Push URL--', url);
@@ -2432,6 +2437,9 @@ app.post('/push-content-notif', function(req, res) {
   .catch(error => {
     console.log('Pushalert error: ', error);
   });
+
+  contentPostStore[currDay] = {"title":"","description":"","html":"","hero_img":""};
+  console.log('--contentPostStore--', contentPostStore);
 });
 
 app.post('/eventOrder', function(req, res) {
