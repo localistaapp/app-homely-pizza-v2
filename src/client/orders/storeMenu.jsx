@@ -144,7 +144,7 @@ class Dashboard extends Component {
                     
                     const orderCount = res[0].count;
 
-                    if(window.currOrderCount != null && orderCount - sessionStorage.getItem('curr-order-count') > 0) {
+                    /*if(window.currOrderCount != null && orderCount - sessionStorage.getItem('curr-order-count') > 0) {
                         document.querySelector('.notif').style.display = 'inline';
                        
                         document.body.appendChild(notifAudio);
@@ -158,7 +158,7 @@ class Dashboard extends Component {
                         item.innerHTML = '<div class="top-bar" onclick="location.href=\'/web-orders\';"><div class="notif-container"><div class="notif-title">You have '+countVal+' new web '+orderSuffix+'!</div></div></div>';
                         document.body.appendChild(item);
                         notifAudio.play();
-                    }
+                    }*/
                     window.currOrderCount = orderCount;
                   } else {
                     this.setState({storeNotExists: true});
