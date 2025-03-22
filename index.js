@@ -2684,7 +2684,7 @@ app.post('/store/web-order', function(req, res) {
                                                 client.end();
                                         })
                                         //res.send("success--");
-                                        /*const mailOptions = {
+                                        const mailOptions = {
                                           from: "slimcrustbskowner@gmail.com",
                                           to: "slimcrustbsk@gmail.com",
                                           cc: 'sampath.oops@gmail.com',
@@ -2697,7 +2697,7 @@ app.post('/store/web-order', function(req, res) {
                                           } else {
                                             console.log("Email sent: ", info.response);
                                           }
-                                        });*/
+                                        });
                                         
                                         
                                     }
