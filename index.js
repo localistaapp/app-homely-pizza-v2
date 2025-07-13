@@ -271,6 +271,7 @@ app.post('/callback', async (req, res) => {
       console.log('--pstatus transactionId--', transactionId);
       console.log('--pstatus code--', code);
       console.log('--Order id--', req.query.oid);
+      console.log('--req.query--', req.query);
 
       //just like req.query.oid, get req.query.fromUrl if not null or empty, use fromUrl for redirection
 
