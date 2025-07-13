@@ -241,6 +241,9 @@ app.post('/callback', async (req, res) => {
   //check if the origin of the request can be identified as v2 pay from console logs
   //if so, based on that, redirect to another view - amuzely.com/app/***/pay=success page or v2 success page without header 
     //and update the am_online_order table instead of online_order table
+  let isAmOrderUrl = false;
+  let fromUrl = '';
+  let orderTable = 'online_order';
   try {
     console.log('-req.params-', req.params);
     console.log('-req.body-', req.body);
@@ -278,39 +281,59 @@ app.post('/callback', async (req, res) => {
         if (err) {
           console.error('error connecting', err.stack)
         } else {
-          client.query("UPDATE \"public\".\"online_order\" SET status = $1 where id = $2",
-              [code, req.query.oid], (err, response) => {
-                    if (err) {
-                      console.log(err)
-                        client.end();
-                    } else {
-                        client.end();
-                    }
-    
-                  });
+
+          client.query("select id,from_url from am_online_order where id=$1",
+                                          [req.query.oid], (err, responseSelect) => {
+                                                if (err) {
+                                                  console.log(err)
+                                                  client.end();
+                                                  res.send("error");
+                                                } else {
+                                                  if(responseSelect.rows && responseSelect.rows.length > 0) {
+                                                    isAmOrderUrl = true;  
+                                                    fromUrl = responseSelect.rows[0].from_url;
+                                                    orderTable = 'am_online_order';
+
+                                                  }
+                                                  client.query("UPDATE \"public\".\""+orderTable+"\" SET status = $1 where id = $2",
+                                                            [code, req.query.oid], (err, response) => {
+                                                                  if (err) {
+                                                                    console.log(err)
+                                                                      client.end();
+                                                                  } else {
+                                                                      client.end();
+                                                                  }
+                                                  
+                                                                });
+                                                }
+
+                                                // Handle different status codes
+                                                switch (code) {
+                                                  case 'PAYMENT_SUCCESS':
+                                                      console.log(transactionId+'--txn success--');
+                                                      //update here
+                                                      return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=success') : res.redirect('/app?apppay=success');
+                                                  case 'PAYMENT_ERROR':
+                                                  case 'PAYMENT_DECLINED':
+                                                    //update here
+                                                    console.log(transactionId+'--txn declined--');
+                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                                  case 'PAYMENT_PENDING':
+                                                    console.log(transactionId+'--txn pending--');
+                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                                  default:
+                                                    console.log(transactionId+'--txn unhandled/declined--');
+                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                              }
+
+
+                                          })
       }
     })
-      // Handle different status codes
-      switch (code) {
-          case 'PAYMENT_SUCCESS':
-              console.log(transactionId+'--txn success--');
-              //update here
-              return res.redirect('/app?apppay=success');
-          case 'PAYMENT_ERROR':
-          case 'PAYMENT_DECLINED':
-            //update here
-            console.log(transactionId+'--txn declined--');
-            return res.redirect('/app?apppay=failure');
-          case 'PAYMENT_PENDING':
-            console.log(transactionId+'--txn pending--');
-            return res.redirect('/app?apppay=failure');
-          default:
-            console.log(transactionId+'--txn unhandled/declined--');
-            return res.redirect('/app?apppay=failure');
-      }
+      
   } catch (error) {
       console.log('--error--', error);
-      return res.redirect('/app?apppay=failed');
+      return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failed') : res.redirect('/app?apppay=failed');
   }
 });
 
