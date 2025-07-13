@@ -305,26 +305,25 @@ app.post('/callback', async (req, res) => {
                                                                   }
                                                   
                                                                 });
+                                                      // Handle different status codes
+                                                      switch (code) {
+                                                        case 'PAYMENT_SUCCESS':
+                                                            console.log(transactionId+'--txn success--');
+                                                            //update here
+                                                            return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=success') : res.redirect('/app?apppay=success');
+                                                        case 'PAYMENT_ERROR':
+                                                        case 'PAYMENT_DECLINED':
+                                                          //update here
+                                                          console.log(transactionId+'--txn declined--');
+                                                          return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                                        case 'PAYMENT_PENDING':
+                                                          console.log(transactionId+'--txn pending--');
+                                                          return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                                        default:
+                                                          console.log(transactionId+'--txn unhandled/declined--');
+                                                          return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+                                                    }
                                                 }
-
-                                                // Handle different status codes
-                                                switch (code) {
-                                                  case 'PAYMENT_SUCCESS':
-                                                      console.log(transactionId+'--txn success--');
-                                                      //update here
-                                                      return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=success') : res.redirect('/app?apppay=success');
-                                                  case 'PAYMENT_ERROR':
-                                                  case 'PAYMENT_DECLINED':
-                                                    //update here
-                                                    console.log(transactionId+'--txn declined--');
-                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
-                                                  case 'PAYMENT_PENDING':
-                                                    console.log(transactionId+'--txn pending--');
-                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
-                                                  default:
-                                                    console.log(transactionId+'--txn unhandled/declined--');
-                                                    return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
-                                              }
 
 
                                           })
