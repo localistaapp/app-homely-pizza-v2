@@ -238,6 +238,9 @@ app.get('/article-video/', async (req, res) => {
 });
 
 app.post('/callback', async (req, res) => {
+  //check if the origin of the request can be identified as v2 pay from console logs
+  //if so, based on that, redirect to another view - amuzely.com/app/***/pay=success page or v2 success page without header 
+    //and update the am_online_order table instead of online_order table
   try {
     console.log('-req.params-', req.params);
     console.log('-req.body-', req.body);
@@ -265,6 +268,10 @@ app.post('/callback', async (req, res) => {
       console.log('--pstatus transactionId--', transactionId);
       console.log('--pstatus code--', code);
       console.log('--Order id--', req.query.oid);
+
+      /*
+      select order id, from_url from amuzely order db, if > 0 rows, res.redirect(from_url+'/pay=success')
+      */
 
       const client = new Client(dbConfig)
       client.connect(err => {
@@ -347,7 +354,6 @@ app.post('/api/my-initiate-payment', async (req, res) => {
       });
   }
 });
-
 
 var pages = [];
   fs.readFile("public/index.html", "utf8", function(err, data) {
