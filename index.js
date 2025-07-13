@@ -274,7 +274,12 @@ app.post('/callback', async (req, res) => {
       console.log('--req.query--', req.query);
 
       let orderIdVal = req.query.oid.split('::')[0];
-      let fromUrlVal = req.query.oid.split('::')[1];
+      let fromUrlVal = '';
+      if(req.query.oid.split('::')[1] == null) {
+        fromUrlVal = '';
+      } else {
+        fromUrlVal = req.query.oid.split('::')[1];
+      }
 
       //just like req.query.oid, get req.query.fromUrl if not null or empty, use fromUrl for redirection
 
@@ -325,23 +330,23 @@ app.post('/callback', async (req, res) => {
       case 'PAYMENT_SUCCESS':
           console.log(transactionId+'--txn success--');
           //update here
-          return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=success') : res.redirect('/app?apppay=success');
+          return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=success') : res.redirect('/app?apppay=success');
       case 'PAYMENT_ERROR':
       case 'PAYMENT_DECLINED':
         //update here
         console.log(transactionId+'--txn declined--');
-        return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=failure') : res.redirect('/app?apppay=failure');
       case 'PAYMENT_PENDING':
         console.log(transactionId+'--txn pending--');
-        return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=failure') : res.redirect('/app?apppay=failure');
       default:
         console.log(transactionId+'--txn unhandled/declined--');
-        return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failure') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=failure') : res.redirect('/app?apppay=failure');
   }
       
   } catch (error) {
       console.log('--error--', error);
-      return isAmOrderUrl ? res.redirect(fromUrl+'?apppay=failed') : res.redirect('/app?apppay=failed');
+      return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=failed') : res.redirect('/app?apppay=failed');
   }
 });
 
