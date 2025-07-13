@@ -272,6 +272,8 @@ app.post('/callback', async (req, res) => {
       console.log('--pstatus code--', code);
       console.log('--Order id--', req.query.oid);
 
+      //just like req.query.oid, get req.query.fromUrl if not null or empty, use fromUrl for redirection
+
       /*
       select order id, from_url from amuzely order db, if > 0 rows, res.redirect(from_url+'/pay=success')
       */
@@ -338,13 +340,14 @@ app.post('/callback', async (req, res) => {
 
 app.post('/api/my-initiate-payment', async (req, res) => {
   try {
-      const { amount, customerDetails } = req.body;
+      const { amount, customerDetails, fromUrl } = req.body;
       
       const payload = {
           merchantId: config.merchantId,
           merchantTransactionId: `TX_${Date.now()}`,
           merchantUserId: customerDetails.userId,
           amount: amount * 100,
+          fromUrl: fromUrl,
           redirectUrl: config.redirectUrl,
           redirectMode: "POST",
           callbackUrl: config.callbackUrl+customerDetails.orderId,

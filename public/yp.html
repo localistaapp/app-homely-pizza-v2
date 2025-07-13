@@ -1459,11 +1459,12 @@ async function initiatePayment() {
     let amount = window.location.href.split('&')[1].split('=')[1];
     let orderId = window.location.href.split('&')[0].split('=')[1];
     let mobile = window.location.href.split('&')[2].split('=')[1];
+    let fromUrl = window.location.href.split('&')[4].split('=')[1];
 
     var customerDetails = {
             userId: '3414',
             mobileNumber: mobile,
-            orderId: orderId
+            orderId: orderId,
         };
     try {
         const response = await fetch('https://www.slimcrust.com/api/my-initiate-payment', {
@@ -1473,6 +1474,7 @@ async function initiatePayment() {
             },
             body: JSON.stringify({
                 amount,
+                fromUrl,
                 customerDetails
             })
         });
