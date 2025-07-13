@@ -351,7 +351,7 @@ app.post('/api/my-initiate-payment', async (req, res) => {
           fromUrl: fromUrl,
           redirectUrl: config.redirectUrl,
           redirectMode: "POST",
-          callbackUrl: config.callbackUrl+customerDetails.orderId,
+          callbackUrl: config.callbackUrl+customerDetails.orderId+'&fromUrl='+fromUrl,
           mobileNumber: customerDetails.mobileNumber,
           paymentInstrument: {
               type: "PAY_PAGE"
