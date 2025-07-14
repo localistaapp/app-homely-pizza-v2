@@ -278,7 +278,7 @@ app.post('/callback', async (req, res) => {
       if(req.query.oid.split('::')[1] == null) {
         fromUrlVal = '';
       } else {
-        fromUrlVal = req.query.oid.split('::')[1];
+        fromUrlVal = req.query.oid.split('::')[1].split('=')[1];
       }
 
       //just like req.query.oid, get req.query.fromUrl if not null or empty, use fromUrl for redirection
@@ -342,7 +342,7 @@ app.post('/callback', async (req, res) => {
       default:
         console.log(transactionId+'--txn unhandled/declined--');
         return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=failure') : res.redirect('/app?apppay=failure');
-  }
+    }
       
   } catch (error) {
       console.log('--error--', error);
