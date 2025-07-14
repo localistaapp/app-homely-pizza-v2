@@ -329,6 +329,7 @@ app.post('/callback', async (req, res) => {
     switch (code) {
       case 'PAYMENT_SUCCESS':
           console.log(transactionId+'--txn success--');
+          console.log('--return val--', fromUrlVal != '' ? fromUrlVal+'?apppay=success' : '/app?apppay=success');
           //update here
           return fromUrlVal != '' ? res.redirect(fromUrlVal+'?apppay=success') : res.redirect('/app?apppay=success');
       case 'PAYMENT_ERROR':
