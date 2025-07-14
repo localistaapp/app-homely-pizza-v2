@@ -331,23 +331,23 @@ app.post('/callback', async (req, res) => {
           console.log(transactionId+'--txn success--');
           console.log('--return val--', fromUrlVal != '' ? fromUrlVal+'?apppay=success' : '/app?apppay=success');
           //update here
-          return fromUrlVal != '' ? res.redirect('https://www.slimcrust.com/yp.html') : res.redirect('/app?apppay=success');
+          return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=success');
       case 'PAYMENT_ERROR':
       case 'PAYMENT_DECLINED':
         //update here
         console.log(transactionId+'--txn declined--');
-        return fromUrlVal != '' ? res.redirect('https://www.slimcrust.com/yp.html') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
       case 'PAYMENT_PENDING':
         console.log(transactionId+'--txn pending--');
-        return fromUrlVal != '' ? res.redirect('https://www.slimcrust.com/yp.html') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
       default:
         console.log(transactionId+'--txn unhandled/declined--');
-        return fromUrlVal != '' ? res.redirect('https://www.slimcrust.com/yp.html') : res.redirect('/app?apppay=failure');
+        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
     }
       
   } catch (error) {
       console.log('--error--', error);
-      return fromUrlVal != '' ? res.redirect('https://www.slimcrust.com/yp.html') : res.redirect('/app?apppay=failed');
+      return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failed');
   }
 });
 
