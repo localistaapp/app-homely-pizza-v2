@@ -142,7 +142,7 @@ class LocationService {
                     let localityName = escape(loc.locality);
                     console.log('--i--', i);
                     console.log('--keyParam--', localityName);
-                    urls[i] = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg&address='+localityName;
+                    urls[i] = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyA38gnkeYsgyTgs4vAXt2r10Vlgg1R2-ec&address='+localityName;
                     const responseData = await retrieve(urls[i]);
                     count++;
                     if (responseData && responseData.results && responseData.results.length > 1) {
@@ -213,7 +213,7 @@ class LocationService {
         return existingLocData.reverse();
     }
     static async fetchNearByPlaces(loc) {
-        const responseData = await retrieve('https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&query=pizza%20restaurant%20%25in%20'+escape(loc)+'&inputtype=textquery&key=%20AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg');
+        const responseData = await retrieve('https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&query=pizza%20restaurant%20%25in%20'+escape(loc)+'&inputtype=textquery&key=%20AIzaSyA38gnkeYsgyTgs4vAXt2r10Vlgg1R2-ec');
         return responseData.results;
     }
 }

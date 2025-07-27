@@ -64,7 +64,7 @@ class Nearby extends Component {
                   <span className="heading">{place.name}</span>
                   
                   <div className="image-container">
-                    <img src={`https://maps.googleapis.com/maps/api/place/photo?photoreference=${place.photos && place.photos.length > 0 && place.photos[0].photo_reference}&sensor=false&maxheight=250&maxwidth=250&key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg`} />
+                    <img src={`https://maps.googleapis.com/maps/api/place/photo?photoreference=${place.photos && place.photos.length > 0 && place.photos[0].photo_reference}&sensor=false&maxheight=250&maxwidth=250&key=AIzaSyA38gnkeYsgyTgs4vAXt2r10Vlgg1R2-ec`} />
                   </div>
                   <div className="nearby-address">
                   {place.formatted_address}
@@ -132,7 +132,7 @@ class Dashboard extends Component {
         }];
     }
     drawMap(loc, defaultLat, defaultLong) {
-      $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization,geometry&key=AIzaSyBvSR-z-DPXEfccE9bwj-FdH1fbsQl60Qg")
+      $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization,geometry&key=AIzaSyA38gnkeYsgyTgs4vAXt2r10Vlgg1R2-ec")
               .done(function(script, textStatus) {
                 var myLatlng = new google.maps.LatLng(defaultLat, defaultLong);
                 window.globalmap = new google.maps.Map(document.getElementById("map-canvas"), {
