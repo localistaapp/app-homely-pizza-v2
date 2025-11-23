@@ -1106,6 +1106,7 @@ class Dashboard extends Component {
                             <div id="checkoutCount" class="c-count">0</div>
                         </div>
                     </div>
+                    <div className="corp-floater" onClick={()=>{window.location.href = '/cafe/zolo';}}>corporate</div>
                     {this.state.clubUserSrc != '' || localStorage.getItem('club-user-pic') != null && <img className='club-user-avatar' src={localStorage.getItem('club-user-pic')} onClick={()=>{document.querySelector("#dialog").showModal()}}/>}
                     {status == 'success' && <span className="stage-heading status-success">Order created successfully</span>}
                     <Paper>
