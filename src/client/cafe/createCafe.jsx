@@ -433,6 +433,7 @@ class Dashboard extends Component {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
         var signedInUser = false;
+        this.setState({curStep: 1});
         if(localStorage.getItem('corporateCode') != null) {
             axios.get(`/corporateUser/get/${localStorage.getItem('corporateCode')}`)
           .then(function (response) {
@@ -816,6 +817,8 @@ class Dashboard extends Component {
     render() {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
         console.log('::results::', results);
+        console.log('--curStep--', curStep);
+
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src={`../img/images/${window.location.pathname.split('/')[2]}.jpg`} style={{width: '160px',zIndex:'-1'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/logo_scr.jpg" style={{zIndex:'-1'}} />
@@ -831,56 +834,9 @@ class Dashboard extends Component {
                     <Paper>
 
                                               <TabPanel value={this.state.value} index={0}>
-                                                {!this.state.loggedIn && <div className="club-main" >
-                                                   <span className="club-heading" style={{top: '12px'}}>Welcome to the Cafe!</span>
-                                                   <hr className="line-light" style={{marginTop: '52px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                   <span className="club-desc" >Login with your Google account for instant access.</span>
-                                                   <br/><br/><br/>
-                                                   <img className='club-banner' src="../img/images/online-order.png" />
-                                                   {localStorage.getItem('corporate-user') == null && this.state.corporateUserSrc == '' && localStorage.getItem('corporate-user-pic') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
-                                                   <br/><br/><br/><br/><br/>
-                                                   <br/><br/><br/><br/>
-                                                </div>}
-                                                {this.state.loggedIn && curStep != 3 &&
-                                                   <div className="md-stepper-horizontal orange">
-                                                        <div id="step1" className="md-step" style={{paddingLeft: '10px'}}>
-                                                        <div className={`md-step-circle ${this.state.curStep == 1 ? 'active' : ''}`}><span>1</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 1 ? 'active' : ''}`}>Subscribe</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
-                                                        <div id="step3" className="md-step">
-                                                        <div className={`md-step-circle ${this.state.curStep == 3 ? 'active' : ''}`}><span>2</span></div>
-                                                        <div className={`md-step-title ${this.state.curStep == 3 ? 'active' : ''}`}>Menu</div>
-                                                        <div className="md-step-bar-left"></div>
-                                                        <div className="md-step-bar-right"></div>
-                                                        </div>
-                                                    </div>}
-                                                {curStep == 1 && <div>
-                                                    <span className="club-heading" style={{top: '12px'}}></span>
-                                                        <hr className="line-light" style={{marginTop: '22px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-1" >Subscribe to notifications to continue. You will receive your order notifications.</span>
-                                                        <br/><br/><br/>
-                                                        <img className='club-banner' src="../img/images/online-order.png" style={{marginTop: '26px'}}/>
-                                                        {localStorage.getItem('corporate-user') == null && this.state.corporateUserSrc == '' && localStorage.getItem('corporate-user-email') == null && <GoogleOneTapLogin onError={(error) => console.log(error)} onSuccess={(response) => {console.log('club login response: ',response);this.login(response);}} googleAccountConfigs={{ client_id: '854842086574-uk0kfphicblidrs1pkbqi7r242iaih80.apps.googleusercontent.com',auto_select: false,cancel_on_tap_outside: false }} />}
-                                                        <br/>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();this.loadSurvey();}}>Next</a>
-                                                        <br/>
-                                                   </div>}
-                                                   {curStep == 2 && <div>
-                                                    <span className="club-heading" style={{top: '12px'}}></span>
-                                                        <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
-                                                        <span className="club-desc-2" >Your club code:<span className="club-code">{localStorage.getItem('corporateCode')}</span></span>
-                                                        <br/>
-                                                        <span className='club-desc-1' style={{marginTop: '64px'}}>
-                                                        🎉 You're now a CLUB member! Share your experience to get more loyalty benefits.
-                                                        </span>
-                                                        <br/>
-                                                        <button type="button" className="login-with-google-btn" onClick={()=>{window.open('https://g.page/r/CQwiiF6lQrvREBM/review');}}>Share via Google</button>
-                                                        <a id="nextStep1" class="button" style={{bottom: '20px'}} onClick={()=>{this.changeStep(3);this.onboardClubUser();}}>Next</a>
-                                                        <br/>
-                                                   </div>}
-                                                   {curStep == 3 && <div>
+                                                
+                                                  
+                                                   {(curStep == 0 || curStep == 1) && <div>
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
                                                         {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
