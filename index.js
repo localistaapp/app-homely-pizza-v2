@@ -392,6 +392,47 @@ app.post('/api/my-initiate-payment', async (req, res) => {
   }
 });
 
+app.post('/api/corp-initiate-payment', async (req, res) => {
+  try {
+      const { amount, customerDetails, fromUrl } = req.body;
+      
+      const payload = {
+          merchantId: config.merchantId,
+          merchantTransactionId: `TX_${Date.now()}`,
+          merchantUserId: customerDetails.userId,
+          amount: amount * 100,
+          redirectUrl: config.redirectUrl,
+          redirectMode: "POST",
+          callbackUrl: config.callbackUrl+customerDetails.orderId+'::fromUrl='+fromUrl,
+          mobileNumber: customerDetails.mobileNumber,
+          paymentInstrument: {
+              type: "PAY_PAGE"
+          }
+      };
+
+      const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+      const checksum = generateHash(base64Payload);
+
+      const response = await axios.post(config.apiEndpoint, 
+          { request: base64Payload },
+          { 
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-VERIFY': checksum
+              }
+          }
+      );
+
+      res.json(response.data);
+  } catch (error) {
+      console.error('Payment initiation failed:', error);
+      res.status(500).json({ 
+          success: false, 
+          message: error.message || 'Payment initiation failed' 
+      });
+  }
+});
+
 var pages = [];
   fs.readFile("public/index.html", "utf8", function(err, data) {
     pages.index = data;

@@ -829,6 +829,93 @@ class Dashboard extends Component {
         });
         console.log('--voted item--', itemName);
     }
+    startPayment(name, mobile, price, orderId) {
+        const customerDetails = {
+            userId: name,
+            mobileNumber: mobile,
+            orderId: orderId
+        };
+        
+        this.initiatePayment(price, customerDetails) // Amount in rupees
+            .then(response => {
+                console.log('Transaction initiated:', response);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+    async initiatePayment (amount, customerDetails) {
+        try {
+            const response = await fetch('https://www.slimcrust.com/api/corp-initiate-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount,
+                    customerDetails
+                })
+            });
+    
+            const result = await response.json();
+            
+            if (result.success) {
+                // Redirect to PhonePe payment page
+                window.location.href = result.data.instrumentResponse.redirectInfo.url;
+            } else {
+                throw new Error(result.message || 'Transaction failed');
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Payment initiation failed:', error);
+            throw error;
+        }
+    }
+    generateUserId() {
+        // 1. Fixed prefix
+        const prefix = "USR";
+      
+        // 2. Randomly permute "ABCD"
+        const letters = ["A", "B", "C", "D"];
+        for (let i = letters.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [letters[i], letters[j]] = [letters[j], letters[i]]; // Fisher–Yates shuffle
+        }
+        const randomLetters = letters.join("");
+      
+        // 3. Random 6-digit number (000000–999999)
+        const randomNumber = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
+      
+        // 4. Final ID
+        return `${prefix}-${randomLetters}-${randomNumber}`;
+      }
+    generateOrderId() {
+        // 1. Fixed prefix
+        const prefix = "OCRP";
+      
+        // 2. Randomly permute "ABCD"
+        const letters = ["A", "B", "C", "D"];
+        for (let i = letters.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [letters[i], letters[j]] = [letters[j], letters[i]]; // Fisher–Yates shuffle
+        }
+        const randomLetters = letters.join("");
+      
+        // 3. Random 6-digit number (000000–999999)
+        const randomNumber = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
+      
+        // 4. Final ID
+        return `${prefix}-${randomLetters}-${randomNumber}`;
+      }
+      
+    payNow() {
+        let oName = this.generateUserId();
+        let oMobile = '7619514999';
+        let oPrice = Math.round(this.getTotal());
+        let orderId = this.generateOrderId();
+        this.startPayment(oName,oMobile,oPrice,orderId);
+    }
 
     render() {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect, isVotingEnabled} = this.state;
@@ -903,7 +990,7 @@ class Dashboard extends Component {
                                 <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
                                     <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl convenience charges.)</div>
                                 </div>
-                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');this.setState({showCoupon: false, activeStep: 3});document.getElementById('step2Circle').classList.add('active');}}>Pay at kiosk&nbsp;→
+                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');document.getElementById('step2Circle').classList.add('active');this.payNow();}}>Pay at kiosk&nbsp;→
                                     <div className=""></div>
                                 </div>
                               </div>}
