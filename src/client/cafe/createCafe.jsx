@@ -412,6 +412,7 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
+            isVotingEnabled: new Date().getHours() < 22,
             loggedIn: localStorage.getItem('corporate-user-email') != null
         };
         window.weekdays = new Array(7);
@@ -813,18 +814,34 @@ class Dashboard extends Component {
             window.location.href='/create-pg-payment?amount='+amount+'&orderId='+orderId;
         }, 2000);
     }
+    saveVote() {
+        let basket = JSON.parse(localStorage.getItem('basket'));
+        let itemName = Object.entries(basket)[0][1].name;
+
+        const order = itemName;
+        const type = 'vote';
+        const status = 'COMPLETED';
+        const price = '';
+        const cafeteriaName = location.pathname.split('/')[2];
+
+        axios.post(`/corporate-order/create`, {order: order, type: type, status: status, price: price,  cafeteriaName: cafeteriaName}).then((response) => {
+            console.log('--Response--', response);
+        });
+        console.log('--voted item--', itemName);
+    }
 
     render() {
-        const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect} = this.state;
+        const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect, isVotingEnabled} = this.state;
         console.log('::results::', results);
         console.log('--curStep--', curStep);
+        console.log('--isVotingEnabled--', isVotingEnabled);
 
         return (<div style={{marginTop: '84px'}}>
                     <img id="logo" className="logo-img" src={`../img/images/${window.location.pathname.split('/')[2]}.jpg`} style={{width: '160px',zIndex:'-1'}} onClick={()=>{window.location.href='/dashboard';}} />
                     <img className='club-logo' src="../img/images/logo_scr.jpg" style={{zIndex:'-1'}} />
                     <span className='club' style={{zIndex:'-1'}}>Cafe</span>
                     <div id="checkoutHeader">
-                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-40px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []});}}>Pre-order&nbsp;→
+                        <div id="checkoutBtn" className="card-btn checkout" onClick={()=>{document.getElementById('checkoutModal').style.top='-55px';this.setState({orderSummary: localStorage.getItem('basket') != null ? JSON.parse(localStorage.getItem('basket')) : []}); this.saveVote(); }}>{isVotingEnabled ? 'Vote Now' :'Pre-order'}&nbsp;→
                             <div className=""></div>
                             <div id="checkoutCount" class="c-count">0</div>
                         </div>
@@ -840,7 +857,7 @@ class Dashboard extends Component {
                                                     <span className="club-heading" style={{top: '12px'}}></span>
                                                         <hr className="line-light" style={{marginTop: '4px', marginBottom: '0px',visibility: 'hidden'}}/>
                                                         {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
-                                                        {this.state.orderSavings == 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Place your cafeteria order with best of savings!</span>}
+                                                        {this.state.orderSavings == 0 && <span className={`club-desc-2 ${isVotingEnabled ? 'vote' : '' }`} style={{fontSize: '15px'}}>🎉  {isVotingEnabled ? 'Please vote for your favourite meal for the day' : 'Place your cafeteria order with best of savings!'}</span>}
                                                         <br/>
                                                        
                                                        
@@ -854,7 +871,7 @@ class Dashboard extends Component {
                                 </div>
                             </div>
                             <div className="md-stepper-horizontal orange" style={{marginTop:'56px',marginLeft:'-10px'}}>
-                                <div class="pre-order-msg">Meal pre-ordered successfully!</div>
+                                <div class="pre-order-msg">{ isVotingEnabled ? 'Meal voting successful!'  : 'Meal pre-ordered successfully!'}</div>
                                 <div id="step1" className="md-step">
                                   <div className="md-step-circle active"><span>1</span></div>
                                   <div className="md-step-title">Pre-Order Summary</div>

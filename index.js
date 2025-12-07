@@ -1340,6 +1340,10 @@ app.get("/web-orders/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
 
+app.get("/dashboard-store-corporate/", function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
+});
+
 app.get("/dashboard-create-order/", function(request, response) {
   response.sendFile(path.resolve(__dirname, 'public', 'orders.html'));
 });
@@ -2307,6 +2311,39 @@ app.get("/store/name/:franchiseId", function(req, res) {
 
 });
 
+app.get("/corporate-votes/:franchiseId", function(req, res) {
+  let franchiseId = req.params.franchiseId;
+  const client = new Client(dbConfig)
+
+    client.connect(err => {
+        if (err) {
+          console.error('error connecting', err.stack)
+          res.send('{}');
+          client.end();
+        } else {
+            client.query("SELECT \"order\", COUNT(*) AS vote_count FROM corporate_order WHERE franchise_id=$1 AND created_at::date = CURRENT_DATE GROUP BY \"order\" ORDER BY vote_count DESC LIMIT 2",
+                        [franchiseId], (err, response) => {
+                              if (err) {
+                                console.log(err);
+                                res.send("error");
+                                client.end();
+                              } else {
+                                 //res.send(response.rows);
+                                 if (response.rows.length == 0) {
+                                    res.send("error");
+                                    client.end();
+                                 } else {
+                                    res.send(response.rows);
+                                    client.end();
+                                 }
+                              }
+                            });
+         }
+    });
+
+
+});
+
 app.get("/web-orders/:franchiseId", function(req, res) {
   let franchiseId = req.params.franchiseId;
   const client = new Client(dbConfig)
@@ -2882,6 +2919,36 @@ app.post('/createClubUser', function(req, res) {
   }
  })
 });
+
+app.post('/corporate-order/create', function(req, res) {
+
+  const storeId = 77;
+  const franchiseId = 6;
+  const order = req.body.order;
+  const type = req.body.type;
+  const status = req.body.status;
+  const price = req.body.price;
+  const cafeteriaName = req.body.cafeteriaName;
+    
+  const client = new Client(dbConfig)
+  client.connect(err => {
+    if (err) {
+      console.error('error connecting', err.stack)
+    } else {
+      console.log('connected');
+      client.query("INSERT INTO \"public\".\"corporate_order\"(store_id, \"order\", status, type, price, cafeteria_name, franchise_id) VALUES($1, $2, $3, $4, $5, $6, $7)",
+                        [storeId, order, status, type, price, cafeteriaName, franchiseId], (err, response) => {
+                              if (err) {
+                                console.log(err)
+                                 res.send("error");
+                              } else {
+                                  //res.send(response);
+                                  res.send('success');
+                              }
+  
+                            });
+                          }});
+});  
 
 app.post('/createCorporateUser', function(req, res) {
   

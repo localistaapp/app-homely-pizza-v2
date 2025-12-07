@@ -21,6 +21,7 @@ import StoreLocationPlanner from'./storeLocationPlanner.jsx';
 import StoreMenu from'./storeMenu.jsx';
 import Enquiries from './enquiries.jsx';
 import WebOrders from './webOrders.jsx';
+import Corporate from './corporate.jsx';
 import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
 
 
@@ -44,6 +45,7 @@ var StoreInventoryWithRouter = withRouter(StoreInventory);
 var StoreChecklistWithRouter = withRouter(StoreChecklist);
 var StoreOnboardingWithRouter =  withRouter(StoreOnboarding);
 var WebOrdersWithRouter = withRouter(WebOrders);
+var CorporateWithRouter = withRouter(Corporate);
 
 render(<Router>
     <div>
@@ -142,6 +144,12 @@ render(<Router>
         <div className="results">
                 <Route exact path="/" component={StoreOnboardingWithRouter} />
             <Route  path="/dashboard-store-onboarding" component={StoreOnboardingWithRouter} />
+        </div>)} />
+
+        <Route path="/dashboard-store-corporate/" exact render={() => (
+        <div className="results">
+                <Route exact path="/" component={CorporateWithRouter} />
+            <Route  path="/dashboard-store-corporate" component={CorporateWithRouter} />
         </div>)} />
 
         <Route path="/store" exact render={() => (
