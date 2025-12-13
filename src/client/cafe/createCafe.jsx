@@ -413,6 +413,8 @@ class Dashboard extends Component {
             currDayTimings: [],
             showOrderConfirmationMsg: false,
             isVotingEnabled: new Date().getHours() < 22,
+            orderedItemAmount: 0,
+            orderedItemName: '',
             loggedIn: localStorage.getItem('corporate-user-email') != null
         };
         window.weekdays = new Array(7);
@@ -431,6 +433,16 @@ class Dashboard extends Component {
     componentDidMount() {
         sessionStorage.removeItem('corp-payment-processing');
         var winHeight = window.innerHeight;
+        let itemName = '';
+        let itemAmount = 0;
+
+        if(location.href.indexOf('?apppay=success') != -1) {
+            itemName = sessionStorage.getItem('corp-item-val');
+            itemAmount = sessionStorage.getItem('corp-payment-val');
+            this.setState({orderedItemName: itemName});
+            this.setState({orderedItemAmount: itemAmount});
+        }
+
         if(window.pushalertbyiw ) {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
         }
@@ -836,6 +848,10 @@ class Dashboard extends Component {
             mobileNumber: mobile,
             orderId: orderId
         };
+        //ToDo: Remove
+        sessionStorage.setItem('corp-payment-val', '180');
+        sessionStorage.setItem('corp-item-val',item);
+        sessionStorage.setItem('corp-payment-processing',window.location.href);
         
         this.initiatePayment(price, customerDetails, item) // Amount in rupees
             .then(response => {
@@ -932,6 +948,20 @@ class Dashboard extends Component {
                                                         {this.state.orderSavings != 0 && <span className="club-desc-2" style={{fontSize: '15px'}}>🎉  Your savings with club till now: ₹<span className="club-code" id="orderSavings">{this.state.orderSavings}</span></span>}
                                                         {this.state.orderSavings == 0 && <span className={`club-desc-2 ${isVotingEnabled ? 'vote' : '' }`} style={{fontSize: '15px'}}>🎉  {isVotingEnabled ? 'Please vote for your favourite meal for the day' : 'Place your cafeteria order with best of savings!'}</span>}
                                                         <br/>
+
+                                                        {this.state.orderedItemName != '' && 
+                                                            <div><div className="modal">
+                                                                    <div className="modal-dialog" onClick={()=>{this.setState({orderedItemName: ''});}}>
+                                                                        <span><b>Item Ordered Successfully!</b></span>
+                                                                        <br/><br/><br/>
+                                                                        <span>Item:</span><span>{this.state.orderedItemName}</span>
+                                                                        <br/>
+                                                                        <span>Price: </span><span>{this.state.orderedItemAmount}</span>
+                                                                        <span className="cross-lbl"><b>x</b></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
                                                        
                                                        
                                                        
