@@ -238,122 +238,92 @@ app.get('/article-video/', async (req, res) => {
 });
 
 app.post('/callback', async (req, res) => {
-  //check if the origin of the request can be identified as v2 pay from console logs
-  //if so, based on that, redirect to another view - amuzely.com/app/***/pay=success page or v2 success page without header 
-    //and update the am_online_order table instead of online_order table
-  let isAmOrderUrl = false;
+  let client;
   let fromUrl = '';
   let orderTable = 'online_order';
+
   try {
     console.log('-req.params-', req.params);
     console.log('-req.body-', req.body);
-      
-      const encodedResponse = req.body.response;
-      console.log('-encodedResponse-', encodedResponse);
-      // Decode from base64
-      const decodedResponse = Buffer.from(encodedResponse, 'base64').toString();
-      
-      // Parse the JSON string to object
-      const responseObj = JSON.parse(decodedResponse);
-      
-      console.log('-encodedResponse-', responseObj);
-      
-      // Verify callback authenticity
-      /*const checksum = req.headers['x-verify'];
-      const calculatedChecksum = generateHash(JSON.stringify(req.body), '/pg/v1/status');
-      
-      if (checksum !== calculatedChecksum) {
-          throw new Error('Invalid callback signature');
-      }*/
 
-      let transactionId = responseObj.data.merchantTransactionId;
-      let code = responseObj.code;
-      console.log('--pstatus transactionId--', transactionId);
-      console.log('--pstatus code--', code);
-      console.log('--Order id--', req.query.oid);
-      console.log('--req.query--', req.query);
+    // 1️⃣ Decode response
+    const encodedResponse = req.body.response;
+    const decodedResponse = Buffer.from(encodedResponse, 'base64').toString();
+    const responseObj = JSON.parse(decodedResponse);
 
-      let orderIdVal = req.query.oid.split('::')[0];
-      let fromUrlVal = '';
-      if(req.query.oid.split('::')[1] == null) {
-        fromUrlVal = '';
-      } else {
-        fromUrlVal = req.query.oid.split('::')[1].split('=')[1];
-      }
+    const transactionId = responseObj?.data?.merchantTransactionId;
+    const code = responseObj?.code;
 
-      //just like req.query.oid, get req.query.fromUrl if not null or empty, use fromUrl for redirection
+    console.log('--txn id--', transactionId);
+    console.log('--status code--', code);
+    console.log('--req.query--', req.query);
 
-      /*
-      select order id, from_url from amuzely order db, if > 0 rows, res.redirect(from_url+'/pay=success')
-      */
+    // 2️⃣ Extract order id safely
+    const rawOid = req.query.oid || '';
+    const orderIdVal = rawOid.split('::')[0];
 
-      const client = new Client(dbConfig)
-      client.connect(err => {
-        if (err) {
-          console.error('error connecting', err.stack)
-        } else {
+    if (!orderIdVal) {
+      console.error('❌ Missing order id');
+      return res.redirect('/app?apppay=failure');
+    }
 
-          client.query("select id,from_url from am_online_order where id=$1",
-                                          [orderIdVal], (err, responseSelect) => {
-                                                if (err) {
-                                                  console.log(err)
-                                                  client.end();
-                                                  res.send("error");
-                                                } else {
-                                                  if(responseSelect.rows && responseSelect.rows.length > 0) {
-                                                    isAmOrderUrl = true;  
-                                                    fromUrl = responseSelect.rows[0].from_url;
-                                                    orderTable = 'am_online_order';
+    // 3️⃣ DB lookup
+    client = new Client(dbConfig);
+    await client.connect();
 
-                                                  }
-                                                  client.query("UPDATE \"public\".\""+orderTable+"\" SET status = $1 where id = $2",
-                                                            [code, orderIdVal], (err, response) => {
-                                                                  if (err) {
-                                                                    console.log(err)
-                                                                      client.end();
-                                                                  } else {
-                                                                      client.end();
-                                                                  }
-                                                  
-                                                                });
-                                                }
+    const selectRes = await client.query(
+      'SELECT id, from_url FROM am_online_order WHERE id = $1',
+      [orderIdVal]
+    );
 
+    if (selectRes.rows.length > 0) {
+      fromUrl = selectRes.rows[0].from_url || '';
+      orderTable = 'am_online_order';
+    }
 
-                                          })
-      
-      
-       }
-    })
+    // 4️⃣ Update status
+    await client.query(
+      `UPDATE public."${orderTable}" SET status = $1 WHERE id = $2`,
+      [code, orderIdVal]
+    );
 
-    // Handle different status codes
+    // 5️⃣ Decide redirect (single exit)
+    let redirectUrl = '/app?apppay=failure';
+
     switch (code) {
       case 'PAYMENT_SUCCESS':
-          console.log(transactionId+'--txn success--');
-          console.log('--return val--', fromUrlVal != '' ? fromUrlVal+'?apppay=success' : '/app?apppay=success');
+        console.log(transactionId + '--txn success--');
 
-          if (fromUrlVal.indexOf('www.slimcrust.com/cafe/') != -1) {
-            console.log('--in if--', fromUrlVal);
-            return res.redirect(fromUrlVal+'?apppay=success');
-          } else {
-            //update here
-            return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=success');
-          }
+        if (fromUrl && fromUrl.includes('/cafe/')) {
+          redirectUrl = `${fromUrl}?apppay=success`;
+        } else {
+          redirectUrl = '/app?apppay=success';
+        }
+        break;
+
       case 'PAYMENT_ERROR':
       case 'PAYMENT_DECLINED':
-        //update here
-        console.log(transactionId+'--txn declined--');
-        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
       case 'PAYMENT_PENDING':
-        console.log(transactionId+'--txn pending--');
-        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
+        console.log(transactionId + '--txn not successful--');
+        redirectUrl = '/app?apppay=failure';
+        break;
+
       default:
-        console.log(transactionId+'--txn unhandled/declined--');
-        return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failure');
+        console.log(transactionId + '--txn unhandled--');
+        redirectUrl = '/app?apppay=failure';
     }
-      
+
+    console.log('➡️ Redirecting to:', redirectUrl);
+    return res.redirect(302, redirectUrl);
+
   } catch (error) {
-      console.log('--error--', error);
-      return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=failed');
+    console.error('❌ callback error:', error);
+    return res.redirect('/app?apppay=failed');
+
+  } finally {
+    if (client) {
+      try { await client.end(); } catch (_) {}
+    }
   }
 });
 
