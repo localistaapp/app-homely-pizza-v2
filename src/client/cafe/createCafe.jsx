@@ -845,6 +845,7 @@ class Dashboard extends Component {
             });
     };
     async initiatePayment (amount, customerDetails) {
+        let fromUrl = window.location.pathname;
         try {
             const response = await fetch('https://www.slimcrust.com/api/corp-initiate-payment', {
                 method: 'POST',
@@ -853,7 +854,8 @@ class Dashboard extends Component {
                 },
                 body: JSON.stringify({
                     amount,
-                    customerDetails
+                    customerDetails,
+                    fromUrl
                 })
             });
     
@@ -880,22 +882,11 @@ class Dashboard extends Component {
         return randomNumber;
       }
     generateOrderId() {
-        // 1. Fixed prefix
-        const prefix = "OCRP";
-      
-        // 2. Randomly permute "ABCD"
-        const letters = ["A", "B", "C", "D"];
-        for (let i = letters.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [letters[i], letters[j]] = [letters[j], letters[i]]; // Fisher–Yates shuffle
-        }
-        const randomLetters = letters.join("");
-      
         // 3. Random 6-digit number (000000–999999)
         const randomNumber = String(Math.floor(Math.random() * 1000000)).padStart(6, "0");
       
         // 4. Final ID
-        return `${prefix}-${randomLetters}-${randomNumber}`;
+        return randomNumber;
       }
       
     payNow() {
