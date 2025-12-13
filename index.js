@@ -337,7 +337,13 @@ app.post('/callback', async (req, res) => {
           if (fromUrlVal.indexOf('www.slimcrust.com/cafe/') != -1) {
             console.log('--in if--', fromUrlVal);
             
-            res.cookie('fromUrl',fromUrlVal);
+            res.cookie('fromUrl', fromUrlVal, {
+              domain: '.slimcrust.com',
+              path: '/',
+              httpOnly: false,
+              secure: true,
+              sameSite: 'Lax'
+            });
             return res.redirect(fromUrlVal+'?apppay=success');
           } else {
             //update here
