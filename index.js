@@ -330,8 +330,13 @@ app.post('/callback', async (req, res) => {
       case 'PAYMENT_SUCCESS':
           console.log(transactionId+'--txn success--');
           console.log('--return val--', fromUrlVal != '' ? fromUrlVal+'?apppay=success' : '/app?apppay=success');
-          //update here
-          return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=success');
+
+          if (fromUrlVal = 'https://www.slimcrust.com/cafe/zolo?apppay=success') {
+            return res.redirect('/app?apppay=success');
+          } else {
+            //update here
+            return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=success');
+          }
       case 'PAYMENT_ERROR':
       case 'PAYMENT_DECLINED':
         //update here
