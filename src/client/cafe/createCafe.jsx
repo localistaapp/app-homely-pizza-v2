@@ -845,7 +845,7 @@ class Dashboard extends Component {
             });
     };
     async initiatePayment (amount, customerDetails) {
-        let fromUrl = window.location.pathname;
+        let fromUrl = window.location.href;
         try {
             const response = await fetch('https://www.slimcrust.com/api/corp-initiate-payment', {
                 method: 'POST',
