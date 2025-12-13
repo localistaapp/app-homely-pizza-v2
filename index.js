@@ -338,8 +338,9 @@ app.post('/callback', async (req, res) => {
             console.log('--in if--', fromUrlVal);
             
             res.cookie('fromUrl', fromUrlVal, {
-              domain: '.slimcrust.com',
+              domain: 'slimcrust.com',
               path: '/',
+              maxAge: 5 * 60 * 1000, // 5 mins
               httpOnly: false,
               secure: true,
               sameSite: 'Lax'
