@@ -429,6 +429,7 @@ class Dashboard extends Component {
         this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
     }
     componentDidMount() {
+        sessionStorage.removeItem('corp-payment-processing');
         var winHeight = window.innerHeight;
         if(window.pushalertbyiw ) {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
@@ -862,6 +863,7 @@ class Dashboard extends Component {
             const result = await response.json();
             
             if (result.success) {
+                sessionStorage.setItem('corp-payment-processing',window.location.href);
                 // Redirect to PhonePe payment page
                 window.location.href = result.data.instrumentResponse.redirectInfo.url;
             } else {

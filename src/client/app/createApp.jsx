@@ -462,6 +462,11 @@ class Dashboard extends Component {
         this.isOlderThanNinetyMinutes = this.isOlderThanNinetyMinutes.bind(this);
     }
     componentDidMount() {
+        if(sessionStorage.getItem('corp-payment-processing')!=null
+            && sessionStorage.getItem('corp-payment-processing') != '') {
+                window.location.href = sessionStorage.getItem('corp-payment-processing')+'?apppay=success';
+            }
+
         var winHeight = window.innerHeight;
         if(window.pushalertbyiw ) {
             (pushalertbyiw = window.pushalertbyiw || []).push(['onReady', this.onPAReady.bind(this)]);
