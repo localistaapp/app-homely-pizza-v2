@@ -238,6 +238,8 @@ app.get('/article-video/', async (req, res) => {
   }
 });
 
+app.use(cookieParser());
+
 app.post('/callback', async (req, res) => {
   //check if the origin of the request can be identified as v2 pay from console logs
   //if so, based on that, redirect to another view - amuzely.com/app/***/pay=success page or v2 success page without header 
@@ -334,7 +336,7 @@ app.post('/callback', async (req, res) => {
 
           if (fromUrlVal.indexOf('www.slimcrust.com/cafe/') != -1) {
             console.log('--in if--', fromUrlVal);
-            app.use(cookieParser());
+            
             res.cookie('fromUrl',fromUrlVal);
             return res.redirect(fromUrlVal+'?apppay=success');
           } else {
