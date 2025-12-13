@@ -332,7 +332,7 @@ app.post('/callback', async (req, res) => {
           console.log('--return val--', fromUrlVal != '' ? fromUrlVal+'?apppay=success' : '/app?apppay=success');
 
           if (fromUrlVal == 'https://www.slimcrust.com/cafe/zolo?apppay=success') {
-            return res.redirect('/app?apppay=success');
+            return res.redirect('https://www.slimcrust.com/cafe/zolo?apppay=success');
           } else {
             //update here
             return fromUrlVal != '' ? res.redirect('/yp.html') : res.redirect('/app?apppay=success');
