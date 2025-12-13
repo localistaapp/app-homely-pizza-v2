@@ -50,7 +50,8 @@
     "update-json-file": "^1.1.1",
     "uuid-v4": "^0.1.0",
     "web-push": "^3.0.0",
-    "openai": "4.86.1"
+    "openai": "4.86.1",
+    "cookie-parser": "1.4.7"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

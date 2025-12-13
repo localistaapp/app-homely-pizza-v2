@@ -12,6 +12,7 @@ var { Client } = require('pg');
 var { Pool } = require('pg');
 var axios = require('axios');
 var nodemailer = require("nodemailer");
+var cookieParser = require('cookie-parser');
 //var nodemailer = {createTransport: function(){}};
 var crypto = require('crypto');
 var cors = require('cors');
