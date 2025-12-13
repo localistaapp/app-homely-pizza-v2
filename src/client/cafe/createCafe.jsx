@@ -918,6 +918,22 @@ class Dashboard extends Component {
         let itemName = Object.entries(basket)[0][1].name;
         this.startPayment(oName,oMobile,oPrice,orderId, itemName);
     }
+    formatDateTime(date = new Date()) {
+        const pad = n => n.toString().padStart(2, '0');
+      
+        const day = pad(date.getDate());
+        const month = pad(date.getMonth() + 1);
+        const year = date.getFullYear();
+      
+        let hours = date.getHours();
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+      
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12; // convert 0 → 12
+      
+        return `${day}-${month}-${year} ${pad(hours)}:${minutes}:${seconds} ${ampm}`;
+      }
 
     render() {
         const {status, orderTitle, dateTime, booking, customer, toppings, extras, location, mapUrl, comments, showLoader, results, starters, orderSummary, showCoupon, showSlot, showList, showWizard, numVistors, curStep, redirect, isVotingEnabled} = this.state;
@@ -954,9 +970,11 @@ class Dashboard extends Component {
                                                                     <div className="modal-dialog" onClick={()=>{this.setState({orderedItemName: ''});}}>
                                                                         <span><b>Item Ordered Successfully!</b></span>
                                                                         <br/><br/><br/>
-                                                                        <span>Item:</span><span>{this.state.orderedItemName}</span>
+                                                                        <span>Item: </span><span>{this.state.orderedItemName}</span>
                                                                         <br/>
                                                                         <span>Price: </span><span>{this.state.orderedItemAmount}</span>
+                                                                        <br/>
+                                                                        <span>Date: </span><span>{this.formatDateTime()}</span>
                                                                         <span className="cross-lbl"><b>x</b></span>
                                                                     </div>
                                                                 </div>
