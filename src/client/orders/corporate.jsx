@@ -330,6 +330,7 @@ class SummaryCard extends Component {
                         </div>
                         <div className="usp-title" style={{marginTop: '56px'}}>
                             <div className="title" style={{marginTop: '-10px',fontSize:'16px',lineHeight:'16px',textAlign:'left',left:'14px'}}>Votes: {data['vote_count']}</div>
+                            <div className="title" style={{marginTop: '14px',fontSize:'16px',lineHeight:'16px',textAlign:'left',left:'14px'}}>Price: {data['price']}</div>
                         </div>
                     </div>
                 </div>

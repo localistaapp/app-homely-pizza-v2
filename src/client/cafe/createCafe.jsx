@@ -822,7 +822,7 @@ class Dashboard extends Component {
         const order = itemName;
         const type = 'vote';
         const status = 'COMPLETED';
-        const price = '';
+        const price = Math.ceil(Math.round(Object.entries(basket)[0][1].price*0.85) / 10) * 10;
         const cafeteriaName = location.pathname.split('/')[2];
 
         axios.post(`/corporate-order/create`, {order: order, type: type, status: status, price: price,  cafeteriaName: cafeteriaName}).then((response) => {
@@ -830,14 +830,14 @@ class Dashboard extends Component {
         });
         console.log('--voted item--', itemName);
     }
-    startPayment(name, mobile, price, orderId) {
+    startPayment(name, mobile, price, orderId, item) {
         const customerDetails = {
             userId: name,
             mobileNumber: mobile,
             orderId: orderId
         };
         
-        this.initiatePayment(price, customerDetails) // Amount in rupees
+        this.initiatePayment(price, customerDetails, item) // Amount in rupees
             .then(response => {
                 console.log('Transaction initiated:', response);
             })
@@ -845,7 +845,7 @@ class Dashboard extends Component {
                 console.error('Error:', error);
             });
     };
-    async initiatePayment (amount, customerDetails) {
+    async initiatePayment (amount, customerDetails, item) {
         let fromUrl = window.location.href;
         try {
             const response = await fetch('https://www.slimcrust.com/api/corp-initiate-payment', {
@@ -863,6 +863,8 @@ class Dashboard extends Component {
             const result = await response.json();
             
             if (result.success) {
+                sessionStorage.getItem('corp-payment-val', amount);
+                sessionStorage.setItem('corp-item-val',item);
                 sessionStorage.setItem('corp-payment-processing',window.location.href);
                 // Redirect to PhonePe payment page
                 window.location.href = result.data.instrumentResponse.redirectInfo.url;
@@ -896,7 +898,9 @@ class Dashboard extends Component {
         let oMobile = '7619514999';
         let oPrice = Math.round(this.getTotal());
         let orderId = this.generateOrderId();
-        this.startPayment(oName,oMobile,oPrice,orderId);
+        let basket = JSON.parse(localStorage.getItem('basket'));
+        let itemName = Object.entries(basket)[0][1].name;
+        this.startPayment(oName,oMobile,oPrice,orderId, itemName);
     }
 
     render() {

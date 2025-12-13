@@ -2384,7 +2384,7 @@ app.get("/corporate-votes/:franchiseId", function(req, res) {
           res.send('{}');
           client.end();
         } else {
-            client.query("SELECT \"order\", COUNT(*) AS vote_count FROM corporate_order WHERE franchise_id=$1 AND created_at::date = CURRENT_DATE GROUP BY \"order\" ORDER BY vote_count DESC LIMIT 2",
+            client.query("SELECT \"order\", COUNT(*) AS vote_count, price FROM corporate_order WHERE franchise_id=$1 AND created_at::date = CURRENT_DATE GROUP BY \"order\", price ORDER BY vote_count DESC LIMIT 2",
                         [franchiseId], (err, response) => {
                               if (err) {
                                 console.log(err);
