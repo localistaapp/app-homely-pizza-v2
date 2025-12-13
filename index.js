@@ -334,7 +334,7 @@ app.post('/callback', async (req, res) => {
 
           if (fromUrlVal.indexOf('www.slimcrust.com/cafe/') != -1) {
             console.log('--in if--', fromUrlVal);
-            app.use(express.cookieParser());
+            app.use(cookieParser());
             res.cookie('fromUrl',fromUrlVal);
             return res.redirect(fromUrlVal+'?apppay=success');
           } else {
