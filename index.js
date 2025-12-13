@@ -400,7 +400,7 @@ app.post('/api/corp-initiate-payment', async (req, res) => {
           merchantId: config.merchantId,
           merchantTransactionId: `TX_${Date.now()}`,
           merchantUserId: customerDetails.userId,
-          amount: amount * 100,
+          amount: amount,
           redirectUrl: config.redirectUrl,
           redirectMode: "POST",
           callbackUrl: config.callbackUrl+customerDetails.orderId+'::fromUrl='+fromUrl,
