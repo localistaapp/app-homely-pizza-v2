@@ -412,7 +412,7 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
-            isVotingEnabled: new Date().getHours() < 22,
+            isVotingEnabled: new Date().getHours() < 10 ? true : false,
             orderedItemAmount: 0,
             orderedItemName: '',
             loggedIn: localStorage.getItem('corporate-user-email') != null
@@ -425,7 +425,7 @@ class Dashboard extends Component {
         window.weekdays[4] = "Thursday";
         window.weekdays[5] = "Friday";
         window.weekdays[6] = "Saturday";
-        this.fetchJson();
+        
         window.currSlotSelected = '';
         this.handleTabChange = this.handleTabChange.bind(this);
         this.checkDeliveryOptions = this.checkDeliveryOptions.bind(this);
@@ -435,6 +435,20 @@ class Dashboard extends Component {
         var winHeight = window.innerHeight;
         let itemName = '';
         let itemAmount = 0;
+
+        if (!this.state.isVotingEnabled) {
+            var franchiseId = 6;
+            axios.get('/corporate-votes/'+franchiseId)
+                    .then(function (response) {
+                    if(response.data.indexOf('error') == -1) {
+                        console.log('--votes res--', response.data);
+                        this.fetchJson(response.data);
+                        let res = response.data;
+                    } 
+                    }.bind(this));
+        } else {
+            this.fetchJson();
+        }
 
         if(location.href.indexOf('?apppay=success') != -1) {
             itemName = sessionStorage.getItem('corp-item-val');
@@ -509,15 +523,27 @@ class Dashboard extends Component {
         }
         this.setState({curStep: stepNum});
     }
-    fetchJson() {
+    fetchJson(resul) {
         let task = 'interior';
         let loc = 'blr';
         let zone = 'east';
+        let firstOrderName = '';
+        let secondOrderName = '';
+
+        if (resul != null && resul.length > 0) {
+            firstOrderName = resul[0].order;
+            secondOrderName = resul[1].order;
+        }
 
         axios.get(`/cafe/data/${location.pathname.split('/')[2]}`)
           .then(function (response) {
             console.log('response data-----', response.data);
-            this.setState({results: response.data.results});
+            let resData = response.data.results;
+            if(firstOrderName != '') {
+                resData = resData.filter(ob => ob.title == firstOrderName || ob.title == secondOrderName);
+            }
+
+            this.setState({results: resData});
           }.bind(this));
     }
     getTotal() {
@@ -1024,9 +1050,10 @@ class Dashboard extends Component {
                                 <div className="summary-total">Total:  <span className="rupee">₹</span><span id="price">{Math.round(this.getTotal())}</span>
                                     <div style={{fontSize: '13px', marginTop: '5px', marginLeft: '2px'}}>(incl convenience charges.)</div>
                                 </div>
-                                <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');document.getElementById('step2Circle').classList.add('active');this.payNow();}}>Pay at kiosk&nbsp;→
+                                
+                                {!isVotingEnabled && <div id="checkoutBtn" className="card-btn checkout" style={{bottom: '120px', marginTop: 'auto'}} onClick={()=>{document.getElementById('step1').classList.add('done');document.getElementById('step2Circle').classList.add('active');this.payNow();}}>Pay at kiosk&nbsp;→
                                     <div className=""></div>
-                                </div>
+                                </div>}
                               </div>}
                               {this.state.showCoupon == true &&
                                 <div className="checkout-content">
