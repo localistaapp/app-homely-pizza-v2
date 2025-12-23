@@ -24,6 +24,8 @@ var base64 = require('file-base64');
 var LocationService = require('./src/server/locations/location-service.js');
 var GeofencingService = require('./src/server/geofencing/geofencing-service.js');
 var PricingService = require('./src/server/pricing/pricing-service.js');
+var runDailyTaskRoute = require("./run-daily-task");
+
 const pgClient = new Client({
       host: 'ec2-54-247-188-247.eu-west-1.compute.amazonaws.com',
       port: 5432,
@@ -2546,6 +2548,8 @@ app.get("/store/web-order/:onlineOrderId", function(req, res) {
 
 });
 
+runDailyTaskRoute(app, new Client(dbConfig), fs, process.env.TASK_KEY);
+
 app.post('/push-notif', function(req, res) {
   const title = req.body.title;
   const description = req.body.description;
@@ -2562,6 +2566,7 @@ app.post('/push-notif', function(req, res) {
     res.send('push error');
   });
 });
+
 
 app.post('/push-content-notif', function(req, res) {
   const title = req.body.title;

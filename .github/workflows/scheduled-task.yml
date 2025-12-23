@@ -1,0 +1,24 @@
+name: Daily Trigger
+
+on:
+  schedule:
+    - cron: "0 5 * * *"  # Daily 6:00 AM IST (00:30 UTC)
+
+jobs:
+  daily:
+    if: github.event.schedule == '0 4 * * *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger daily task
+        run: |
+          for i in 1 2 3; do
+            echo "Attempt $i..."
+            if curl -s -o /dev/null -w "%{http_code}" -X POST https://slimcrust-app.onrender.com/run-daily-task?key=${{ secrets.TASK_KEY }} | grep -q "200"; then
+              echo "Success"
+              exit 0
+            fi
+            echo "Failed, retrying in 30s..."
+            sleep 30
+          done
+          echo "All retries failed"
+          exit 1
