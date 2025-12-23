@@ -2,11 +2,11 @@ name: Daily Trigger
 
 on:
   schedule:
-    - cron: "15 5 * * *"  # Daily 6:00 AM IST (00:30 UTC)
+    - cron: "15 6 * * *"  # Daily 6:00 AM IST (00:30 UTC)
 
 jobs:
   daily:
-    if: github.event.schedule == '15 5 * * *'
+    if: github.event.schedule == '15 6 * * *'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger daily task

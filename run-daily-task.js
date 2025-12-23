@@ -6,8 +6,8 @@ async function dailyJob(client, fs) {
 
   return new Promise(async (resolve, reject) => {
 
-    const title = 'Test notification01';
-    const description = 'Notification from daily scheduler';
+    const title = 'Vote for your meal 🥗 today';
+    const description = 'Vote now!';
     const segmentId =  '52552';
     console.log('--Push Title--', title);
     console.log('--Push Description--', description);
