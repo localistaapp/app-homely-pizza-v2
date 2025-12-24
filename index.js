@@ -2395,7 +2395,7 @@ app.get("/corporate-votes/:franchiseId", function(req, res) {
                               } else {
                                  //res.send(response.rows);
                                  if (response.rows.length == 0) {
-                                    res.send("error");
+                                    res.send(response.rows);
                                     client.end();
                                  } else {
                                     res.send(response.rows);
