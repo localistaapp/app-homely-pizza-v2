@@ -412,7 +412,7 @@ class Dashboard extends Component {
             onlineOrdersTimings: {},
             currDayTimings: [],
             showOrderConfirmationMsg: false,
-            isVotingEnabled: new Date().getHours() < 10 ? true : false,
+            isVotingEnabled: new Date().getHours() < 12 ? true : false,
             orderedItemAmount: 0,
             orderedItemName: '',
             loggedIn: localStorage.getItem('corporate-user-email') != null
@@ -532,6 +532,8 @@ class Dashboard extends Component {
 
         if (resul != null && resul.length > 0) {
             firstOrderName = resul[0].order;
+        }
+        if (resul != null && resul.length > 1) {
             secondOrderName = resul[1].order;
         }
 
