@@ -5,6 +5,11 @@ async function dailyJob(client, fs) {
   console.log("Daily task started:", new Date().toISOString());
 
   return new Promise(async (resolve, reject) => {
+    let currHour = new Date().getHours();
+    if (currHour > 9) {
+      console.log('--avoiding rerun of daily task--');
+      return;
+    }
 
     const title = 'Vote for your meal 🥗 today';
     const description = 'Vote now!';
