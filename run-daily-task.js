@@ -6,7 +6,7 @@ async function dailyJob(client, fs) {
 
   return new Promise(async (resolve, reject) => {
     let currHour = new Date().getHours();
-    if (currHour > 9) {
+    if (currHour > 19) {
       console.log('--avoiding rerun of daily task--');
       return;
     }
