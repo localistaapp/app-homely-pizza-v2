@@ -7,24 +7,24 @@ async function dailyJob(client, fs) {
   return new Promise(async (resolve, reject) => {
     let currHour = new Date().getHours();
     console.log('--currHour--', currHour);
-    if (currHour == 9) {
+    if (currHour != 4) {
       console.log('--currHour == 23--', currHour);
       resolve();
+    } else {
+        const title = 'Vote for your meal 🥗 today';
+        const description = 'Vote now!';
+        const segmentId =  '52552';
+        console.log('--Push Title--', title);
+        console.log('--Push Description--', description);
+        axios
+        .post('https://api.pushalert.co/rest/v1/segment/'+segmentId+'/send', 'url=https://www.slimcrust.com/cafe/zolo&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
+        .then(res => {
+          console.log('Pushalert success: ');
+        })
+        .catch(error => {
+          console.log('Pushalert error: ', error);
+        });    
     }
-
-    const title = 'Vote for your meal 🥗 today';
-    const description = 'Vote now!';
-    const segmentId =  '52552';
-    console.log('--Push Title--', title);
-    console.log('--Push Description--', description);
-    axios
-    .post('https://api.pushalert.co/rest/v1/segment/'+segmentId+'/send', 'url=https://www.slimcrust.com/cafe/zolo&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
-    .then(res => {
-      console.log('Pushalert success: ');
-    })
-    .catch(error => {
-      console.log('Pushalert error: ', error);
-    });    
 
   }).then(() => {
     console.log("Weekly task finished:", new Date().toISOString());
