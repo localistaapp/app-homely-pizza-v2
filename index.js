@@ -1661,7 +1661,7 @@ client.connect(err => {
                           });
   }
 });
- res.sendFile(path.resolve(__dirname, 'public', 'franchiseEnquiry.html'));
+response.sendFile(path.resolve(__dirname, 'public', 'confirmation.html'));
 });
 
 app.post('/paymentRequest', function(req, res) {
