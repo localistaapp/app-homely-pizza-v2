@@ -7,7 +7,7 @@ async function dailyJob(client, fs) {
   return new Promise(async (resolve, reject) => {
     let currHour = new Date().getHours();
     console.log('--currHour--', currHour);
-    if (currHour == 23) {
+    if (currHour == 9) {
       console.log('--currHour == 23--', currHour);
       resolve();
     }
