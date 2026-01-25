@@ -11,6 +11,31 @@ async function dailyJob(client, fs) {
       console.log('--currHour == 23--', currHour);
       resolve();
     } else {
+
+      let day = new Date().getDay();
+      if (day == 7) { //ToDo: Replace 7 by 0
+        return;
+      } else {
+        let webhookURls = {
+          0: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktrsw60002cdbrktpq8let0',//ToDo: remove entry for Sunday
+          1: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktrsw60002cdbrktpq8let0',
+          2: 'https://www.app.ocoya.com/api/_hooks/webhook/cmkttvyfn000gglvso70k0ku4',
+          3: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktu0pal000bn5s7oeesnum5',
+          4: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktrsw60002cdbrktpq8let0',
+          5: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktu4pdj000fuhy31ubrnqit',
+          6: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktu5y6n000wn5s7fkhqdc6f',
+        }
+          
+          axios
+          .get(webhookURls[day])
+          .then(res => {
+            console.log('Webhook call success: ');
+          })
+          .catch(error => {
+            console.log('Webhook call error: ', error);
+          }); 
+        }
+
         const title = 'Vote for your meal 🥗 today';
         const description = 'Vote now!';
         const segmentId =  '52552';
