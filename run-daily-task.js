@@ -13,11 +13,10 @@ async function dailyJob(client, fs) {
     } else {
 
       let day = new Date().getDay();
-      if (day == 7) { //ToDo: Replace 7 by 0
+      if (day == 0) {
         return;
       } else {
         let webhookURls = {
-          0: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktrsw60002cdbrktpq8let0',//ToDo: remove entry for Sunday
           1: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktrsw60002cdbrktpq8let0',
           2: 'https://www.app.ocoya.com/api/_hooks/webhook/cmkttvyfn000gglvso70k0ku4',
           3: 'https://www.app.ocoya.com/api/_hooks/webhook/cmktu0pal000bn5s7oeesnum5',
@@ -36,21 +35,26 @@ async function dailyJob(client, fs) {
           }); 
         }
 
-        const title = 'Vote for your meal 🥗 today';
-        const description = 'Vote now!';
-        const segmentId =  '52552';
-        console.log('--Push Title--', title);
-        console.log('--Push Description--', description);
-        axios
-        .post('https://api.pushalert.co/rest/v1/segment/'+segmentId+'/send', 'url=https://www.slimcrust.com/cafe/zolo&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
-        .then(res => {
-          console.log('Pushalert success: ');
+        if (day == 0 || day == 6) {
           resolve();
-        })
-        .catch(error => {
-          console.log('Pushalert error: ', error);
-          resolve();
-        });    
+          return;
+        } else {
+            const title = 'Vote for your meal 🥗 today';
+            const description = 'Vote now!';
+            const segmentId =  '52552';
+            console.log('--Push Title--', title);
+            console.log('--Push Description--', description);
+            axios
+            .post('https://api.pushalert.co/rest/v1/segment/'+segmentId+'/send', 'url=https://www.slimcrust.com/cafe/zolo&title='+title+'&message='+description, {headers: {'Authorization': 'api_key=2012aa1c7e1cc3a1905f98fd47a7dcf7'}})
+            .then(res => {
+              console.log('Pushalert success: ');
+              resolve();
+            })
+            .catch(error => {
+              console.log('Pushalert error: ', error);
+              resolve();
+            });  
+        }
     }
 
   }).then(() => {

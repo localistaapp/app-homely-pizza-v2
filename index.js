@@ -2399,8 +2399,19 @@ app.get("/corporate-votes/:franchiseId", function(req, res) {
                                     client.end();
                                  } else {
                                     if (response.rows.length == 1) {
-                                      const customRow = {"order":"Spaghetti Feast","vote_count":"1","price":"170"};
-                                      response.rows.push(customRow);
+                                      if (response.rows[0].order != 'Desi Tadka') {
+                                        const customRow = {"order":"Desi Tadka","vote_count":"1","price":"150"};
+                                        response.rows.push(customRow);
+                                      } else if (response.rows[0].order != 'Spaghetti Feast') {
+                                        const customRow = {"order":"Spaghetti Feast","vote_count":"1","price":"170"};
+                                        response.rows.push(customRow);
+                                      } else if (response.rows[0].order != 'Mexican Rice Bowl') {
+                                        const customRow = {"order":"Mexican Rice Bowl","vote_count":"1","price":"180"};
+                                        response.rows.push(customRow);
+                                      } else if (response.rows[0].order != 'Penne Pasta') {
+                                        const customRow = {"order":"Penne Pasta","vote_count":"1","price":"160"};
+                                        response.rows.push(customRow);
+                                      } 
                                     }
                                     res.send(response.rows);
                                     client.end();
