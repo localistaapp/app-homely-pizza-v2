@@ -26,6 +26,7 @@ var GeofencingService = require('./src/server/geofencing/geofencing-service.js')
 var PricingService = require('./src/server/pricing/pricing-service.js');
 const { extractGST } = require('./src/server/pricing/gstUtils.js'); 
 var runDailyTaskRoute = require("./run-daily-task");
+const PDFDocument = require('pdfkit');
 
 const pgClient = new Client({
       host: 'ec2-54-247-188-247.eu-west-1.compute.amazonaws.com',
@@ -3627,6 +3628,119 @@ app.post('/createStoreOrderWithGST', async function(req, res) {
     await client.query('ROLLBACK');
     console.error(err);
     res.send("error");
+  } finally {
+    await client.end();
+  }
+
+});
+
+app.get('/invoice/:invoiceNumber/pdf', async function(req, res) {
+
+  const invoiceNumber = req.params.invoiceNumber;
+  const client = new Client(dbConfig);
+
+  await client.connect();
+
+  try {
+
+    // 1️⃣ Fetch Invoice
+    const invoiceResp = await client.query(
+      `SELECT * FROM invoices WHERE invoice_number = $1`,
+      [invoiceNumber]
+    );
+
+    if (!invoiceResp.rows[0]) {
+      await client.end();
+      return res.status(404).send("Invoice not found");
+    }
+
+    const invoice = invoiceResp.rows[0];
+
+    // 2️⃣ Fetch Line Items
+    const itemsResp = await client.query(
+      `SELECT * FROM invoice_items
+       WHERE invoice_id = $1`,
+      [invoice.id]
+    );
+
+    const items = itemsResp.rows;
+
+    // 3️⃣ Prepare PDF Response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename=${invoice.invoice_number}.pdf`
+    );
+
+    const doc = new PDFDocument({ margin: 40 });
+    doc.pipe(res);
+
+    // ===============================
+    // HEADER
+    // ===============================
+
+    doc.fontSize(18).text('TAX INVOICE', { align: 'center' });
+    doc.moveDown();
+
+    doc.fontSize(12);
+    doc.text('Slimcrust');
+    doc.text('GSTIN: ' + invoice.gstin);
+    doc.text('Place of Supply: ' + invoice.place_of_supply);
+    doc.moveDown();
+
+    doc.text('Invoice Number: ' + invoice.invoice_number);
+    doc.text('Invoice Date: ' + new Date(invoice.invoice_date).toLocaleString());
+    doc.text('SAC Code: ' + invoice.sac_code);
+    doc.moveDown();
+
+    // ===============================
+    // TABLE HEADER
+    // ===============================
+
+    doc.text('------------------------------------------------------------');
+    doc.text('Item                Qty     Rate     Amount');
+    doc.text('------------------------------------------------------------');
+
+    // ===============================
+    // LINE ITEMS
+    // ===============================
+
+    items.forEach(item => {
+      doc.text(
+        `${item.item_name.padEnd(18)} ` +
+        `${String(item.quantity).padEnd(6)} ` +
+        `${String(item.unit_price).padEnd(8)} ` +
+        `${item.line_gross}`
+      );
+    });
+
+    doc.text('------------------------------------------------------------');
+    doc.moveDown();
+
+    // ===============================
+    // GST SUMMARY
+    // ===============================
+
+    doc.text(`Taxable Value: ₹${invoice.taxable_amount.toFixed(2)}`);
+    doc.text(`CGST (2.5%): ₹${invoice.cgst_amount.toFixed(2)}`);
+    doc.text(`SGST (2.5%): ₹${invoice.sgst_amount.toFixed(2)}`);
+    doc.moveDown();
+
+    doc.fontSize(14).text(`Total: ₹${invoice.gross_amount.toFixed(2)}`, {
+      align: 'right'
+    });
+
+    doc.moveDown(2);
+
+    doc.fontSize(10);
+    doc.text('This is a system-generated invoice.');
+    doc.text('Thank you for your business!');
+
+    doc.end();
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("error");
   } finally {
     await client.end();
   }
