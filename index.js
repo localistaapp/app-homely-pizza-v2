@@ -24,6 +24,7 @@ var base64 = require('file-base64');
 var LocationService = require('./src/server/locations/location-service.js');
 var GeofencingService = require('./src/server/geofencing/geofencing-service.js');
 var PricingService = require('./src/server/pricing/pricing-service.js');
+const { extractGST } = require('./src/server/pricing/gstUtils.js'); 
 var runDailyTaskRoute = require("./run-daily-task");
 
 const pgClient = new Client({
@@ -3354,6 +3355,283 @@ app.post('/createStoreOrder', function(req, res) {
     }
   })
 })
+
+function getFinancialYear(date = new Date()) {
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  return m >= 4
+    ? `${y.toString().slice(-2)}-${(y + 1).toString().slice(-2)}`
+    : `${(y - 1).toString().slice(-2)}-${y.toString().slice(-2)}`;
+}
+
+function generateChecksum(payload) {
+  return crypto.createHash('sha256')
+    .update(JSON.stringify(payload))
+    .digest('hex');
+}
+
+function addLineItem(items, name, qty, unitPrice) {
+  if (!qty || qty <= 0) return;
+
+  const lineGross = qty * unitPrice;
+  const gst = extractGST(lineGross);
+
+  items.push({
+    name,
+    qty,
+    unitPrice,
+    lineGross,
+    gst
+  });
+}
+
+app.post('/createStoreOrderWithGST', async function(req, res) {
+
+  const client = new Client(dbConfig);
+  await client.connect();
+
+  try {
+
+    await client.query('BEGIN');
+
+    const lat = req.body.storeLat;
+    const long = req.body.storeLong;
+    const hasReviewed = req.body.hasReviewed == 'true' ? 'y' : 'n';
+    const clubCode = req.body.clubCode;
+    const franchiseId = req.body.franchiseId;
+
+    const pizza1Qty = parseInt(req.body.pizza1Qty || 0);
+    const pizza2Qty = parseInt(req.body.pizza2Qty || 0);
+    const pizza3Qty = parseInt(req.body.pizza3Qty || 0);
+    const pizza4Qty = parseInt(req.body.pizza4Qty || 0);
+    const pizza5Qty = parseInt(req.body.pizza5Qty || 0);
+    const pizza6Qty = parseInt(req.body.pizza6Qty || 0);
+    const pizza7Qty = parseInt(req.body.pizza7Qty || 0);
+    const pizza8Qty = parseInt(req.body.pizza8Qty || 0);
+
+    const takeAwayQty = parseInt(req.body.takeAwayQty || 0);
+    const extraToppingsQty = parseInt(req.body.extraToppingsQty || 0);
+
+    const pizza1SliceQty = parseInt(req.body.pizza1SliceQty || 0);
+    const pizza2SliceQty = parseInt(req.body.pizza2SliceQty || 0);
+    const pizza3SliceQty = parseInt(req.body.pizza3SliceQty || 0);
+    const pizza4SliceQty = parseInt(req.body.pizza4SliceQty || 0);
+    const pizza5SliceQty = parseInt(req.body.pizza5SliceQty || 0);
+    const pizza6SliceQty = parseInt(req.body.pizza6SliceQty || 0);
+    const pizza7SliceQty = parseInt(req.body.pizza7SliceQty || 0);
+    const pizza8SliceQty = parseInt(req.body.pizza8SliceQty || 0);
+
+    const takeAwaySliceQty = parseInt(req.body.takeAwaySliceQty || 0);
+
+    // 1️⃣ Fetch Store
+    const storeResp = await client.query(
+      'SELECT lat, long, id FROM store WHERE franchise_id = $1',
+      [franchiseId]
+    );
+
+    if (!storeResp.rows[0]) {
+      await client.query('ROLLBACK');
+      return res.send("error-store-not-found");
+    }
+
+    const storeId = storeResp.rows[0].id;
+
+    const isInVicinity = true;
+    if (!isInVicinity) {
+      await client.query('ROLLBACK');
+      return res.send("error-not-in-vicinity");
+    }
+
+    // 2️⃣ Club user
+    const clubResp = await client.query(
+      'SELECT id FROM club_user WHERE customer_code = $1',
+      [clubCode]
+    );
+
+    let clubUserId = 0;
+    if (clubResp.rows[0] && clubResp.rows[0].id != null) {
+      clubUserId = clubResp.rows[0].id;
+    }
+
+    const hasValidCode = clubUserId !== 0;
+
+    // 3️⃣ Pricing
+    const totalPrice = PricingService.getTotalPrice(
+      pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty,
+      pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty,
+      takeAwayQty, extraToppingsQty,
+      hasValidCode, hasReviewed,
+      pizza1SliceQty, pizza2SliceQty, pizza3SliceQty, pizza4SliceQty,
+      pizza5SliceQty, pizza6SliceQty, pizza7SliceQty, pizza8SliceQty,
+      takeAwaySliceQty
+    );
+
+    const discountedPrice = PricingService.getDiscountedPrice(
+      pizza1Qty, pizza2Qty, pizza3Qty, pizza4Qty,
+      pizza5Qty, pizza6Qty, pizza7Qty, pizza8Qty,
+      takeAwayQty, extraToppingsQty,
+      hasValidCode, hasReviewed,
+      pizza1SliceQty, pizza2SliceQty, pizza3SliceQty, pizza4SliceQty,
+      pizza5SliceQty, pizza6SliceQty, pizza7SliceQty, pizza8SliceQty,
+      takeAwaySliceQty
+    );
+
+    const orderJson = JSON.stringify(req.body);
+
+    const orderInsert = await client.query(
+      `INSERT INTO store_order
+       (store_id, order_json, total_price, discounted_price, status, returning_customer, user_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       RETURNING id`,
+      [storeId, orderJson, totalPrice, discountedPrice, 'PAYMENT_PENDING', 'N', clubUserId]
+    );
+
+    const orderId = orderInsert.rows[0].id;
+
+    // 4️⃣ Build Itemized Invoice Lines
+    const invoiceItems = [];
+
+    addLineItem(invoiceItems, 'Pizza 1', pizza1Qty, PricingService.pizza1StdPrice);
+    addLineItem(invoiceItems, 'Pizza 2', pizza2Qty, PricingService.pizza2StdPrice);
+    addLineItem(invoiceItems, 'Pizza 3', pizza3Qty, PricingService.pizza3StdPrice);
+    addLineItem(invoiceItems, 'Pizza 4', pizza4Qty, PricingService.pizza4StdPrice);
+    addLineItem(invoiceItems, 'Pizza 5', pizza5Qty, PricingService.pizza5StdPrice);
+    addLineItem(invoiceItems, 'Pizza 6', pizza6Qty, PricingService.pizza6StdPrice);
+    addLineItem(invoiceItems, 'Pizza 7', pizza7Qty, PricingService.pizza7StdPrice);
+    addLineItem(invoiceItems, 'Pizza 8', pizza8Qty, PricingService.pizza8StdPrice);
+
+    addLineItem(invoiceItems, 'Pizza Slice', pizza1SliceQty, PricingService.pizzaSliceStdPrice);
+    addLineItem(invoiceItems, 'Pizza 8 Slice', pizza8SliceQty, PricingService.pizza8SliceStdPrice);
+
+    addLineItem(invoiceItems, 'Takeaway Box', takeAwayQty, PricingService.takeAwayStdPrice);
+    addLineItem(invoiceItems, 'Slice Takeaway', takeAwaySliceQty, PricingService.takeAwaySliceStdPrice);
+    addLineItem(invoiceItems, 'Extra Toppings', extraToppingsQty, PricingService.extraToppingsStdPrice);
+
+    // 5️⃣ Compute Totals
+    let grossTotal = 0;
+    let taxableTotal = 0;
+    let gstTotal = 0;
+    let cgstTotal = 0;
+    let sgstTotal = 0;
+
+    invoiceItems.forEach(i => {
+      grossTotal += i.lineGross;
+      taxableTotal += i.gst.taxableValue;
+      gstTotal += i.gst.gstAmount;
+      cgstTotal += i.gst.cgst;
+      sgstTotal += i.gst.sgst;
+    });
+
+    const fy = getFinancialYear();
+
+    await client.query(
+      `INSERT INTO invoice_fy_sequences(financial_year)
+       VALUES($1)
+       ON CONFLICT (financial_year) DO NOTHING`,
+      [fy]
+    );
+
+    const seqResp = await client.query(
+      `UPDATE invoice_fy_sequences
+       SET current_sequence = current_sequence + 1
+       WHERE financial_year = $1
+       RETURNING current_sequence`,
+      [fy]
+    );
+
+    const sequence = seqResp.rows[0].current_sequence;
+    const invoiceNumber = `SC/${fy}/${String(sequence).padStart(6,'0')}`;
+    const invoiceId = crypto.randomUUID();
+
+    const checksum = generateChecksum({
+      invoiceNumber,
+      grossTotal,
+      taxableTotal,
+      gstTotal
+    });
+
+    await client.query(
+      `INSERT INTO invoices (
+        id, invoice_number, invoice_sequence, financial_year,
+        invoice_date, supply_type,
+        gstin, legal_name, place_of_supply,
+        gross_amount, taxable_amount, gst_amount,
+        cgst_amount, sgst_amount,
+        gst_rate, sac_code,
+        status, checksum
+      )
+      VALUES (
+        $1,$2,$3,$4,now(),'dine_in',
+        $5,$6,'Karnataka',
+        $7,$8,$9,$10,$11,
+        5.00,'996331',
+        'ISSUED',$12
+      )`,
+      [
+        invoiceId,
+        invoiceNumber,
+        sequence,
+        fy,
+        process.env.GSTIN,
+        'Slimcrust',
+        grossTotal,
+        taxableTotal,
+        gstTotal,
+        cgstTotal,
+        sgstTotal,
+        checksum
+      ]
+    );
+
+    for (const item of invoiceItems) {
+      await client.query(
+        `INSERT INTO invoice_items (
+          id, invoice_id, item_name,
+          quantity, unit_price, line_gross,
+          taxable_value, gst_amount,
+          cgst_amount, sgst_amount
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        [
+          crypto.randomUUID(),
+          invoiceId,
+          item.name,
+          item.qty,
+          item.unitPrice,
+          item.lineGross,
+          item.gst.taxableValue,
+          item.gst.gstAmount,
+          item.gst.cgst,
+          item.gst.sgst
+        ]
+      );
+    }
+
+    await client.query(
+      `UPDATE store_order
+       SET invoice_id = $1
+       WHERE id = $2`,
+      [invoiceId, orderId]
+    );
+
+    await client.query('COMMIT');
+
+    res.send(JSON.stringify({
+      orderId,
+      invoiceNumber,
+      price: discountedPrice,
+      storeId
+    }));
+
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error(err);
+    res.send("error");
+  } finally {
+    await client.end();
+  }
+
+});
 
 app.post('/updateStoreOrder/status/:status', function(req, res) {
   const status = req.params.status;

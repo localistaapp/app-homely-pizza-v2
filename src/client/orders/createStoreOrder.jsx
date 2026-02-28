@@ -486,7 +486,7 @@ class Dashboard extends Component {
 
         //create store
         var http = new XMLHttpRequest();
-        var url = '/createStoreOrder';
+        var url = '/createStoreOrderWithGST';
         var params = 'hasReviewed='+hasReviewed+'&clubCode='+clubCode+'&pizza1Qty='+pizza1Qty+'&pizza2Qty='+pizza2Qty+'&pizza3Qty='+pizza3Qty+'&pizza4Qty='+pizza4Qty+'&pizza5Qty='+pizza5Qty+'&pizza6Qty='+pizza6Qty+'&pizza7Qty='+pizza7Qty+'&pizza8Qty='+pizza8Qty;
         params += '&pizza1SliceQty='+pizza1SliceQty+'&pizza2SliceQty='+pizza2SliceQty+'&pizza3SliceQty='+pizza3SliceQty+'&pizza4SliceQty='+pizza4SliceQty+'&pizza5SliceQty='+pizza5SliceQty+'&pizza6SliceQty='+pizza6SliceQty+'&pizza7SliceQty='+pizza7SliceQty+'&pizza8SliceQty='+pizza8SliceQty+'&takeAwaySliceQty='+takeAwaySliceQty;
         params += '&takeAwayQty='+takeAwayQty+'&extraToppingsQty='+extraToppingsQty;

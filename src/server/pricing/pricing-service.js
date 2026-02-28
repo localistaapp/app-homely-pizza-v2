@@ -60,18 +60,23 @@ class PricingService {
       return Math.round(totalPrice);
    }
 }
-PricingService.pizza1StdPrice = 199;
-PricingService.pizza2StdPrice = 189;
-PricingService.pizza3StdPrice = 209;
-PricingService.pizza4StdPrice = 189;
-PricingService.pizza5StdPrice = 199;
-PricingService.pizza6StdPrice = 209;
-PricingService.pizza7StdPrice = 209;
-PricingService.pizza8StdPrice = 239;
-PricingService.pizzaSliceStdPrice = 30;
-PricingService.pizza8SliceStdPrice = 45;
-PricingService.takeAwayStdPrice = 20;
-PricingService.takeAwaySliceStdPrice = 5;
-PricingService.extraToppingsStdPrice = 25;
+// All prices are GST-inclusive (5%)
+
+PricingService.pizza1StdPrice = 219;
+PricingService.pizza2StdPrice = 209;   // anchor revised from 189
+PricingService.pizza3StdPrice = 229;
+PricingService.pizza4StdPrice = 209;
+PricingService.pizza5StdPrice = 219;
+PricingService.pizza6StdPrice = 229;
+PricingService.pizza7StdPrice = 229;
+PricingService.pizza8StdPrice = 259;
+
+PricingService.pizzaSliceStdPrice = 35;     // anchor revised from 30
+PricingService.pizza8SliceStdPrice = 49;
+
+PricingService.takeAwayStdPrice = 22;
+PricingService.takeAwaySliceStdPrice = 6;
+
+PricingService.extraToppingsStdPrice = 28;
 
 module.exports = PricingService;
