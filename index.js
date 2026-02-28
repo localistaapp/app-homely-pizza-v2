@@ -3634,9 +3634,9 @@ app.post('/createStoreOrderWithGST', async function(req, res) {
 
 });
 
-app.get('/invoice/:invoiceNumber/pdf', async function(req, res) {
+app.get('/invoice/pdf', async function(req, res) {
 
-  const invoiceNumber = req.params.invoiceNumber;
+  const invoiceNumber = req.query.i;
   const client = new Client(dbConfig);
 
   await client.connect();
