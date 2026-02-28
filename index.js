@@ -3721,12 +3721,12 @@ app.get('/invoice/pdf', async function(req, res) {
     // GST SUMMARY
     // ===============================
 
-    doc.text(`Taxable Value: ₹${invoice.taxable_amount.toFixed(2)}`);
-    doc.text(`CGST (2.5%): ₹${invoice.cgst_amount.toFixed(2)}`);
-    doc.text(`SGST (2.5%): ₹${invoice.sgst_amount.toFixed(2)}`);
+    doc.text(`Taxable Value: ₹${Number(invoice.taxable_amount).toFixed(2)}`);
+    doc.text(`CGST (2.5%): ₹${Number(invoice.cgst_amount).toFixed(2)}`);
+    doc.text(`SGST (2.5%): ₹${Number(invoice.sgst_amount).toFixed(2)}`);
     doc.moveDown();
 
-    doc.fontSize(14).text(`Total: ₹${invoice.gross_amount.toFixed(2)}`, {
+    doc.fontSize(14).text(`Total: ₹${Number(invoice.gross_amount).toFixed(2)}`, {
       align: 'right'
     });
 
